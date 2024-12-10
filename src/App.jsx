@@ -4,11 +4,13 @@ import About from './components/About';
 import HowItWorks from './components/HowItWorks';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import ForgotPassword from './components/ForgotPassword';
+import VerificationCode from './components/VerificationCode';
 
 function App() {
     return (
         <div>
-            < SignIn/>
+            <VerificationCode/>
         </div>
     );
 }
