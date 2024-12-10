@@ -45,7 +45,7 @@ const ForgotPassword = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-[#738FFD] rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
-        {/* Right Section */}
+        {/* Left Section */}
         <div className="w-1/2 h-full flex flex-col justify-center items-center text-white p-8 sm:p-16 lg:p-32">
           <h1 className="font-extrabold text-xl sm:text-3xl text-center mb-10">
             FORGOT PASSWORD
@@ -62,7 +62,7 @@ const ForgotPassword = () => {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -84,7 +84,7 @@ const ForgotPassword = () => {
 
             <button
               type="button" // Changed to type="button" so it doesn't submit the form
-              className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-amber-100 focus:ring-2 focus:ring-amber-100 mt-6"
+              className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-amber-100 focus:ring-2 focus:ring-amber-100 mt-6"
               disabled={isCancelDisabled} // Disabled until email is entered
               onClick={handleCancel} // Reset email and errors on cancel
             >
