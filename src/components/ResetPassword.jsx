@@ -83,7 +83,7 @@ const ResetPassword = () => {
 
             <button
               type="submit"
-              className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-amber-100 focus:ring-2 focus:ring-amber-100 mt-6"
+              className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
               disabled={isReset}
             >
               Continue

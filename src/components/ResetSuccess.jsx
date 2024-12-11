@@ -20,7 +20,7 @@ const ResetSuccess = () => {
 
           <button
               type="button" 
-              className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-amber-100 focus:ring-2 focus:ring-amber-100 mt-6"
+              className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
               onClick={handleCancel} 
             >
               Sign In
