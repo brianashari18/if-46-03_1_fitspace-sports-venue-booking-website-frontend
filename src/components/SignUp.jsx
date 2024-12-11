@@ -7,12 +7,12 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  
+
   const [emailError, setEmailError] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  
+
   const [isSignUp, setIsSignUp] = useState(false);
 
   // Fungsi untuk validasi email
@@ -81,33 +81,39 @@ const SignUp = () => {
   return (
     <div className="flex justify-center items-center min-h-screen  bg-gray-100">
       <div className="bg-white rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
-        
         {/* Left Section */}
         <div className="w-1/2 h-full bg-gray-50 rounded-l-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
           <h1 className="font-bold text-xl sm:text-2xl text-center mb-3">
             SIGN UP
           </h1>
-          <form className="w-full max-w-sm space-y-2 mb-2" onSubmit={handleSubmit}>
+          <form
+            className="w-full max-w-sm space-y-2 mb-2"
+            onSubmit={handleSubmit}
+          >
             <div>
               <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {emailError && <div className="text-sm text-red-600">{emailError}</div>}
+                type="email"
+                placeholder="Email"
+                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {emailError && (
+                <div className="text-sm text-red-600">{emailError}</div>
+              )}
             </div>
 
             <div>
-            <input
-              type="text"
-              placeholder="First Name"
-              className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            {firstNameError && <div className="text-sm text-red-600">{firstNameError}</div>}
+              <input
+                type="text"
+                placeholder="First Name"
+                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              {firstNameError && (
+                <div className="text-sm text-red-600">{firstNameError}</div>
+              )}
             </div>
 
             <input
@@ -119,25 +125,31 @@ const SignUp = () => {
             />
 
             <div>
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {passwordError && (
+                <div className="text-sm text-red-600">{passwordError}</div>
+              )}
             </div>
 
             <div>
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {confirmPasswordError && <div className="text-sm text-red-600">{confirmPasswordError}</div>}
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {confirmPasswordError && (
+                <div className="text-sm text-red-600">
+                  {confirmPasswordError}
+                </div>
+              )}
             </div>
 
             <div className="text-right">
@@ -155,7 +167,9 @@ const SignUp = () => {
           </form>
 
           <div className="w-full flex flex-col justify-center items-center max-w-sm space-y-2 mt-2">
-            <div className="text-center text-sm text-gray-600">Or continue with</div>
+            <div className="text-center text-sm text-gray-600">
+              Or continue with
+            </div>
             <div className="flex justify-center items-center">
               <button className="w-12 h-12 p-2 rounded-full bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 font-semibold">
                 <img

@@ -9,12 +9,13 @@ import ForgotPassword from "./components/ForgotPassword";
 import VerificationCode from "./components/VerificationCode";
 import ResetPassword from "./components/ResetPassword";
 import ResetSuccess from "./components/ResetSuccess";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   return (
     <Router>
       <div>
-        <ForgotPassword/>
+        <EditProfile/>
       </div>
     </Router>
   );
