@@ -17,6 +17,7 @@ export default {
       },
       colors: {
         'primary': '#738FFD',
+<<<<<<< HEAD
         'primary2': '#E6FDA3',
         'hitam': '#333333',
       },
@@ -26,6 +27,15 @@ export default {
         'facebook': "url('./src/assets/facebook.png')",
         'tiktok': "url('./src/assets/tiktok.png')",
         'twitter': "url('./src/assets/twitter.png')",
+=======
+      },
+      boxShadow: {
+        'inner-dark': 'inset 5px 5px 15px 10px rgba(0, 0, 0, 0.15)',
+        '3xl': ' 5px 5px 15px 10px rgba(0, 0, 0, 0.15)',
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+>>>>>>> 3ad5f005cfacc6d8935faae3682ce2dcb825d09a
       },
     },
   },
