@@ -10,12 +10,13 @@ import VerificationCode from "./components/VerificationCode";
 import ResetPassword from "./components/ResetPassword";
 import ResetSuccess from "./components/ResetSuccess";
 import EditProfile from "./components/EditProfile";
+import ChangePassword from "./components/ChangePassword";
 
 function App() {
   return (
     <Router>
       <div>
-        <EditProfile/>
+        <ChangePassword/>
       </div>
     </Router>
   );

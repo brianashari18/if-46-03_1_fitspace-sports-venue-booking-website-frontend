@@ -2,7 +2,7 @@ import { useState } from "react";
 import ProfileIcon from "../assets/ProfileIcon.png";
 import OrderIcon from "../assets/OrderIcon.png";
 import AddVenue from "../assets/AddVenue.png";
-import ChangePassword from "../assets/ChangePassword.png";
+import ChangePass from "../assets/ChangePass.png";
 import LogOutIcon from "../assets/LogOutIcon.png";
 import Profile from "../assets/Profile.png";
 
@@ -76,7 +76,7 @@ const EditProfile = () => {
         <div className="flex flex-col space-y-4">
           <button className="font-semibold flex items-center px-5 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
             <img
-              src={ChangePassword}
+              src={ChangePass}
               alt="Change Password"
               className="w-6 h-6 mr-3"
             />
@@ -89,16 +89,16 @@ const EditProfile = () => {
         </div>
       </div>
 
-      <div className="p-10">
-        <h1 className="text-2xl font-bold text-black text-start mb-6">
+      <div className="p-6 ">
+        <h1 className="text-2xl font-bold text-black text-start mb-6 ml-36">
           Edit Profile
         </h1>
-        <div className="bg-white rounded-lg shadow-xl w-full sm:w-2/4 md:w-2/3 lg:w-1/2 xl:w-[77rem] h-[40rem] flex flex-wrap">
+        <div className="bg-white rounded-lg shadow-xl w-full sm:w-2/4 md:w-1/3 lg:w-1/2 xl:w-[60rem] h-[40rem] flex flex-wrap ml-36">
           <div className="w-full h-48 border-b-[1px] border-gray-900 border-opacity-35 shadow-lg p-6">
-            <p className="text-start text-gray-400 font-medium ml-7">
+            <p className="text-start text-gray-400 font-medium ml-[6rem]">
               Your Profile
             </p>
-            <img src={Profile} alt="Profile" className="w-28 h-28 mt-3 ml-4" />
+            <img src={Profile} alt="Profile" className="w-28 h-28 mt-3 ml-20"/>
           </div>
 
           <div className="w-full border text-center h-[calc(100%-12rem)] flex justify-center item ">
