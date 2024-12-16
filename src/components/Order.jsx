@@ -35,7 +35,7 @@ const orders = [
   },
 ];
 
-const OrderSelesai = () => {
+const Order = () => {
   const [activeTab, setActiveTab] = useState("selesai");
 
   // Filter orders berdasarkan status
@@ -157,4 +157,4 @@ const OrderSelesai = () => {
   );
 };
 
-export default OrderSelesai;
+export default Order;
