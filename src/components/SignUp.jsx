@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import googleIcon from "../assets/google.png";
 
 const SignUp = () => {
@@ -58,24 +59,6 @@ const SignUp = () => {
       setIsSignUp(false);
       return;
     }
-
-    // Kirim data ke server untuk registrasi
-    // try {
-    //   const result = await axios.post('/api/signup', { firstName, lastName, email, password });
-
-    //   if (result.data.success === 'true') {
-    //     setIsSignUp(false);
-    //     alert('Sign Up Successful');
-    //     history.push('/home'); // Ganti dengan route yang sesuai
-    //   } else {
-    //     setErrorMessage(result.data.error);
-    //     setIsSignUp(false);
-    //   }
-    // } catch (error) {
-    //   console.error('Sign Up Failed:', error);
-    //   setErrorMessage('An error occurred while signing up');
-    //   setIsSignUp(false);
-    // }
   };
 
   return (
@@ -191,12 +174,12 @@ const SignUp = () => {
             <p className="font-semibold text-sm sm:text-lg text-center mb-10 sm:mb-20">
               Enter your personal details to use all of site features
             </p>
-            <button
-              type="button"
-              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg"
+            <Link
+              to="/sign-in"  // Arahkan ke halaman Sign In
+              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
             >
               SIGN IN
-            </button>
+            </Link>
           </div>
         </div>
       </div>
