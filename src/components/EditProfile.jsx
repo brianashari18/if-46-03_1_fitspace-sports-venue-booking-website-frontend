@@ -106,7 +106,7 @@ const EditProfile = () => {
               <div className="flex items-center w-full mt-20">
                 <label
                   htmlFor="email"
-                  className="w-1/6 text-right mr-5 text-gray-500 font-medium"
+                  className="w-1/6 text-left mr-5 text-gray-500 font-medium"
                 >
                   Email
                 </label>
@@ -126,7 +126,7 @@ const EditProfile = () => {
               <div className="flex items-center w-full">
                 <label
                   htmlFor="firstName"
-                  className="w-1/6 text-right mr-5 text-gray-500 font-medium"
+                  className="w-1/6 text-left mr-5 text-gray-500 font-medium"
                 >
                   First Name
                 </label>
@@ -148,7 +148,7 @@ const EditProfile = () => {
               <div className="flex items-center w-full mb-10">
                 <label
                   htmlFor="lastName"
-                  className="w-1/6 text-right mr-5 text-gray-500 font-medium"
+                  className="w-1/6 text-left mr-5 text-gray-500 font-medium"
                 >
                   Last Name
                 </label>

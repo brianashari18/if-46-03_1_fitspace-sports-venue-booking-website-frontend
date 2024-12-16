@@ -11,12 +11,13 @@ import ResetPassword from "./components/ResetPassword";
 import ResetSuccess from "./components/ResetSuccess";
 import EditProfile from "./components/EditProfile";
 import ChangePassword from "./components/ChangePassword";
+import OrderSelesai from "./components/OrderSelesai";
 
 function App() {
   return (
     <Router>
       <div>
-        <ChangePassword/>
+        <OrderSelesai/>
       </div>
     </Router>
   );
