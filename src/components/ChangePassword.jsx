@@ -95,13 +95,26 @@ const ChangePassword = () => {
           Change Password
         </h1>
         <div className="bg-white rounded-lg shadow-xl w-full sm:w-2/4 md:w-1/3 lg:w-1/2 xl:w-[60rem] h-[40rem] flex flex-wrap ml-36">
-          <div className="w-full h-48 border-b-[1px] border-gray-900 border-opacity-35 shadow-lg p-6">
-            <img src={Profile} alt="Profile" className="w-28 h-28 mt-4 ml-20" />
+          <div className="w-full h-48 border-b-[1px] border-gray-900 border-opacity-35 shadow-lg p-6 flex items-center">
+            {/* Profile Image */}
+            <img
+              src={Profile}
+              alt="Profile"
+              className="w-28 h-28 ml-16"
+            />
+
+            {/* User Details */}
+            <div className="ml-6 w-full">
+              <p className="text-xl text-black font-bold">
+                Bobby Junario
+              </p>
+              <p className="text-sm text-gray-400 font-semibold mt-2">Bobby123@gmail.com</p>
+            </div>
           </div>
 
-          <div className="w-full h-[calc(100%-12rem)] flex flex-col items-center justify-center px-4 border border-red-900">
+          <div className="w-full h-[calc(100%-12rem)] flex flex-col items-center justify-center px-4">
             {/* Header Section */}
-            <div className="w-full max-w-2xl mb-6">
+            <div className="w-full max-w-3xl mb-6">
               <h1 className="text-2xl font-bold text-black text-start mb-2">
                 Password
               </h1>
@@ -111,12 +124,12 @@ const ChangePassword = () => {
             </div>
 
             {/* Form Section */}
-            <form className="w-full max-w-2xl space-y-6 border border-red-900">
+            <form className="w-full max-w-3xl space-y-6 ">
               {/* Input Current Password */}
               <div className="flex items-center">
                 <label
                   htmlFor="currentPassword"
-                  className="w-1/3 text-right pr-4 text-gray-500 font-medium"
+                  className="w-1/3 text-left pr-4 text-gray-500 font-medium"
                 >
                   Current Password
                 </label>
@@ -125,7 +138,7 @@ const ChangePassword = () => {
                     type="password"
                     id="currentPassword"
                     placeholder="Current Password"
-                    className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 rounded-lg bg-[#738FFD] bg-opacity-35 placeholder-gray-500 border-[#738FFD] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                   />
@@ -141,7 +154,7 @@ const ChangePassword = () => {
               <div className="flex items-center">
                 <label
                   htmlFor="newPassword"
-                  className="w-1/3 text-right pr-4 text-gray-500 font-medium"
+                  className="w-1/3 text-left pr-4 text-gray-500 font-medium"
                 >
                   New Password
                 </label>
@@ -150,7 +163,7 @@ const ChangePassword = () => {
                     type="password"
                     id="newPassword"
                     placeholder="New Password"
-                    className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 rounded-lg bg-[#738FFD] bg-opacity-35 placeholder-gray-500 border-[#738FFD] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
@@ -166,7 +179,7 @@ const ChangePassword = () => {
               <div className="flex items-center">
                 <label
                   htmlFor="confirmNewPassword"
-                  className="w-1/3 text-right pr-4 text-gray-500 font-medium"
+                  className="w-1/3 text-left pr-4 text-gray-500 font-medium"
                 >
                   Confirm New Password
                 </label>
@@ -175,7 +188,7 @@ const ChangePassword = () => {
                     type="password"
                     id="confirmNewPassword"
                     placeholder="Confirm New Password"
-                    className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 rounded-lg bg-[#738FFD] bg-opacity-35 placeholder-gray-500 border-[#738FFD] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
                   />

@@ -89,7 +89,7 @@ const EditProfile = () => {
         </div>
       </div>
 
-      <div className="p-6 ">
+      <div className="p-6">
         <h1 className="text-2xl font-bold text-black text-start mb-6 ml-36">
           Edit Profile
         </h1>
