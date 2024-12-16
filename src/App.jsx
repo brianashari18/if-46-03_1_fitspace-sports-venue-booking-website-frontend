@@ -12,12 +12,16 @@ import ResetSuccess from "./components/ResetSuccess";
 import EditProfile from "./components/EditProfile";
 import ChangePassword from "./components/ChangePassword";
 import OrderSelesai from "./components/OrderSelesai";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer"; 
 
 function App() {
   return (
     <Router>
       <div>
+        <Navbar/>
         <OrderSelesai/>
+        <Footer/>
       </div>
     </Router>
   );

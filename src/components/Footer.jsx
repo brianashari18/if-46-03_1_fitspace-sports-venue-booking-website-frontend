@@ -7,7 +7,7 @@ import facebook from '../assets/facebook.png';
 const Footer = () => {
     return (
 
-        <section className="min-h-screen flex flex-col ">
+        <section className="h-f flex flex-col ">
              <div className="flex-grow">
              </div>
              <footer className="bg-primary py-10 flex justify-between drop-shadow-2xl">
