@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import ResetSuccessfull from "../assets/ResetSuccessfull.png";
 
 const ResetSuccess = () => {
-  const handleCancel = () => {
-    // You can add a redirect or any action when clicking the Reset button
-    console.log("Redirect to sign-in page or any other action.");
-  };
+  // const handleCancel = () => {
+  //   // You can add a redirect or any action when clicking the Reset button
+  //   console.log("Redirect to sign-in page or any other action.");
+  // };
   
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -18,13 +19,12 @@ const ResetSuccess = () => {
             Please sign in again with your new password
           </p>
 
-          <button
-              type="button" 
-              className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
-              onClick={handleCancel} 
+          <Link
+              to="/sign-in"  // Arahkan ke halaman Sign In
+              className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6 text-center"
             >
               Sign In
-            </button>
+            </Link>
         </div>
 
         {/* Right Section */}
