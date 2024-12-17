@@ -65,7 +65,7 @@ const SignUp = () => {
     <div className="flex justify-center items-center min-h-screen  bg-gray-100">
       <div className="bg-white rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
         {/* Left Section */}
-        <div className="w-1/2 h-full bg-gray-50 rounded-l-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
+        <div className="w-1/2 h-full bg-white rounded-l-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
           <h1 className="font-bold text-xl sm:text-2xl text-center mb-3">
             SIGN UP
           </h1>

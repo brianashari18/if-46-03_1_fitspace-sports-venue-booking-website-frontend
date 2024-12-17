@@ -35,9 +35,6 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/order" element={<Order />} />
-          <Route path="/booking-success" element={<BookingSuccess />} />
-          <Route path="/venues" element={<Venues />} />
-          <Route path="/venue-detail" element={<VenueDetail />} />
           <Route path="/" element={<SignIn />} />  {/* Or any default route */}
         </Routes>
 

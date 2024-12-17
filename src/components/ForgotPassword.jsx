@@ -1,5 +1,5 @@
-import React, { useState, createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, createContext, useContext } from "react";
+import { Link } from "react-router-dom";
 import ForgotPass from "../assets/ForgotPass.png";
 
 // Membuat EmailContext
@@ -13,7 +13,6 @@ const ForgotPassword = () => {
   const [emailError, setEmailError] = useState("");
   const [isContinueDisabled, setIsContinueDisabled] = useState(true);
   const [isCancelDisabled, setIsCancelDisabled] = useState(false);
-  const navigate = useNavigate(); // Untuk menavigasi ke halaman berikutnya
 
   // Fungsi untuk validasi email
   const isValidEmail = (email) => {
@@ -28,8 +27,11 @@ const ForgotPassword = () => {
     // Validasi input
     let isValid = true;
 
-    if (email.trim() === "" || !isValidEmail(email)) {
-      setEmailError("Enter a valid email address");
+    if (email.trim() === "") {
+      setEmailError("Email cannot be empty.");
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      setEmailError("Enter a valid email address.");
       isValid = false;
     }
 
@@ -37,9 +39,6 @@ const ForgotPassword = () => {
       setIsContinueDisabled(true);
       return;
     }
-
-    // Jika validasi sukses, simpan email ke context dan arahkan ke halaman verifikasi
-    navigate("/verification", { state: { email } }); // Arahkan ke halaman verifikasi dan kirim email sebagai state
   };
 
   const handleCancel = () => {
@@ -66,7 +65,7 @@ const ForgotPassword = () => {
             </p>
 
             <form
-              className="w-60 max-w-sm space-y-2 mb-2"
+              className="w-60 max-w-sm space-y-4 mb-2"
               onSubmit={handleSubmit}
             >
               <div>
@@ -81,26 +80,28 @@ const ForgotPassword = () => {
                   }}
                 />
                 {emailError && (
-                  <div className="text-sm text-red-600">{emailError}</div>
+                  <div className="text-sm text-white mt-2">{emailError}</div>
                 )}
               </div>
 
-              <button
-                type="submit"
-                className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
-                disabled={isContinueDisabled}
-              >
-                Continue
-              </button>
+              <div className="w-full flex flex-col space-y-2 mt-6">
+                <Link
+                  to="/verification-code" // Arahkan ke halaman Sign In
+                  className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
+                  onClick={handleSubmit}
+                >
+                  Continue
+                </Link>
 
-              <button
-                type="button"
-                className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
-                disabled={isCancelDisabled}
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
+                <Link
+                  to="/sign-in" // Arahkan ke halaman Sign In
+                  className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
+                  disabled={isCancelDisabled}
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Link>
+              </div>
             </form>
           </div>
 

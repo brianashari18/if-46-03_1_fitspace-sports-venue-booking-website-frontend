@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link dari React Router
+import { Link } from "react-router-dom"; 
 import googleIcon from "../assets/google.png";
 
 const SignIn = () => {
@@ -69,7 +69,7 @@ const SignIn = () => {
         </div>
 
         {/* Right Section */}
-        <div className="w-1/2 h-full bg-gray-50 rounded-r-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
+        <div className="w-1/2 h-full bg-gray-100 rounded-r-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
           <h1 className="font-bold text-xl sm:text-2xl text-center mb-12">
             SIGN IN
           </h1>
@@ -97,7 +97,7 @@ const SignIn = () => {
             </div>
 
             <div className="text-right">
-              <a href="#" className="text-black text-sm hover:underline">
+              <a href="/forgot-password" className="text-black text-sm hover:underline">
                 Forgot Password?
               </a>
             </div>
