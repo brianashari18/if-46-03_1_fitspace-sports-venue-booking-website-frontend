@@ -18,6 +18,7 @@ export default {
       colors: {
         'primary': '#738FFD',
         'primary2': '#E6FDA3',
+        'secondaryK': '#F2FA5A',
         'hitam': '#333333',
         'putih': '#F5F5F5',
       },

@@ -14,8 +14,8 @@ const ContactUs = () => {
                         <input type="Email"
                              placeholder="Email" 
                              className="w-full border border-gray-300 rounded-3xl p-3 focus:outline-primary focus:ring-primary mb-6 font-poppins"/>
-                            <input type="Subject"
-                            placeholder="Subject" 
+                            <input type="Name"
+                            placeholder="Name" 
                             className="w-full border border-gray-300 rounded-3xl p-3 focus:outline-primary focus:ring-primary mb-6 font-poppins"/>
                              <input type="Description"
                              placeholder="Description" 

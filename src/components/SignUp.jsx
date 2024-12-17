@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import googleIcon from "../assets/google.png";
 
 const SignUp = () => {
@@ -58,31 +59,13 @@ const SignUp = () => {
       setIsSignUp(false);
       return;
     }
-
-    // Kirim data ke server untuk registrasi
-    // try {
-    //   const result = await axios.post('/api/signup', { firstName, lastName, email, password });
-
-    //   if (result.data.success === 'true') {
-    //     setIsSignUp(false);
-    //     alert('Sign Up Successful');
-    //     history.push('/home'); // Ganti dengan route yang sesuai
-    //   } else {
-    //     setErrorMessage(result.data.error);
-    //     setIsSignUp(false);
-    //   }
-    // } catch (error) {
-    //   console.error('Sign Up Failed:', error);
-    //   setErrorMessage('An error occurred while signing up');
-    //   setIsSignUp(false);
-    // }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen  bg-gray-100">
       <div className="bg-white rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
         {/* Left Section */}
-        <div className="w-1/2 h-full bg-gray-50 rounded-l-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
+        <div className="w-1/2 h-full bg-white rounded-l-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
           <h1 className="font-bold text-xl sm:text-2xl text-center mb-3">
             SIGN UP
           </h1>
@@ -152,11 +135,6 @@ const SignUp = () => {
               )}
             </div>
 
-            <div className="text-right">
-              <a href="#" className="text-black text-sm hover:underline">
-                Forgot Password?
-              </a>
-            </div>
             <button
               type="submit"
               className="w-full p-3 rounded-lg bg-[#738ffd] text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 mt-6"
@@ -166,12 +144,12 @@ const SignUp = () => {
             </button>
           </form>
 
-          <div className="w-full flex flex-col justify-center items-center max-w-sm space-y-2 mt-2">
+          <div className="w-full flex flex-col justify-center items-center max-w-sm space-y-6 mt-3">
             <div className="text-center text-sm text-gray-600">
               Or continue with
             </div>
             <div className="flex justify-center items-center">
-              <button className="w-12 h-12 p-2 rounded-full bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 font-semibold">
+              <button className="w-12 h-12 p-2 rounded-full bg-white hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 font-semibold">
                 <img
                   src={googleIcon}
                   alt="Google logo"
@@ -191,12 +169,12 @@ const SignUp = () => {
             <p className="font-semibold text-sm sm:text-lg text-center mb-10 sm:mb-20">
               Enter your personal details to use all of site features
             </p>
-            <button
-              type="button"
-              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg"
+            <Link
+              to="/sign-in" // Arahkan ke halaman Sign In
+              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
             >
               SIGN IN
-            </button>
+            </Link>
           </div>
         </div>
       </div>

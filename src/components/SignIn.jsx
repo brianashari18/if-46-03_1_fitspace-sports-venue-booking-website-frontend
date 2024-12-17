@@ -1,13 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import googleIcon from "../assets/google.png";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  
+
   const [isSignIn, setIsSignIn] = useState(false);
 
   // Fungsi untuk validasi email
@@ -42,28 +43,7 @@ const SignIn = () => {
       return;
     }
 
-    // try {
-    //   const result = await axios.post('/api/login', { email, password });
-
-    //   if (result.data.success === 'true') {
-    //     const user = {
-    //       id: result.data.id,
-    //       username: result.data.username,
-    //       email: result.data.email,
-    //     };
-
-    //     setIsSignIn(false);
-    //     alert('Sign In Successfully');
-    //     history.push('/home', { user });
-    //   } else {
-    //     setErrorMessage(result.data.error);
-    //     setIsSignIn(false);
-    //   }
-    // } catch (error) {
-    //   console.error('Login Failed:', error);
-    //   setErrorMessage('An error occurred while signing in');
-    //   setIsSignIn(false);
-    // }
+    //Fetch API (tunggu login sukses)
   };
 
   return (
@@ -79,47 +59,58 @@ const SignIn = () => {
               Register with your personal details to use all of the site
               features
             </p>
-            <button
-              type="button"
-              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg"
+
+            <Link
+              to="/sign-up" // Gunakan Link untuk navigasi ke halaman SignUp
+              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
             >
               SIGN UP
-            </button>
+            </Link>
           </div>
         </div>
 
         {/* Right Section */}
-        <div className="w-1/2 h-full bg-gray-50 rounded-r-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
+        <div className="w-1/2 h-full bg-gray-100 rounded-r-lg flex flex-col justify-center items-center p-8 sm:p-16 lg:p-44">
           <h1 className="font-bold text-xl sm:text-2xl text-center mb-12">
             SIGN IN
           </h1>
-          <form className="w-full max-w-sm space-y-2 mb-2" onSubmit={handleSubmit}>
+          <form
+            className="w-full max-w-sm space-y-2 mb-2"
+            onSubmit={handleSubmit}
+          >
             <div>
               <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {emailError && <div className="text-sm text-red-600">{emailError}</div>}
+                type="email"
+                placeholder="Email"
+                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {emailError && (
+                <div className="text-sm text-red-600">{emailError}</div>
+              )}
             </div>
 
             <div>
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {passwordError && (
+                <div className="text-sm text-red-600">{passwordError}</div>
+              )}
             </div>
 
             <div className="text-right">
-              <a href="#" className="text-black text-sm hover:underline">
+              <Link
+                to="/forgot-password" // Gunakan Link untuk navigasi ke halaman SignUp
+                className="text-black text-sm hover:underline"
+              >
                 Forgot Password?
-              </a>
+              </Link>
             </div>
             <button
               type="submit"

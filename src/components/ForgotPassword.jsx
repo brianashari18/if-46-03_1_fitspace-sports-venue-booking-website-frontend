@@ -1,5 +1,5 @@
-import React, { useState, createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, createContext, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ForgotPass from "../assets/ForgotPass.png";
 
 // Membuat EmailContext
@@ -11,9 +11,8 @@ export const useEmail = () => useContext(EmailContext);
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [isContinueDisabled, setIsContinueDisabled] = useState(true);
-  const [isCancelDisabled, setIsCancelDisabled] = useState(false);
-  const navigate = useNavigate(); // Untuk menavigasi ke halaman berikutnya
+  const [isContinueDisabled, setIsContinueDisabled] = useState(true);  // Disabled Continue button by default
+  const navigate = useNavigate();
 
   // Fungsi untuk validasi email
   const isValidEmail = (email) => {
@@ -21,38 +20,44 @@ const ForgotPassword = () => {
     return emailRegex.test(email);
   };
 
+  // Fungsi untuk menangani pengiriman form
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEmailError("");
+    setEmailError(""); // Reset error
 
-    // Validasi input
-    let isValid = true;
-
-    if (email.trim() === "" || !isValidEmail(email)) {
-      setEmailError("Enter a valid email address");
-      isValid = false;
-    }
-
-    if (!isValid) {
-      setIsContinueDisabled(true);
+    // Validasi input email
+    if (email.trim() === "") {
+      setEmailError("Email cannot be empty.");
+      setIsContinueDisabled(true); // Disable Continue if email is empty
       return;
     }
 
-    // Jika validasi sukses, simpan email ke context dan arahkan ke halaman verifikasi
-    navigate("/verification", { state: { email } }); // Arahkan ke halaman verifikasi dan kirim email sebagai state
+    if (!isValidEmail(email)) {
+      setEmailError("Enter a valid email address.");
+      setIsContinueDisabled(true); // Disable Continue if email is not valid
+      return;
+    }
+
+    // Jika email valid, arahkan ke halaman verification-code
+    navigate("/verification-code", { state: { email } });
   };
 
+  // Fungsi untuk menangani aksi Cancel
   const handleCancel = () => {
-    // Reset email dan error jika tombol Cancel ditekan
-    setEmail("");
-    setEmailError("");
-    setIsCancelDisabled(true);
-    setIsContinueDisabled(true);
+    setEmail(""); // Reset email field
+    setEmailError(""); // Clear any error messages
+  };
+
+  // Update Continue button disabled state based on email input
+  const handleEmailChange = (e) => {
+    const inputEmail = e.target.value;
+    setEmail(inputEmail);
+    setIsContinueDisabled(inputEmail.trim() === "" || !isValidEmail(inputEmail)); // Disable if email is invalid or empty
+    setEmailError(""); // Reset error on input change
   };
 
   return (
     <EmailContext.Provider value={{ email, setEmail }}>
-      {" "}
       {/* Menyediakan context */}
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
         <div className="bg-[#738FFD] rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
@@ -66,41 +71,39 @@ const ForgotPassword = () => {
             </p>
 
             <form
-              className="w-60 max-w-sm space-y-2 mb-2"
+              className="w-60 max-w-sm space-y-4 mb-2"
               onSubmit={handleSubmit}
             >
               <div>
                 <input
-                  type="text"
+                  type="email"
                   placeholder="Email"
                   className="w-full p-3 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setIsContinueDisabled(e.target.value.trim() === ""); // Disable Continue if email is empty
-                  }}
+                  onChange={handleEmailChange} // Update email value and validation on change
                 />
                 {emailError && (
-                  <div className="text-sm text-red-600">{emailError}</div>
+                  <div className="text-sm text-white mt-2">{emailError}</div>
                 )}
               </div>
 
-              <button
-                type="submit"
-                className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
-                disabled={isContinueDisabled}
-              >
-                Continue
-              </button>
+              <div className="w-full flex flex-col space-y-2 mt-6">
+                <button
+                  type="submit"
+                  className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
+                  disabled={isContinueDisabled} // Disable Continue if email is empty or invalid
+                >
+                  Continue
+                </button>
 
-              <button
-                type="button"
-                className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
-                disabled={isCancelDisabled}
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
+                <Link
+                  to="/sign-in"
+                  className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
+                  onClick={handleCancel} // Reset form when Cancel is clicked
+                >
+                  Cancel
+                </Link>
+              </div>
             </form>
           </div>
 

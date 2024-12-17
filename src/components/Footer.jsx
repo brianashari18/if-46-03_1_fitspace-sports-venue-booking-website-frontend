@@ -6,15 +6,26 @@ import facebook from '../assets/facebook.png';
 
 const Footer = () => {
     return (
-        <section>
-             <footer className="bg-primary py-10 flex justify-between items-center drop-shadow-2xl">
-             <img src={logo} alt="clickable image" className=' object-cover px-20' />
-                <div className='flex flex-row justify-center gap-12 px-24'>
-                    <button className='font-poppins text-primary2'>Home</button>
-                    <button className='font-poppins text-primary2'>Venue</button>
-                    <button className='font-poppins text-primary2'>How To Book</button>
-                    <button className='font-poppins text-primary2'>About Us</button>
-                    <button className='font-poppins text-primary2'>Contact Us</button>
+        <section className="h-f flex flex-col ">
+             <div className="flex-grow">
+             </div>
+             <footer className="bg-primary py-10 flex justify-between drop-shadow-2xl">
+                    <a href="">
+                        <img src={logo} alt="footer" className=' object-cover px-24 py-1' />
+                    </a>
+                <div className='flex flex-row justify-between gap-12 px-24 py-6'>
+                    <a href="">
+                        <button className='font-poppins text-primary2'>Home</button>
+                    </a>  
+                    <a href="/venue">
+                        <button className='font-poppins text-primary2'>Venue</button>
+                    </a>
+                    <a href="/about-us">
+                        <button className='font-poppins text-primary2'>About Us</button>
+                    </a>
+                    <a href="/contact-us">
+                        <button className='font-poppins text-primary2'>Contact Us</button>
+                    </a>
                 </div>
                 <div className='flex flex-col justify-end'>
                     <div>
