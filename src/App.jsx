@@ -1,9 +1,6 @@
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
 import Venues from "./components/Venues";
-import About from "./components/About";
-import HowItWorks from "./components/HowItWorks";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import ForgotPassword from "./components/ForgotPassword";
@@ -14,10 +11,9 @@ import EditProfile from "./components/EditProfile";
 import ChangePassword from "./components/ChangePassword";
 import Order from "./components/Order";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer"; 
-import BookingSuccess from "./components/BookingSuccess";
-import VenueDetail from "./components/VenueDetail";
-import Review from "./components/Review";
+import Footer from "./components/footer";
+import AboutUs from "./components/AboutUs";
+import ContactUs from "./components/ContactUs";
 
 function App() {
   return (
@@ -25,7 +21,6 @@ function App() {
       <div className="min-h-screen bg-gray-100">
         {/* Navbar will be outside of the Routes */}
         <Navbar />
-
         {/* Define Routes */}
         <Routes>
           <Route path="/about-us" element={<AboutUs />}/>
@@ -40,11 +35,8 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/order" element={<Order />} />
-          <Route path="/venues" element={<Venues />} />
-          <Route path="/venues-detail" element={<VenueDetail />} />
           <Route path="/" element={<SignIn />} />  {/* Or any default route */}
         </Routes>
-
         {/* Footer will be outside of the Routes */}
         <Footer />
       </div>
