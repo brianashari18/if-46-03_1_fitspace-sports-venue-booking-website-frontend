@@ -15,6 +15,10 @@ export default function SportVenues() {
   const [selectedRating, setSelectedRating] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
 
+  const [showPriceRange, setShowPriceRange] = useState(false);
+  const [lowestPrice, setLowestPrice] = useState(""); // Input Lowest Price
+  const [highestPrice, setHighestPrice] = useState(""); // Input Highest Price
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navigation */}
@@ -103,8 +107,8 @@ export default function SportVenues() {
                 )}
             </div>
 
-            {/* Rating Dropdown */}
-            <div className="relative">
+    {/* Rating Dropdown */}
+    <div className="relative">
                 <button
                 onClick={() => setIsRatingOpen(!isRatingOpen)}
                 className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
@@ -139,7 +143,7 @@ export default function SportVenues() {
                 onClick={() => setIsPriceOpen(!isPriceOpen)}
                 className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
                 >
-                Price
+                {selectedPrice || "Price"}
                 <ChevronDown size={20} />
                 </button>
                 {isPriceOpen && (
@@ -152,8 +156,13 @@ export default function SportVenues() {
                         key={price}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
-                        setSelectedPrice(price);
-                        setIsPriceOpen(false);
+            setSelectedPrice(price);
+            setIsPriceOpen(false); // Tutup dropdown setelah memilih
+            if (price === "Price Range") {
+              setShowPriceRange(true); // Tampilkan input Price Range
+            } else {
+              setShowPriceRange(false); // Sembunyikan input Price Range
+            }
                         }}
                     >
                         {price}
@@ -164,6 +173,42 @@ export default function SportVenues() {
             </div>
             </div>
         </div>
+        
+        {/* Price Range Input */}
+        {showPriceRange && (
+          <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <h4 className="flex justify-center font-semibold mb-5">Set Price Range</h4>
+            <div className="flex justify-center gap-3 items-center">
+              <input
+                type="number"
+                placeholder="Lowest Price"
+                value={lowestPrice}
+                onChange={(e) => setLowestPrice(e.target.value)}
+                className="w-40 h-9 border border-gray-300 rounded-md px-2 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+              <span className="text-gray-500">—</span>
+              <input
+                type="number"
+                placeholder="Highest Price"
+                value={highestPrice}
+                onChange={(e) => setHighestPrice(e.target.value)}
+                className="w-40 h-9 border border-gray-300 rounded-md px-2 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </div>
+            <div className="flex justify-center mt-5">
+              <button
+                onClick={() => {
+                  alert(`Price Range: ${lowestPrice} - ${highestPrice}`);
+                  setIsPriceOpen(false);
+                }}
+                className="bg-[#6B7FFF] text-white px-20 py-2 rounded-md text-sm hover:bg-[#5a6edb] transition duration-300"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
+
 
       {/* Venue Grid */}
       <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
