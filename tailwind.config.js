@@ -17,9 +17,9 @@ export default {
       },
       colors: {
         'primary': '#738FFD',
-<<<<<<< HEAD
         'primary2': '#E6FDA3',
         'hitam': '#333333',
+        'putih': '#F5F5F5',
       },
       image:{
         'logo': "url('./src/assets/yellow-logo.png')",
@@ -27,7 +27,9 @@ export default {
         'facebook': "url('./src/assets/facebook.png')",
         'tiktok': "url('./src/assets/tiktok.png')",
         'twitter': "url('./src/assets/twitter.png')",
-=======
+        'bola': "url('./src/assets/bola.jpeg')",
+        'Badminton': "url('./src/assets/Badminton.png')",
+        'Basketball': "url('./src/assets/Basketball.png')",
       },
       boxShadow: {
         'inner-dark': 'inset 5px 5px 15px 10px rgba(0, 0, 0, 0.15)',
@@ -35,7 +37,6 @@ export default {
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
->>>>>>> 3ad5f005cfacc6d8935faae3682ce2dcb825d09a
       },
     },
   },

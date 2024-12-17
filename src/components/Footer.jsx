@@ -6,28 +6,33 @@ import facebook from '../assets/facebook.png';
 
 const Footer = () => {
     return (
-
-        <section className="min-h-screen flex flex-col ">
-             <div className="flex-grow">
-             </div>
-             <footer className="bg-primary py-10 flex justify-between drop-shadow-2xl">
-             <img src={logo} alt="footer" className=' object-cover px-24 py-1' />
-                <div className='flex flex-row justify-between gap-12 px-24 py-6'>
-                    <h1 className='font-poppins text-primary2'>Home</h1>
-                    <h1 className='font-poppins text-primary2'>Venue</h1>
-                    <h1 className='font-poppins text-primary2'>How To Book</h1>
-                    <h1 className='font-poppins text-primary2'>About Us</h1>
-                    <h1 className='font-poppins text-primary2'>Contact Us</h1>
+        <section>
+             <footer className="bg-primary py-10 flex justify-between items-center drop-shadow-2xl">
+             <img src={logo} alt="clickable image" className=' object-cover px-20' />
+                <div className='flex flex-row justify-center gap-12 px-24'>
+                    <button className='font-poppins text-primary2'>Home</button>
+                    <button className='font-poppins text-primary2'>Venue</button>
+                    <button className='font-poppins text-primary2'>How To Book</button>
+                    <button className='font-poppins text-primary2'>About Us</button>
+                    <button className='font-poppins text-primary2'>Contact Us</button>
                 </div>
                 <div className='flex flex-col justify-end'>
                     <div>
                         <h1 className='font-poppins text-primary2 px-36'>Follow Us On</h1>
                     </div>
-                    <div className='flex flex-row px-32'>
+                    <div className='flex justify-center flex-row px-32'>
+                        <a href="https://www.instagram.com/rrohhmman/profilecard/?igsh=MWtoOXZxMXd5bmpjeQ==">
                         <img src={facebook} alt="footer" className='object-cover' />
+                        </a>
+                        <a href="https://www.instagram.com/rrohhmman/profilecard/?igsh=MWtoOXZxMXd5bmpjeQ==">
                         <img src={instagram} alt="footer" className='object-cover' />
+                        </a>
+                        <a href="https://www.instagram.com/rrohhmman/profilecard/?igsh=MWtoOXZxMXd5bmpjeQ==">
                         <img src={twitter} alt="footer" className='object-cover' />
+                        </a>
+                        <a href="https://www.instagram.com/rrohhmman/profilecard/?igsh=MWtoOXZxMXd5bmpjeQ==">
                         <img src={tiktok} alt="footer" className='object-cover' /> 
+                        </a>
                     </div>
                 </div>
             </footer>
@@ -40,5 +45,4 @@ const Footer = () => {
         </section>
     );
 };
-
 export default Footer;
