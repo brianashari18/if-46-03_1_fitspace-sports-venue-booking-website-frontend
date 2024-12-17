@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import googleIcon from "../assets/google.png";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  
+
   const [isSignIn, setIsSignIn] = useState(false);
 
   // Fungsi untuk validasi email
@@ -56,9 +56,10 @@ const SignIn = () => {
               Hello, Friend!
             </h1>
             <p className="font-semibold text-sm sm:text-lg text-center mb-10 sm:mb-20">
-              Register with your personal details to use all of the site features
+              Register with your personal details to use all of the site
+              features
             </p>
-            
+
             <Link
               to="/sign-up" // Gunakan Link untuk navigasi ke halaman SignUp
               className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
@@ -73,7 +74,10 @@ const SignIn = () => {
           <h1 className="font-bold text-xl sm:text-2xl text-center mb-12">
             SIGN IN
           </h1>
-          <form className="w-full max-w-sm space-y-2 mb-2" onSubmit={handleSubmit}>
+          <form
+            className="w-full max-w-sm space-y-2 mb-2"
+            onSubmit={handleSubmit}
+          >
             <div>
               <input
                 type="email"
@@ -82,7 +86,9 @@ const SignIn = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {emailError && <div className="text-sm text-red-600">{emailError}</div>}
+              {emailError && (
+                <div className="text-sm text-red-600">{emailError}</div>
+              )}
             </div>
 
             <div>
@@ -93,13 +99,18 @@ const SignIn = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
+              {passwordError && (
+                <div className="text-sm text-red-600">{passwordError}</div>
+              )}
             </div>
 
             <div className="text-right">
-              <a href="/forgot-password" className="text-black text-sm hover:underline">
+              <Link
+                to="/forgot-password" // Gunakan Link untuk navigasi ke halaman SignUp
+                className="text-black text-sm hover:underline"
+              >
                 Forgot Password?
-              </a>
+              </Link>
             </div>
             <button
               type="submit"

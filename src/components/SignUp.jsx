@@ -135,11 +135,6 @@ const SignUp = () => {
               )}
             </div>
 
-            <div className="text-right">
-              <a href="#" className="text-black text-sm hover:underline">
-                Forgot Password?
-              </a>
-            </div>
             <button
               type="submit"
               className="w-full p-3 rounded-lg bg-[#738ffd] text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 mt-6"
@@ -149,12 +144,12 @@ const SignUp = () => {
             </button>
           </form>
 
-          <div className="w-full flex flex-col justify-center items-center max-w-sm space-y-2 mt-2">
+          <div className="w-full flex flex-col justify-center items-center max-w-sm space-y-6 mt-3">
             <div className="text-center text-sm text-gray-600">
               Or continue with
             </div>
             <div className="flex justify-center items-center">
-              <button className="w-12 h-12 p-2 rounded-full bg-gray-100 hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 font-semibold">
+              <button className="w-12 h-12 p-2 rounded-full bg-white hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 font-semibold">
                 <img
                   src={googleIcon}
                   alt="Google logo"
@@ -175,7 +170,7 @@ const SignUp = () => {
               Enter your personal details to use all of site features
             </p>
             <Link
-              to="/sign-in"  // Arahkan ke halaman Sign In
+              to="/sign-in" // Arahkan ke halaman Sign In
               className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
             >
               SIGN IN

@@ -2,11 +2,6 @@ import { Link } from "react-router-dom";
 import ResetSuccessfull from "../assets/ResetSuccessfull.png";
 
 const ResetSuccess = () => {
-  // const handleCancel = () => {
-  //   // You can add a redirect or any action when clicking the Reset button
-  //   console.log("Redirect to sign-in page or any other action.");
-  // };
-  
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-[#738FFD] rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
