@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import ResetPass from "../assets/ResetPass.png";
+import Visibility from '@mui/icons-material/Visibility'; 
+import VisibilityOff from '@mui/icons-material/VisibilityOff'; 
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -10,15 +13,18 @@ const ResetPassword = () => {
 
   const [isReset, setIsReset] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const navigate = useNavigate(); 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsReset(true);
 
-    // Reset errors
     setPasswordError("");
     setConfirmPasswordError("");
 
-    // Validasi input
     let isValid = true;
 
     if (password.trim() === "") {
@@ -35,6 +41,8 @@ const ResetPassword = () => {
       setIsReset(false);
       return;
     }
+
+    navigate("/reset-success"); 
   };
 
   return (
@@ -53,27 +61,49 @@ const ResetPassword = () => {
             className="w-60 max-w-sm space-y-2 mb-2"
             onSubmit={handleSubmit}
           >
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} 
                 placeholder="Password"
                 className="w-full p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                onClick={() => setShowPassword(!showPassword)} 
+              >
+                {showPassword ? (
+                  <Visibility /> 
+                ) : (
+                  <VisibilityOff /> 
+                )}
+              </button>
               {passwordError && (
                 <div className="text-sm text-red-100">{passwordError}</div>
               )}
             </div>
 
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"} 
                 placeholder="Confirm Password"
                 className="w-full p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+              >
+                {showConfirmPassword ? (
+                  <Visibility /> 
+                ) : (
+                  <VisibilityOff /> 
+                )}
+              </button>
               {confirmPasswordError && (
                 <div className="text-sm text-red-100">
                   {confirmPasswordError}

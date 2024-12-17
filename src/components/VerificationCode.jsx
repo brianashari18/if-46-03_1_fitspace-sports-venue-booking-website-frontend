@@ -6,7 +6,6 @@ const VerificationCode = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Ambil email dari lokasi state atau localStorage
   const [email, setEmail] = useState(() => {
     const emailFromState = location.state?.email;
     if (emailFromState) {
@@ -21,7 +20,6 @@ const VerificationCode = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [resendMessage, setResendMessage] = useState("");
 
-  // Redirect ke halaman forgot-password jika email tidak ditemukan
   useEffect(() => {
     if (!email) {
       navigate("/forgot-password");
@@ -55,7 +53,6 @@ const VerificationCode = () => {
       setIsVerified(true);
       setErrorMessage("");
 
-      // Navigasi ke halaman tujuan setelah verifikasi berhasil
       navigate("/reset-password", { state: { email } });
     } else {
       setErrorMessage("Invalid Code!");

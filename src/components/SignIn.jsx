@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import googleIcon from "../assets/google.png";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
   const [isSignIn, setIsSignIn] = useState(false);
 
-  // Fungsi untuk validasi email
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
@@ -21,11 +23,9 @@ const SignIn = () => {
     e.preventDefault();
     setIsSignIn(true);
 
-    // Reset errors
     setEmailError("");
     setPasswordError("");
 
-    // Validasi input
     let isValid = true;
 
     if (email.trim() === "" || !isValidEmail(email)) {
@@ -61,7 +61,7 @@ const SignIn = () => {
             </p>
 
             <Link
-              to="/sign-up" // Gunakan Link untuk navigasi ke halaman SignUp
+              to="/sign-up" 
               className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
             >
               SIGN UP
@@ -91,9 +91,9 @@ const SignIn = () => {
               )}
             </div>
 
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} 
                 placeholder="Password"
                 className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={password}
@@ -102,11 +102,22 @@ const SignIn = () => {
               {passwordError && (
                 <div className="text-sm text-red-600">{passwordError}</div>
               )}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+              >
+                {showPassword ? (
+                  <Visibility /> 
+                ) : (
+                  <VisibilityOff /> 
+                )}
+              </button>
             </div>
 
             <div className="text-right">
               <Link
-                to="/forgot-password" // Gunakan Link untuk navigasi ke halaman SignUp
+                to="/forgot-password" 
                 className="text-black text-sm hover:underline"
               >
                 Forgot Password?
