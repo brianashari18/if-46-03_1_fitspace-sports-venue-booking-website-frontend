@@ -17,8 +17,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer"; 
 import BookingSuccess from "./components/BookingSuccess";
 import VenueDetail from "./components/VenueDetail";
-import ContactUs from "./components/ContactUs";
-import AboutUs from "./components/AboutUs";
+import Review from "./components/Review";
 
 function App() {
   return (
@@ -41,6 +40,8 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/order" element={<Order />} />
+          <Route path="/venues" element={<Venues />} />
+          <Route path="/venues-detail" element={<VenueDetail />} />
           <Route path="/" element={<SignIn />} />  {/* Or any default route */}
         </Routes>
 
