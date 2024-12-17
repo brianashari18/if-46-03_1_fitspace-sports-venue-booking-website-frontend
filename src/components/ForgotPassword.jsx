@@ -2,63 +2,54 @@ import { useState, createContext, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ForgotPass from "../assets/ForgotPass.png";
 
-// Membuat EmailContext
 const EmailContext = createContext();
 
-// Custom hook untuk menggunakan EmailContext
 export const useEmail = () => useContext(EmailContext);
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [isContinueDisabled, setIsContinueDisabled] = useState(true);  // Disabled Continue button by default
+  const [isContinueDisabled, setIsContinueDisabled] = useState(true);  
   const navigate = useNavigate();
 
-  // Fungsi untuk validasi email
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
 
-  // Fungsi untuk menangani pengiriman form
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEmailError(""); // Reset error
+    setEmailError(""); 
 
-    // Validasi input email
     if (email.trim() === "") {
       setEmailError("Email cannot be empty.");
-      setIsContinueDisabled(true); // Disable Continue if email is empty
+      setIsContinueDisabled(true); 
       return;
     }
 
     if (!isValidEmail(email)) {
       setEmailError("Enter a valid email address.");
-      setIsContinueDisabled(true); // Disable Continue if email is not valid
+      setIsContinueDisabled(true); 
       return;
     }
 
-    // Jika email valid, arahkan ke halaman verification-code
     navigate("/verification-code", { state: { email } });
   };
 
-  // Fungsi untuk menangani aksi Cancel
   const handleCancel = () => {
-    setEmail(""); // Reset email field
-    setEmailError(""); // Clear any error messages
+    setEmail(""); 
+    setEmailError(""); 
   };
 
-  // Update Continue button disabled state based on email input
   const handleEmailChange = (e) => {
     const inputEmail = e.target.value;
     setEmail(inputEmail);
-    setIsContinueDisabled(inputEmail.trim() === "" || !isValidEmail(inputEmail)); // Disable if email is invalid or empty
-    setEmailError(""); // Reset error on input change
+    setIsContinueDisabled(inputEmail.trim() === "" || !isValidEmail(inputEmail)); 
+    setEmailError(""); 
   };
 
   return (
     <EmailContext.Provider value={{ email, setEmail }}>
-      {/* Menyediakan context */}
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
         <div className="bg-[#738FFD] rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
           {/* Left Section */}

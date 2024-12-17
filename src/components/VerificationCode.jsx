@@ -1,19 +1,75 @@
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import VerifCode from "../assets/VerifCode.png";
 
 const VerificationCode = () => {
   const location = useLocation();
-  console.log(location.state);
-  const email = location.state?.email;
+  const navigate = useNavigate();
+
+  // Ambil email dari lokasi state atau localStorage
+  const [email, setEmail] = useState(() => {
+    const emailFromState = location.state?.email;
+    if (emailFromState) {
+      localStorage.setItem("email", emailFromState);
+      return emailFromState;
+    }
+    return localStorage.getItem("email");
+  });
+
+  const [codeInputs, setCodeInputs] = useState(["", "", "", ""]);
+  const [isVerified, setIsVerified] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [resendMessage, setResendMessage] = useState("");
+
+  // Redirect ke halaman forgot-password jika email tidak ditemukan
+  useEffect(() => {
+    if (!email) {
+      navigate("/forgot-password");
+    }
+  }, [email, navigate]);
+
+  const handleInputChange = (index, value, event) => {
+    if (!/^\d$/.test(value) && value !== "") return;
+
+    const newCodeInputs = [...codeInputs];
+
+    if (event.key === "Backspace" && !value) {
+      if (index > 0) {
+        document.getElementById(`input-${index - 1}`).focus();
+      }
+    } else {
+      newCodeInputs[index] = value.slice(0, 1);
+      setCodeInputs(newCodeInputs);
+
+      if (value.length === 1 && index < 3) {
+        document.getElementById(`input-${index + 1}`).focus();
+      }
+    }
+  };
 
   const handleVerify = () => {
-    // Logika verifikasi, misalnya, validasi input dan panggilan API
-    console.log("Code verified");
+    const verificationCode = codeInputs.join("");
+    if (verificationCode.length === 4) {
+      console.log("Verifikasi dengan kode:", verificationCode);
+
+      setIsVerified(true);
+      setErrorMessage("");
+
+      // Navigasi ke halaman tujuan setelah verifikasi berhasil
+      navigate("/reset-password", { state: { email } });
+    } else {
+      setErrorMessage("Invalid Code!");
+    }
   };
 
   const handleResendCode = () => {
-    // Tambahkan logika untuk mengirim ulang kode, misalnya, panggilan API
-    console.log("Resend code requested");
+    console.log("Mengirim ulang kode ke email:", email);
+    setResendMessage(`The verification code has been resent to ${email}.`);
+    setErrorMessage("");
+
+    setTimeout(() => {
+      setResendMessage("");
+    }, 3000);
   };
 
   return (
@@ -26,32 +82,40 @@ const VerificationCode = () => {
           </h1>
           <p className="font-semibold text-sm sm:text-lg text-center sm:mb-20">
             We have sent your code to{" "}
-            {email && <span className="text-black">{email}</span>}
+            {email && <span className="text-white font-bold">{email}</span>}
           </p>
 
           <div className="flex justify-center gap-5 -mt-10 mb-6">
-            <input
-              type="text"
-              maxLength="1"
-              className="w-12 h-12 sm:w-14 sm:h-14 text-center text-lg font-bold text-black bg-transparent border border-[#E6FDA3] rounded-2xl shadow focus:outline-none focus:ring-2 focus:ring-[#F2FA5A]"
-            />
-            <input
-              type="text"
-              maxLength="1"
-              className="w-12 h-12 sm:w-14 sm:h-14 text-center text-lg font-bold text-black bg-transparent border border-[#E6FDA3] rounded-2xl shadow focus:outline-none focus:ring-2 focus:ring-[#F2FA5A]"
-            />
-            <input
-              type="text"
-              maxLength="1"
-              className="w-12 h-12 sm:w-14 sm:h-14 text-center text-lg font-bold text-black bg-transparent border border-[#E6FDA3] rounded-2xl shadow focus:outline-none focus:ring-2 focus:ring-[#F2FA5A]"
-            />
-            <input
-              type="text"
-              maxLength="1"
-              className="w-12 h-12 sm:w-14 sm:h-14 text-center text-lg font-bold text-black bg-transparent border border-[#E6FDA3] rounded-2xl shadow focus:outline-none focus:ring-2 focus:ring-[#F2FA5A]"
-            />
+            {Array.from({ length: 4 }).map((_, index) => (
+              <input
+                key={index}
+                id={`input-${index}`}
+                type="text"
+                maxLength="1"
+                value={codeInputs[index]}
+                onChange={(e) =>
+                  handleInputChange(index, e.target.value, e.nativeEvent)
+                }
+                onKeyDown={(e) =>
+                  handleInputChange(index, e.target.value, e.nativeEvent)
+                }
+                className="w-12 h-12 sm:w-14 sm:h-14 text-center text-lg font-bold text-black bg-transparent border border-[#E6FDA3] rounded-2xl shadow focus:outline-none focus:ring-2 focus:ring-[#F2FA5A]"
+              />
+            ))}
           </div>
-          {/* Verify Button */}
+
+          {errorMessage && (
+            <p className="text-[#E6FDA3] font-semibold text-sm mb-4">
+              {errorMessage}
+            </p>
+          )}
+
+          {resendMessage && (
+            <p className="text-[#E6FDA3] font-semibold text-sm mb-4">
+              {resendMessage}
+            </p>
+          )}
+
           <button
             onClick={handleVerify}
             className="w-60 p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition mt-6"
