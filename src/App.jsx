@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Venues from "./components/Venues";
-import About from "./components/About";
+import AboutUs from "./components/About";
 import HowItWorks from "./components/HowItWorks";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
@@ -29,7 +29,7 @@ function App() {
         {/* Define Routes */}
         <Routes>
           <Route path="/about-us" element={<AboutUs />}/>
-          <Route path="/contact-us" element={<ContactUs />}/>
+          <Route path="/contact-us" element={<Contact />}/>
           <Route path="/venue" element={<Venues />}/>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
