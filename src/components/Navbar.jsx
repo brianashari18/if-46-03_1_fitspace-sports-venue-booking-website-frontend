@@ -1,20 +1,34 @@
 import logo from '../assets/yellow-logo.png';
 const Navbar = () => {
     return (
-        <section className="w-full bg-primary flex justify-between items-center px-10 py-5 fixed">  
+        <section className="bg-primary flex justify-between items-center px-10 py-5">  
             <div className= "text-primary2 flex justify-start gap-16">
-            <img src={logo} alt="navbar" className='w-20  h-auto object-cover' />
-                <h1 className=' font-poppins '>Home</h1>
-                <h1 className=' font-poppins'>Venue</h1>
-                <h1 className='font-poppins'>About Us</h1>
-                <h1 className='font-poppins'>Contact Us</h1>
+                 <a href="/home">
+                        <img src={logo} alt="navbar" className='w-20  h-auto object-cover' />  
+                 </a>
+                <a href="/home">
+                    <button className='font-poppins'>Home</button>
+                </a>  
+                <a href="/venue">
+                    <button className='font-poppins'>Venue</button>
+                </a>
+                <a href="/about-us">
+                    <button className='font-poppins'>About Us</button>
+                </a>
+                <a href="/contact-us">
+                    <button className='font-poppins'>Contact Us</button>
+                </a>
             </div>
             <div className='text-primary2 flex justify-center gap-5'>
-            <h1 className='font-poppins p-2'> Sign In</h1>
-            <h1 className='text-black font-poppins font-bold  rounded-lg px-3 py-2   bg-primary2'>Sign Up</h1>
+                <a href="/sign-in">
+                    <button className='font-poppins p-2'> Sign In</button>
+                </a>
+                <a href="/sign-up">
+                    <button className='text-hitam font-poppins font-bold  rounded-lg px-3 py-2 hover:bg-secondaryK  bg-primary2'>Sign Up</button>
+                </a>
+
             </div>
         </section>  
     );
 };
-
 export default Navbar;
