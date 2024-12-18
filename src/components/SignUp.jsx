@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import googleIcon from "../assets/google.png";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -17,8 +16,9 @@ const SignUp = () => {
 
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -108,47 +108,45 @@ const SignUp = () => {
               onChange={(e) => setLastName(e.target.value)}
             />
 
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <span
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <Visibility/>
-                ) : (
-                  <VisibilityOff/>
-                )}
-              </span>
+            <div>
+              <div className="relative">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  placeholder="Password"
+                  className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setPasswordVisible(!passwordVisible)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {passwordVisible ? "Hide" : "Show"}
+                </button>
+              </div>
               {passwordError && (
                 <div className="text-sm text-red-600">{passwordError}</div>
               )}
             </div>
 
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
-                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <span
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? (
-                  <Visibility/>
-                ) : (
-                  <VisibilityOff/>
-                )}
-              </span>
+            <div>
+              <div className="relative">
+                <input
+                  type={confirmPasswordVisible ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {confirmPasswordVisible ? "Hide" : "Show"}
+                </button>
+              </div>
               {confirmPasswordError && (
                 <div className="text-sm text-red-600">{confirmPasswordError}</div>
               )}
@@ -189,7 +187,7 @@ const SignUp = () => {
               Enter your personal details to use all of site features
             </p>
             <Link
-              to="/sign-in" 
+              to="/sign-in"
               className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
             >
               SIGN IN
