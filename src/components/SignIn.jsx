@@ -48,7 +48,7 @@ const SignIn = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
+      <div className="rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
         {/* Left Section */}
         <div className="w-1/2 bg-[#738FFD] rounded-l-lg rounded-r-[75px] h-full flex flex-col justify-center items-center p-8 sm:p-44">
           <div className="flex flex-col justify-center items-center text-white">

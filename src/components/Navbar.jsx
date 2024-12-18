@@ -3,10 +3,10 @@ const Navbar = () => {
     return (
         <section className="bg-primary flex justify-between items-center px-10 py-5">  
             <div className= "text-primary2 flex justify-start gap-16">
-                 <a href="">
+                 <a href="/home">
                         <img src={logo} alt="navbar" className='w-20  h-auto object-cover' />  
                  </a>
-                <a href="">
+                <a href="/home">
                     <button className='font-poppins'>Home</button>
                 </a>  
                 <a href="/venue">
