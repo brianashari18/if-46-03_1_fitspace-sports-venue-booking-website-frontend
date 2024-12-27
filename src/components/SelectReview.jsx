@@ -12,7 +12,7 @@ const SelectReview = () => {
       <main className="flex flex-1 flex-col items-center justify-center">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg p-12">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-32 h-32 rounded-full overflow-hidden mb-2">
+            <div className="w-24 h-24 rounded-full overflow-hidden mb-2">
               <img
                 src={profile}
                 alt="Profile"
