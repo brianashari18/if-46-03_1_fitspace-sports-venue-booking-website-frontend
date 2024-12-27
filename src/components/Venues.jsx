@@ -66,7 +66,7 @@ export default function SportVenues() {
                     className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50"
                     onMouseLeave={() => setIsFacilityOpen(false)}
                 >
-                    {['Futsal', 'Basketball', 'Tennis', 'Badminton', 'Swimming Pool'].map((facility) => (
+                    {['Futsal', 'Basketball', 'Badminton', 'Voli'].map((facility) => (
                     <div
                         key={facility}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
