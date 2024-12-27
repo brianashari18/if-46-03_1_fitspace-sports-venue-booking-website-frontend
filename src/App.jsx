@@ -17,6 +17,8 @@ import ContactUs from "./components/ContactUs";
 import Homepage from "./components/Homepage.jsx";
 import SelectReview from "./components/SelectReview.jsx";
 import WriteReview from "./components/WriteReview.jsx";
+import ReviewSuccess from "./components/ReviewSuccess.jsx";
+
 function App() {
   return (
     <Router>
@@ -40,6 +42,7 @@ function App() {
           <Route path="/home" element={<Homepage />} />
           <Route path="/select-review" element={<SelectReview />} />
           <Route path="/write-review" element={<WriteReview />} />
+          <Route path="/review-success" element={<ReviewSuccess />} />
           <Route path="/" element={<SignIn />} />  {/* Or any default route */}
         </Routes>
         {/* Footer will be outside of the Routes */}
