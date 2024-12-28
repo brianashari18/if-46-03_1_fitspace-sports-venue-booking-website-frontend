@@ -33,11 +33,11 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verification-code" element={<VerificationCode />} />
+          <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/" element={<SignIn />} />
 
           <Route element={<ProtectedRoute/>}>
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/reset-success" element={<ResetSuccess />} />
             <Route path="/about-us" element={<AboutUs />}/>
             <Route path="/contact-us" element={<ContactUs />}/>
             <Route path="/venue" element={<Venues />}/>

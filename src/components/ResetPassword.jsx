@@ -44,17 +44,17 @@ const ResetPassword = () => {
     }
 
     const userData = {
-      password : password,
+      new_password : password,
       confirmation_password: confirmPassword
     }
 
     try {
       await resetPassword(userData);
+      navigate("/reset-success");
     }catch (error) {
       alert(error.message);
     }
 
-    navigate("/reset-success"); 
   };
 
   return (
