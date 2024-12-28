@@ -57,7 +57,7 @@ export const validateOtp = async (otp) => {
                 'Content-Type': 'application/json'
             }
         })
-        localStorage.setItem("reset_token",res.data.token)
+        localStorage.setItem("token",res.data.token)
     }catch (error) {
         console.error(error.response || error.message);
         throw new Error(
@@ -67,8 +67,8 @@ export const validateOtp = async (otp) => {
 
 export const resetPassword = async (userData) => {
     try {
-        const token = localStorage.getItem("reset_token");
-        console.log(localStorage.getItem("reset_token"))
+        const token = localStorage.getItem("token");
+        console.log(localStorage.getItem("token"))
         await axios.patch(baseUrl + '/auth/reset-password',userData ,{
             headers :{
                 'Content-Type': 'application/json',
