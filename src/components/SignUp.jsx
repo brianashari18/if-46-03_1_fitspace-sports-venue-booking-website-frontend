@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import googleIcon from "../assets/google.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {registerUser} from "../services/user-service.js";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -16,23 +17,27 @@ const SignUp = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const [isSignUp, setIsSignUp] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const navigate = useNavigate();
+
   const isValidEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const resetErrors = () => {
+    setEmailError("");
+    setFirstNameError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSignUp(true);
-
-    setEmailError("");
-    setFirstNameError("");
-    setPasswordError("");
-    setConfirmPasswordError("");
+    resetErrors();
 
     let isValid = true;
 
@@ -59,6 +64,28 @@ const SignUp = () => {
     if (!isValid) {
       setIsSignUp(false);
       return;
+    }
+
+    const userData = {
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      password: password,
+      confirmationPassword: confirmPassword,
+    };
+
+    await handleRegister(userData);
+  };
+
+  const handleRegister = async (userData) => {
+    try {
+      const result = await registerUser(userData);
+      console.log("User registered successfully:", result);
+      navigate("/sign-in"); // Redirect to the sign-in page on success
+    } catch (error) {
+      console.error(error.message);
+      setEmailError(error.message || "An error occurred during registration.");
+      setIsSignUp(false); // Re-enable the submit button
     }
   };
 
