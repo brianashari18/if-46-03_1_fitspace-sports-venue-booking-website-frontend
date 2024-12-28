@@ -26,7 +26,7 @@ export const login = async (userData) => {
                 'Content-Type' : 'application/json',
             }
         });
-        localStorage.setItem("token",response.data.token)
+        localStorage.setItem("token",response.data.data.token);
         return response.data
     } catch (error){
         console.error('Error during Login ', error.response || error.message);
@@ -57,7 +57,7 @@ export const validateOtp = async (otp) => {
                 'Content-Type': 'application/json'
             }
         })
-        localStorage.setItem("token",res.data.token)
+        localStorage.setItem("token",res.data.data.token);
     }catch (error) {
         console.error(error.response || error.message);
         throw new Error(
