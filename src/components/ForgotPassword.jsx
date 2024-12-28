@@ -1,10 +1,9 @@
 import { useState, createContext, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ForgotPass from "../assets/ForgotPass.png";
+import {forgotPassword} from "../services/user-service.js";
 
 const EmailContext = createContext();
-
-export const useEmail = () => useContext(EmailContext);
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +16,7 @@ const ForgotPassword = () => {
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setEmailError(""); 
 
@@ -33,7 +32,16 @@ const ForgotPassword = () => {
       return;
     }
 
-    navigate("/verification-code", { state: { email } });
+    const data = {
+      email : email
+    }
+
+    try {
+      await forgotPassword(data);
+    }catch (error) {
+      alert(error.message);
+    }
+    navigate("/verification-code", { state: { data } });
   };
 
   const handleCancel = () => {

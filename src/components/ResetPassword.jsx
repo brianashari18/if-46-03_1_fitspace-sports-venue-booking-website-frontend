@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import ResetPass from "../assets/ResetPass.png";
 import Visibility from '@mui/icons-material/Visibility'; 
-import VisibilityOff from '@mui/icons-material/VisibilityOff'; 
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {forgotPassword, resetPassword} from "../services/user-service.js";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -40,6 +41,17 @@ const ResetPassword = () => {
     if (!isValid) {
       setIsReset(false);
       return;
+    }
+
+    const userData = {
+      password : password,
+      confirmation_password: confirmPassword
+    }
+
+    try {
+      await resetPassword(userData);
+    }catch (error) {
+      alert(error.message);
     }
 
     navigate("/reset-success"); 

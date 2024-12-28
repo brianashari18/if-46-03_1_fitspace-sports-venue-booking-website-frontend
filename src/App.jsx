@@ -18,6 +18,7 @@ import Homepage from "./components/Homepage.jsx";
 import SelectReview from "./components/SelectReview.jsx";
 import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -27,24 +28,30 @@ function App() {
         <Navbar />
         {/* Define Routes */}
         <Routes>
-          <Route path="/about-us" element={<AboutUs />}/>
-          <Route path="/contact-us" element={<ContactUs />}/>
-          <Route path="/venue" element={<Venues />}/>
+
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verification-code" element={<VerificationCode />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/reset-success" element={<ResetSuccess />} />
-          <Route path="/edit-profile" element={<EditProfile />} />
-          <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/home" element={<Homepage />} />
-          <Route path="/select-review" element={<SelectReview />} />
-          <Route path="/write-review" element={<WriteReview />} />
-          <Route path="/review-success" element={<ReviewSuccess />} />
-          <Route path="/" element={<SignIn />} />  {/* Or any default route */}
+          <Route path="/" element={<SignIn />} />
+
+          <Route element={<ProtectedRoute/>}>
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-success" element={<ResetSuccess />} />
+            <Route path="/about-us" element={<AboutUs />}/>
+            <Route path="/contact-us" element={<ContactUs />}/>
+            <Route path="/venue" element={<Venues />}/>
+            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/order" element={<Order />} />
+            <Route path="/home" element={<Homepage />} />
+            <Route path="/select-review" element={<SelectReview />} />
+            <Route path="/write-review" element={<WriteReview />} />
+            <Route path="/review-success" element={<ReviewSuccess />} />
+          </Route>
+           {/* Or any default route */}
         </Routes>
+
         {/* Footer will be outside of the Routes */}
         <Footer />
       </div>

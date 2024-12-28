@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import VerifCode from "../assets/VerifCode.png";
+import {validateOtp} from "../services/user-service.js";
 
 const VerificationCode = () => {
   const location = useLocation();
@@ -45,7 +46,7 @@ const VerificationCode = () => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     const verificationCode = codeInputs.join("");
     if (verificationCode.length === 4) {
       console.log("Verifikasi dengan kode:", verificationCode);
@@ -53,6 +54,15 @@ const VerificationCode = () => {
       setIsVerified(true);
       setErrorMessage("");
 
+      const data = {
+        otp : verificationCode
+      }
+
+      try {
+        await validateOtp(data)
+      }catch (e){
+        alert(e.message);
+      }
       navigate("/reset-password", { state: { email } });
     } else {
       setErrorMessage("Invalid Code!");
