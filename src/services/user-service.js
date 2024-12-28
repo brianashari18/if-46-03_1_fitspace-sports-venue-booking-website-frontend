@@ -26,7 +26,7 @@ export const login = async (userData) => {
                 'Content-Type' : 'application/json',
             }
         });
-        localStorage.setItem("token",response.data.data.token);
+        localStorage.setItem("token",response.data.data.token)
         return response.data
     } catch (error){
         console.error('Error during Login ', error.response || error.message);
@@ -36,8 +36,9 @@ export const login = async (userData) => {
 }
 
 export const forgotPassword = async (email) => {
+    console.log(`EMAIL: ${email}`);
     try {
-        await axios.post(baseUrl + "/auth/forgot-password",email, {
+        return await axios.post(baseUrl + "/auth/forgot-password",email, {
             headers :{
                 'Content-Type': 'application/json'
             }
@@ -57,7 +58,7 @@ export const validateOtp = async (otp) => {
                 'Content-Type': 'application/json'
             }
         })
-        localStorage.setItem("token",res.data.data.token);
+        localStorage.setItem("token",res.data.data.token)
     }catch (error) {
         console.error(error.response || error.message);
         throw new Error(
@@ -68,14 +69,13 @@ export const validateOtp = async (otp) => {
 export const resetPassword = async (userData) => {
     try {
         const token = localStorage.getItem("token");
-        console.log(localStorage.getItem("token"))
         await axios.patch(baseUrl + '/auth/reset-password',userData ,{
             headers :{
                 'Content-Type': 'application/json',
-                'Authorization' : token ? token : null
+                'Reset-Token' : token
             }
         })
-        localStorage.removeItem("reset_token")
+        localStorage.removeItem("token")
     }catch (error) {
         console.error(error.response || error.message);
         throw new Error(
