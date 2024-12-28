@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import googleIcon from "../assets/google.png";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import userService from "../services/user-service.js";
+import {login} from "../services/user-service.js";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -46,14 +46,19 @@ const SignIn = () => {
       return;
     }
 
+    const userData = {
+      email : email,
+      password : password
+    }
+
     try {
-      const data = await userService.login(email, password); // Call the service
+      const data = await login(userData);
       console.log("Sign-in successful:", data);
       navigate("/home");
     } catch (error) {
       console.error("Sign-in error:", error);
       if (error.message) {
-        alert(error.message); // Show the error message
+        alert(error.message);
       }
     } finally {
       setIsSignIn(false);

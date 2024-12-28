@@ -1,20 +1,34 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_BASE_URL = "http://localhost:8080/api";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
-const userService  = {
-    login: async (email, password) => {
-        try {
-            const response = await axios.post(`${API_BASE_URL}/auth/login`, {
-                email,
-                password,
-            });
-            return response.data; // Return the response data
-        } catch (error) {
-            throw error.response ? error.response.data : new Error("Network Error");
-        }
-    },
+export const registerUser = async (userData) => {
+    try {
+        const response = await axios.post(baseUrl + '/users', userData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error during user registration:', error.response || error.message);
+        throw new Error(
+            error.response?.data?.message || 'Failed to register user. Please try again later.'
+        );
+    }
 };
 
-export default
-    userService
+export const login = async (userData) => {
+    try {
+        const response = await axios.post(baseUrl + '/auth/login',userData , {
+            headers :{
+                'Content-Type' : 'application/json',
+            }
+        });
+        return response.data
+    } catch (error){
+        console.error('Error during Login ', error.response || error.message);
+        throw new Error(
+            error.response?.data?.message || 'Failed to login. Please try again later.')
+    }
+}
