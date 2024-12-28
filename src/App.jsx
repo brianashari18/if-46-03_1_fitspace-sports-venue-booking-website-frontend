@@ -19,6 +19,7 @@ import SelectReview from "./components/SelectReview.jsx";
 import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import VenueDetail from "./components/VenueDetail.jsx";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/about-us" element={<AboutUs />}/>
             <Route path="/contact-us" element={<ContactUs />}/>
             <Route path="/venue" element={<Venues />}/>
+            <Route path="/venueDetail/:name" element={<VenueDetail />}/>
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/order" element={<Order />} />

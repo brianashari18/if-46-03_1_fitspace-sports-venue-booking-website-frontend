@@ -5,6 +5,9 @@ import locationmap from '../assets/locationmap.png'; // Example location map ima
 import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import avatar2 from '../assets/avatar2.png'; // Import avatar2
 import avatar3 from '../assets/avatar3.png'; // Import avatar3
+import { useLocation } from 'react-router-dom';
+
+
 
 const scheduleData = [
   { day: '11 Nov', dayName: 'Monday' },
@@ -74,7 +77,11 @@ function ProgressBar({ value }) {
 }
 
 export default function VenueDetail() {
+  const { state } = useLocation();
+  const venue = state?.venue;
+  console.log(venue)
   return (
+
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
       <div className="relative h-[500px]">

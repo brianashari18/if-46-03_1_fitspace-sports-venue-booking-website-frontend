@@ -7,7 +7,7 @@ const VerificationCode = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState(() => {
+  const [email] = useState(() => {
     const emailFromState = location.state?.email;
     if (emailFromState) {
       localStorage.setItem("email", emailFromState);
@@ -17,7 +17,7 @@ const VerificationCode = () => {
   });
 
   const [codeInputs, setCodeInputs] = useState(["", "", "", ""]);
-  const [isVerified, setIsVerified] = useState(false);
+  const [ setIsVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [resendMessage, setResendMessage] = useState("");
 
