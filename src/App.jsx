@@ -37,7 +37,7 @@ function App() {
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/" element={<SignIn />} />
 
-          <Route element={<ProtectedRoute/>}>
+          {/*<Route element={<ProtectedRoute/>}>*/}
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about-us" element={<AboutUs />}/>
             <Route path="/contact-us" element={<ContactUs />}/>
@@ -50,7 +50,7 @@ function App() {
             <Route path="/select-review" element={<SelectReview />} />
             <Route path="/write-review" element={<WriteReview />} />
             <Route path="/review-success" element={<ReviewSuccess />} />
-          </Route>
+          {/*</Route>*/}
            {/* Or any default route */}
         </Routes>
 
