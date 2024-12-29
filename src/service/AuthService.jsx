@@ -1,17 +1,17 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.18.11:8080/api/auth/login';
+const BASE_URL = 'http://192.168.18.11:8080/api/auth';
 
 const AuthService = {
-  async signIn(email, password) {
+  async login(email, password) {
     try {
-      const responsesignIn = await axios.post(`${BASE_URL}/signIn`, {
+      const responseLogin = await axios.post(`${BASE_URL}/login`, {
         email,
         password,
       });
 
-      if (responsesignIn.status === 200) {
-        const { data: user } = responsesignIn.data;
+      if (responseLogin.status === 200) {
+        const { data: user } = responseLogin.data;
         const token = user.token;
 
         const responseUser = await axios.get(`${BASE_URL}/current`, {
@@ -43,17 +43,17 @@ const AuthService = {
     }
   },
 
-  async signUp(email, username, password, confirmPassword) {
+  async register(email, username, password, confirmPassword) {
     try {
-      const responsesignUp = await axios.post(`${BASE_URL}/signUp`, {
+      const responseRegister = await axios.post(`${BASE_URL}/register`, {
         email,
         username,
         password,
         confirmPassword,
       });
 
-      if (responsesignUp.status === 200) {
-        const { data } = responsesignUp.data;
+      if (responseRegister.status === 200) {
+        const { data } = responseRegister.data;
         return {
           success: true,
           id: data.id,
@@ -61,7 +61,7 @@ const AuthService = {
           username,
         };
       } else {
-        return { success: false, error: responsesignUp.data.errors };
+        return { success: false, error: responseRegister.data.errors };
       }
     } catch (error) {
       return { success: false, error: error.response?.data?.errors || error.message };

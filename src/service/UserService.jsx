@@ -5,7 +5,7 @@ const BASE_URL = 'http://192.168.18.11:8080/api/users';
 const UserService = {
   async register(email, username, password, confirmPassword) {
     try {
-      const responseRegister = await axios.post(`${BASE_URL}/register`, {
+      const responseRegister = await axios.post(`${BASE_URL}`, {
         email,
         username,
         password,
