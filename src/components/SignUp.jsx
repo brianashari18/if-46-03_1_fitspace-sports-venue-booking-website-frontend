@@ -157,7 +157,7 @@ const SignUp = () => {
               className="w-full p-3 rounded-lg bg-[#738ffd] text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 mt-6"
               disabled={isSignUp}
             >
-              {isSignUp ? "Signing Up..." : "SIGN UP"}
+              {isSignUp ? "SIGN UP" : "SIGN UP"}
             </button>
           </form>
 

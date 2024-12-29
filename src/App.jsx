@@ -37,7 +37,7 @@ function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/order" element={<Order />} />
           <Route path="/home" element={<Homepage />} />
-          <Route path="/" element={<SignIn />} />  {/* Or any default route */}
+          <Route path="/" element={<Homepage/>} />  {/* Or any default route */}
         </Routes>
         {/* Footer will be outside of the Routes */}
         <Footer />
