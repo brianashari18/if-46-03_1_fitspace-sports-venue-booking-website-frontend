@@ -30,14 +30,15 @@ function App() {
         {/* Define Routes */}
         <Routes>
 
-          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/" element={<Venues/>} />
+          {/* <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verification-code" element={<VerificationCode />} />
           <Route path="/reset-success" element={<ResetSuccess />} />
-          <Route path="/" element={<SignIn />} />
+          <Route path="/" element={<SignIn />} /> */}
 
-          <Route element={<ProtectedRoute/>}>
+          {/* <Route element={<ProtectedRoute/>}>
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about-us" element={<AboutUs />}/>
             <Route path="/contact-us" element={<ContactUs />}/>
@@ -50,7 +51,7 @@ function App() {
             <Route path="/select-review" element={<SelectReview />} />
             <Route path="/write-review" element={<WriteReview />} />
             <Route path="/review-success" element={<ReviewSuccess />} />
-          </Route>
+          </Route> */}
            {/* Or any default route */}
         </Routes>
 
