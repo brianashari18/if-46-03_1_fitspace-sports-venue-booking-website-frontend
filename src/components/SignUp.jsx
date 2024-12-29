@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import googleIcon from "../assets/google.png";
+import {registerUser} from "../services/user-service.js";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -15,24 +16,27 @@ const SignUp = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
   const isValidEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const resetErrors = () => {
+    setEmailError("");
+    setFirstNameError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSignUp(true);
-
-    setEmailError("");
-    setFirstNameError("");
-    setPasswordError("");
-    setConfirmPasswordError("");
+    resetErrors();
 
     let isValid = true;
 
@@ -59,6 +63,29 @@ const SignUp = () => {
     if (!isValid) {
       setIsSignUp(false);
       return;
+    }
+
+    const userData = {
+      email: email,
+      first_name: firstName,
+      last_name: lastName,
+      password: password,
+      confirmation_password: confirmPassword,
+    };
+
+    await handleRegister(userData);
+  };
+
+  const handleRegister = async (userData) => {
+    try {
+      console.log(userData)
+      const result = await registerUser(userData);
+      console.log("User registered successfully:", result);
+      navigate("/sign-in"); // Redirect to the sign-in page on success
+    } catch (error) {
+      console.error(error.message);
+      setEmailError(error.message || "An error occurred during registration.");
+      setIsSignUp(false); // Re-enable the submit button
     }
   };
 
@@ -111,7 +138,7 @@ const SignUp = () => {
             <div>
               <div className="relative">
                 <input
-                  type={passwordVisible ? "text" : "password"}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={password}
@@ -119,10 +146,10 @@ const SignUp = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setPasswordVisible(!passwordVisible)}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
                 >
-                  {passwordVisible ? "Hide" : "Show"}
+                  {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
               {passwordError && (
@@ -133,7 +160,7 @@ const SignUp = () => {
             <div>
               <div className="relative">
                 <input
-                  type={confirmPasswordVisible ? "text" : "password"}
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={confirmPassword}
@@ -141,10 +168,10 @@ const SignUp = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
                 >
-                  {confirmPasswordVisible ? "Hide" : "Show"}
+                  {showConfirmPassword ? "Hide" : "Show"}
                 </button>
               </div>
               {confirmPasswordError && (

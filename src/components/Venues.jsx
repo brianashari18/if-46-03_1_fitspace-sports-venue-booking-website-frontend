@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom'; // Changed to react-router-dom Link
-import hero1 from "../assets/hero1.png"; // Example image import
-import progresif from '../assets/progresif.png'; // Example image import
-import { ChevronDown, Star, Facebook, Instagram, Twitter } from 'lucide-react';
+import { useState,useEffect } from 'react';
+import axios from 'axios';
+import hero1 from "../assets/hero1.png";
+import { ChevronDown, Star} from 'lucide-react';
+import photos from "../../public/vite.svg";
+import {useNavigate} from "react-router-dom";
 
 export default function SportVenues() {
   // State to manage dropdown visibility
@@ -19,9 +20,41 @@ export default function SportVenues() {
   const [lowestPrice, setLowestPrice] = useState(""); // Input Lowest Price
   const [highestPrice, setHighestPrice] = useState(""); // Input Highest Price
 
+
+  const [venues, setVenues] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(9); // Set limit per page to 9
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchVenues = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/venues'); // Update with your backend URL
+                setVenues(response.data.data);
+
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching venues:', error);
+                setIsLoading(false);
+            }
+        };
+
+        fetchVenues();
+    }, []);
+
+    // Calculate data for current page
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentVenues = venues.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Total number of pages
+    const totalPages = Math.ceil(venues.length / itemsPerPage);
+
   return (
     <div className="min-h-screen flex flex-col">
-      
+
       {/* Hero Section */}
       <div className="bg-[#738FFD] text-white px-4 py-12 md:py-16 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
@@ -44,7 +77,7 @@ export default function SportVenues() {
           <img
             src={hero1} // Use imported image
             alt="Sports illustration"
-            className="absolute top-0 right-0 w-[363px] h-[325px] object-contain" 
+            className="absolute top-0 right-0 w-[363px] h-[325px] object-contain"
           />
         </div>
       </div>
@@ -148,7 +181,7 @@ export default function SportVenues() {
             </div>
             </div>
         </div>
-        
+
         {/* Price Range Input */}
         {showPriceRange && (
           <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
@@ -185,60 +218,72 @@ export default function SportVenues() {
         )}
 
 
-      {/* Venue Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="relative h-48">
-              <img
-                src={i === 0 ? progresif : "/placeholder.svg?height=200&width=400"}
-                alt="Venue"
-                className="object-cover w-full h-full"
-              />
-            </div>
-            <div className="p-4">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold">
-                  {i === 0 ? 'PROGRESIF SPORT CENTRE' : 'Sport'}
-                </h3>
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star
-                      key={j}
-                      size={16}
-                      className="text-yellow-400 fill-current"
-                    />
-                  ))}
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">
-                Jl. Sukabumi - Ujungjaya, Sukur, Kec. Armandia,
-                Kabupaten Meranada Utara, Sulawesi Utara
-              </p>
-              <div className="flex gap-2">
-                <span className="bg-gray-200 px-3 py-1 rounded-md text-sm">
-                  Futsal
+        {/* Venue Grid */}
+        <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentVenues.length > 0 ? (
+                currentVenues.map((venue) => (
+                    <div
+                        key={venue.id}
+                        className="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                        onClick={() => navigate(`/venueDetail/${venue.name}`, { state: { venue } })}
+                    >
+                        <div className="relative h-48">
+                            <img
+                                src={photos}
+                                alt="Venue"
+                                className="object-cover w-full h-full"
+                            />
+                        </div>
+                        <div className="p-4">
+                            <div className="flex justify-between items-start mb-2">
+                                <h3 className="font-bold">{venue.name || 'Sport Venue'}</h3>
+                                <div className="flex">
+                                    {Array.from({ length: venue.rating }).map((_, j) => (
+                                        <Star
+                                            key={j}
+                                            size={16}
+                                            className="text-yellow-400 fill-current"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-4">
+                                {venue.street} - {venue.district}, {venue.city_or_regency}, {venue.province}
+                            </p>
+                            <div className="flex gap-2">
+                                {venue.fields.map((field, j) => (
+                                    <span
+                                        key={j}
+                                        className="bg-gray-200 px-3 py-1 rounded-md text-sm"
+                                    >
+                  {field.type}
                 </span>
-                <span className="bg-gray-200 px-3 py-1 rounded-md text-sm">
-                  Mini soccer
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <p className="text-center col-span-full">No venues available.</p>
+            )}
+        </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center gap-2 py-8">
-        {[1, 2, 3, 4, 5].map((num) => (
-          <button
-            key={num}
-            className="w-8 h-8 rounded-full bg-[#6B7FFF] text-white flex items-center justify-center"
-          >
-            {num}
-          </button>
-        ))}
-      </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+            <div className="flex justify-center gap-2 py-8">
+                {Array.from({ length: totalPages }).map((_, pageIndex) => (
+                    <button
+                        key={pageIndex}
+                        onClick={() => setCurrentPage(pageIndex + 1)}
+                        className={`w-8 h-8 rounded-full ${
+                            currentPage === pageIndex + 1 ? 'bg-[#6B7FFF] text-white' : 'bg-gray-300'
+                        } flex items-center justify-center`}
+                    >
+                        {pageIndex + 1}
+                    </button>
+                ))}
+            </div>
+        )}
     </div>
   );
 }

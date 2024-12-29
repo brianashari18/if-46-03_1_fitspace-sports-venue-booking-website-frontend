@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import googleIcon from "../assets/google.png";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {login} from "../services/user-service.js";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -14,10 +15,13 @@ const SignIn = () => {
 
   const [isSignIn, setIsSignIn] = useState(false);
 
+  const navigate = useNavigate();
+
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +47,23 @@ const SignIn = () => {
       return;
     }
 
-    //Fetch API (tunggu login sukses)
+    const userData = {
+      email : email,
+      password : password
+    }
+
+    try {
+      const data = await login(userData);
+      console.log("Sign-in successful:", data);
+      navigate("/home");
+    } catch (error) {
+      console.error("Sign-in error:", error);
+      if (error.message) {
+        alert(error.message);
+      }
+    } finally {
+      setIsSignIn(false);
+    }
   };
 
   return (

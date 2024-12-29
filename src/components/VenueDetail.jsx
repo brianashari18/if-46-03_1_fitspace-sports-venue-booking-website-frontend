@@ -5,6 +5,8 @@ import locationmap from '../assets/locationmap.png'; // Example location map ima
 import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import avatar2 from '../assets/avatar2.png'; // Import avatar2
 import avatar3 from '../assets/avatar3.png'; // Import avatar3
+import { useLocation } from 'react-router-dom';
+
 
 const scheduleData = [
   { day: '11 Nov', dayName: 'Monday' },
@@ -74,7 +76,12 @@ function ProgressBar({ value }) {
 }
 
 export default function VenueDetail() {
+
+  const { state } = useLocation();
+  const venue = state?.venue;
+  console.log(venue)
   return (
+
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
       <div className="relative h-[500px]">
@@ -86,18 +93,18 @@ export default function VenueDetail() {
         <div className="absolute inset-0 bg-black/40">
           <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-16">
             <h1 className="text-4xl font-bold text-white mb-4">
-              PROGRESIF SPORT CENTRE
+              {venue.name}
             </h1>
             <p className="text-white/90 mb-6">
-              Jl. Suryalaya Indah No.1-5 Cigadung, Kec. Lengkong, Kota Bandung, Jawa Barat 40265
+              {venue.street} - {venue.district}, {venue.city_or_regency}, {venue.province}
             </p>
             <div className="flex flex-wrap gap-3">
-              {['Futsal', 'Badminton', 'Kolam Renang', 'Lapang Bola', 'Galerry'].map((tag) => (
-                <span
-                  key={tag}
-                  className={`px-4 py-1 rounded-full text-sm ${tag === 'Galerry' ? 'bg-[#738FFD] text-white' : 'bg-[#E7FF8C] text-gray-800'}`}
-                >
-                  {tag}
+              {venue.fields.map((field, j) => (
+                  <span
+                      key={j}
+                      className="bg-gray-200 px-3 py-1 rounded-md text-sm"
+                  >
+                  {field.type}
                 </span>
               ))}
             </div>
@@ -111,7 +118,7 @@ export default function VenueDetail() {
           <h2 className="text-xl font-bold mb-4">LOCATION</h2>
           <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
             <img
-              src={locationmap}
+              src={""}
               alt="Location Map"
               className="w-full h-full object-cover rounded-lg"
             />
@@ -182,12 +189,12 @@ export default function VenueDetail() {
         {/* Reviews Section */}
         <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-2">4.0</h2>
+            <h2 className="text-3xl font-bold mb-2">{venue.rating}</h2>
             <div className="flex justify-center mb-2">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-5 h-5 ${i < 4 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                  className={`w-5 h-5 ${i < venue.rating ? 'fill-yellow-400 text-yellow-400' :  'text-gray-300'}`}
                 />
               ))}
             </div>
