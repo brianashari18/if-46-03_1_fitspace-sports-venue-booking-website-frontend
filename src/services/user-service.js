@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {Navigate, Outlet} from "react-router-dom";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

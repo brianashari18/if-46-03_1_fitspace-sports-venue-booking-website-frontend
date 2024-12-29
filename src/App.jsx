@@ -38,7 +38,11 @@ function App() {
           <Route path="/reset-success" element={<ResetSuccess />} />
           <Route path="/" element={<SignIn />} /> */}
 
+<<<<<<< HEAD
           {/* <Route element={<ProtectedRoute/>}>
+=======
+          {/*<Route element={<ProtectedRoute/>}>*/}
+>>>>>>> e67dc6dd8ee5f2231897e18b3d062a68f15d52bf
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about-us" element={<AboutUs />}/>
             <Route path="/contact-us" element={<ContactUs />}/>
@@ -51,7 +55,11 @@ function App() {
             <Route path="/select-review" element={<SelectReview />} />
             <Route path="/write-review" element={<WriteReview />} />
             <Route path="/review-success" element={<ReviewSuccess />} />
+<<<<<<< HEAD
           </Route> */}
+=======
+          {/*</Route>*/}
+>>>>>>> e67dc6dd8ee5f2231897e18b3d062a68f15d52bf
            {/* Or any default route */}
         </Routes>
 
