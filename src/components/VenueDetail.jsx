@@ -24,30 +24,6 @@ const timeSlots = [
   { time: '08:00 - 09:00', price: 'Rp120.000' },
 ];
 
-const reviews = [
-  {
-    name: 'Unknown',
-    rating: 5,
-    comment: 'Lapangan futsal GOR Bandung',
-    subComment: 'kocak bangett ini lapangan',
-    avatar: avatar1,  // Directly set the imported avatar image
-  },
-  {
-    name: 'Unknown',
-    rating: 4,
-    comment: 'Lapangan futsal GOR Bandung',
-    subComment: 'hmmm lapangan ini',
-    avatar: avatar2,  // Directly set the imported avatar image
-  },
-  {
-    name: 'Unknown',
-    rating: 5,
-    comment: 'Lapangan futsal GOR Bandung',
-    subComment: 'wow bangett ini ',
-    avatar: avatar3,  // Directly set the imported avatar image
-  },
-];
-
 
 // Custom Progress Bar component
 function ProgressBar({ value }) {
@@ -92,8 +68,8 @@ export default function VenueDetail() {
   const selectedFieldSchedules = scheduleDetailsByField.find((field) => field.fieldType === selectedField)?.schedules || [];
 
   {/* Reviews Section */}
-  const selectedFieldReviews =
-      venue.fields.find((field) => field.type === selectedField)?.reviews || [];
+  // Combine all reviews from all fields
+  const allReviews = venue.fields.flatMap((field) => field.reviews);
 
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
@@ -103,10 +79,10 @@ export default function VenueDetail() {
   const endIndex = startIndex + reviewsPerPage;
 
 // Slice reviews for the current page
-  const currentReviews = selectedFieldReviews.slice(startIndex, endIndex);
+  const currentReviews = allReviews.slice(startIndex, endIndex);
 
 // Total number of pages
-  const totalPages = Math.ceil(selectedFieldReviews.length / reviewsPerPage);
+  const totalPages = Math.ceil(allReviews.length / reviewsPerPage);
 
   console.log(selectedFieldSchedules)
   console.log(scheduleDetailsByField);
@@ -263,7 +239,7 @@ export default function VenueDetail() {
                     />
                 ))}
               </div>
-              <p className="text-sm text-gray-500">based on 23 reviews</p>
+              <p className="text-sm text-gray-500">based on {allReviews.length} reviews</p>
             </div>
 
             {/* Rating Bars */}
@@ -288,46 +264,52 @@ export default function VenueDetail() {
             </div>
 
 
-            <div className="space-y-4 mb-8">
+            <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-2">Reviews</h2>
-                <p className="text-sm text-gray-500">
-                  {selectedFieldReviews.length} reviews
-                </p>
               </div>
 
               {/* Display Current Reviews */}
-              {currentReviews.map((review, idx) => (
-                  <div key={idx} className="p-4 bg-white shadow-md rounded-lg mb-4">
-                    <div className="flex items-start gap-4">
-                      {/* Dynamically set the avatar or use a default */}
-                      <img
-                          src={avatar1} // Use a default avatar
-                          alt="User Avatar"
-                          width={48}
-                          height={48}
-                          className="rounded-full"
-                      />
+              <div className="space-y-4 mb-8">
+                {currentReviews.map((review, idx) => {
+                  // Find the field type for the current review
+                  const fieldType = venue.fields.find((field) => field.id === review.field_id)?.type;
 
-                      <div>
-                        <div className="font-medium">{`Username: ${review.username}`}</div>
-                        <div className="flex mb-1">
-                          {[...Array(5)].map((_, i) => (
-                              <Star
-                                  key={i}
-                                  className={`w-4 h-4 ${
-                                      i < review.rating
-                                          ? 'fill-yellow-400 text-yellow-400'
-                                          : 'text-gray-300'
-                                  }`}
-                              />
-                          ))}
+                  return (
+                      <div key={idx} className="p-4 bg-white shadow-md rounded-lg mb-4">
+                        <div className="flex items-start gap-4">
+                          {/* Dynamically set the avatar or use a default */}
+                          <img
+                              src={avatar1} // Use a default avatar
+                              alt="User Avatar"
+                              width={48}
+                              height={48}
+                              className="rounded-full"
+                          />
+
+                          <div>
+                            <div className="font-medium">{`Username: ${review.user_id || 'undefined'}`}</div>
+                            {/* Display the field type */}
+                            <div className="text-sm text-gray-500">{fieldType}</div>
+                            <div className="flex mb-1">
+                              {[...Array(5)].map((_, i) => (
+                                  <Star
+                                      key={i}
+                                      className={`w-4 h-4 ${
+                                          i < review.rating
+                                              ? 'fill-yellow-400 text-yellow-400'
+                                              : 'text-gray-300'
+                                      }`}
+                                  />
+                              ))}
+                            </div>
+                            <p className="text-sm font-medium">{review.comment}</p>
+                          </div>
                         </div>
-                        <p className="text-sm font-medium">{review.comment}</p>
                       </div>
-                    </div>
-                  </div>
-              ))}
+                  );
+                })}
+              </div>
 
               {/* Pagination Controls */}
               <div className="flex justify-center items-center space-x-4">
