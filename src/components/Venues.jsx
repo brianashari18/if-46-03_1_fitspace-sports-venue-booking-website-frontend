@@ -24,8 +24,8 @@ export default function SportVenues() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9); // Set limit per page to 9
-  const [activeButton, setActiveButton] = useState(null); // State to track active button
 
+  const [activeButton, setActiveButton] = useState(null); // State to track active button
   const navigate = useNavigate();
 
   const handleButtonClick = (location) => {
