@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { Star } from 'lucide-react'; // Assuming lucide-react is needed for stars
 import progresif from '../assets/progresif.png'; // Example image import
-import locationmap from '../assets/locationmap.png'; // Example location map image import
 import avatar1 from '../assets/avatar1.png'; // Example avatar image import
-import avatar2 from '../assets/avatar2.png'; // Import avatar2
-import avatar3 from '../assets/avatar3.png'; // Import avatar3
 import { useLocation } from 'react-router-dom';
+import SelectReview from "./SelectReview"; // Ensure the correct path
+import WriteReview from "./WriteReview";
 
 
 const scheduleData = [
@@ -22,6 +21,21 @@ const timeSlots = [
   { time: '06:00 - 07:00', price: 'Rp120.000' },
   { time: '07:00 - 08:00', price: 'Rp120.000' },
   { time: '08:00 - 09:00', price: 'Rp120.000' },
+  { time: '09:00 - 10:00', price: 'Rp120.000' },
+  { time: '10:00 - 11:00', price: 'Rp120.000' },
+  { time: '11:00 - 12:00', price: 'Rp120.000' },
+  { time: '12:00 - 13:00', price: 'Rp120.000' },
+  { time: '13:00 - 14:00', price: 'Rp120.000' },
+  { time: '14:00 - 15:00', price: 'Rp120.000' },
+  { time: '15:00 - 16:00', price: 'Rp120.000' },
+  { time: '16:00 - 17:00', price: 'Rp120.000' },
+  { time: '17:00 - 18:00', price: 'Rp120.000' },
+  { time: '18:00 - 19:00', price: 'Rp120.000' },
+  { time: '19:00 - 20:00', price: 'Rp120.000' },
+  { time: '20:00 - 21:00', price: 'Rp120.000' },
+  { time: '21:00 - 22:00', price: 'Rp120.000' },
+  { time: '22:00 - 23:00', price: 'Rp120.000' },
+  { time: '23:00 - 24:00', price: 'Rp120.000' },
 ];
 
 
@@ -50,11 +64,13 @@ export default function VenueDetail() {
   const venue = state?.venue;
   console.log(venue)
 
+  const user = JSON.parse(localStorage.getItem("user"))
+  console.log(user)
+
   const [selectedField, setSelectedField] = useState(venue.fields[0]?.type);
   const handleFieldChange = (e) => setSelectedField(e.target.value);
 
   const scheduleDetailsByField = venue.fields.map((field) => {
-    // Check if fieldSchedules exist and map the required properties
     return {
       fieldType: field.type,
       schedules: field.fieldSchedules?.map((scheduleItem) => ({
@@ -74,18 +90,31 @@ export default function VenueDetail() {
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5;
 
-// Calculate start and end indices for slicing reviews
   const startIndex = (currentPage - 1) * reviewsPerPage;
   const endIndex = startIndex + reviewsPerPage;
 
-// Slice reviews for the current page
   const currentReviews = allReviews.slice(startIndex, endIndex);
 
-// Total number of pages
   const totalPages = Math.ceil(allReviews.length / reviewsPerPage);
 
-  console.log(selectedFieldSchedules)
-  console.log(scheduleDetailsByField);
+  const [isSelectReviewOpen, setIsSelectReviewOpen] = useState(false);
+  const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
+  const [selectedFacility, setSelectedFacility] = useState(null);
+
+  const toggleSelectReviewModal = () => {
+    setIsSelectReviewOpen(!isSelectReviewOpen);
+  };
+
+  const openWriteReviewModal = (facility) => {
+    setSelectedFacility(facility);
+    setIsSelectReviewOpen(false);
+    setIsWriteReviewOpen(true);
+  };
+
+  const closeWriteReviewModal = () => {
+    setIsWriteReviewOpen(false);
+  };
+
 
   return (
 
@@ -185,44 +214,58 @@ export default function VenueDetail() {
               <div className="min-w-[800px]">
                 <div className="grid grid-cols-8 gap-2 mb-4">
                   <div className="font-medium">Time</div>
-                  {/* Pemetaan hari dengan background bg-[#E6FDA3] */}
+                  {/* Map days with background */}
                   {scheduleData.map((day) => (
-                      <div key={day.day} className="text-center bg-[#F5F5F5] p-4 rounded-lg">
+                      <div
+                          key={day.day}
+                          className="text-center bg-[#F5F5F5] p-4 rounded-lg"
+                      >
                         <div className="font-medium">{day.day}</div>
                         <div className="text-sm text-gray-500">{day.dayName}</div>
                       </div>
                   ))}
                 </div>
 
-                {timeSlots.map((slot, idx) => (
-                    <div key={idx} className="grid grid-cols-8 gap-2 mb-2">
-                      <div className="font-medium">{slot.time}</div>
-                      {scheduleData.map((day, i) => {
-                        // Find the schedule that matches both timeSlot and date
-                        const schedule = selectedFieldSchedules.find(
-                            (s) => s.timeSlot === slot.time && s.date === day.date
-                        );
+                {/* Scrollable Time Slots */}
+                <div
+                    className="overflow-y-auto"
+                    style={{
+                      maxHeight: "250px", // Adjust to show only 5 time slots
+                    }}
+                >
+                  {timeSlots.map((slot, idx) => (
+                      <div key={idx} className="grid grid-cols-8 gap-2 mb-2">
+                        <div className="font-medium">{slot.time}</div>
+                        {scheduleData.map((day, i) => {
+                          // Find the schedule that matches both timeSlot and date
+                          const schedule = selectedFieldSchedules.find(
+                              (s) => s.timeSlot === slot.time && s.date === day.date
+                          );
 
-                        // Determine availability based on status
-                        const isAvailable = schedule?.status === 'available';
+                          // Determine availability based on status
+                          const isAvailable = schedule?.status === "available";
 
-                        return (
-                            <div
-                                key={i}
-                                className={`p-2 rounded-lg flex justify-center items-center ${
-                                    isAvailable ? 'bg-[#F5F5F5] text-black' : 'bg-[#F8B6B6] text-[#a83434]'
-                                }`}
-                            >
-                              <div className="text-center">
-                                <div className="text-sm font-medium">{slot.price}</div>
-                                <div className="text-xs">{isAvailable ? 'Available' : 'Not Available'}</div>
+                          return (
+                              <div
+                                  key={i}
+                                  className={`p-2 rounded-lg flex justify-center items-center ${
+                                      isAvailable
+                                          ? "bg-[#F5F5F5] text-black"
+                                          : "bg-[#F8B6B6] text-[#a83434]"
+                                  }`}
+                              >
+                                <div className="text-center">
+                                  <div className="text-sm font-medium">{slot.price}</div>
+                                  <div className="text-xs">
+                                    {isAvailable ? "Available" : "Not Available"}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                        );
-                      })}
-                    </div>
-                ))}
-
+                          );
+                        })}
+                      </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -288,7 +331,7 @@ export default function VenueDetail() {
                           />
 
                           <div>
-                            <div className="font-medium">{`Username: ${review.user_id || 'undefined'}`}</div>
+                            <div className="font-medium">{`${review.user.first_name || 'undefined'}`}</div>
                             {/* Display the field type */}
                             <div className="text-sm text-gray-500">{fieldType}</div>
                             <div className="flex mb-1">
@@ -342,11 +385,33 @@ export default function VenueDetail() {
                 </button>
               </div>
             </div>
-
-            <button className="w-full bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg">
+            {/* Write a Review Button */}
+            <button
+                className="w-full bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg"
+                onClick={toggleSelectReviewModal}
+            >
               Write a Review
             </button>
           </div>
+
+          {/* SelectReview Modal */}
+          {isSelectReviewOpen && (
+              <SelectReview
+                  facilities={venue.fields.map((field) => field.type)}
+                  onClose={toggleSelectReviewModal}
+                  username={user.first_name}
+                  onNext={openWriteReviewModal} // Trigger WriteReview modal
+              />
+          )}
+
+          {/* WriteReview Modal */}
+          {isWriteReviewOpen && (
+              <WriteReview
+                  onClose={closeWriteReviewModal}
+                  username={user.first_name}
+                  selectedFacility={selectedFacility}
+              />
+          )}
         </div>
       </div>
   );
