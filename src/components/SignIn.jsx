@@ -141,7 +141,7 @@ const SignIn = ({onLogin}) => {
                             {emailError && <div className="text-sm text-red-600">{emailError}</div>}
                         </div>
 
-                        <div className="relative">
+                        <div className="relative flex items-center">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
@@ -149,15 +149,17 @@ const SignIn = ({onLogin}) => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                                className="absolute right-3 flex items-center justify-center text-gray-600 hover:text-gray-800"
+                                style={{ top: "50%", transform: "translateY(-50%)" }}
                             >
-                                {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
                             </button>
                         </div>
+                        {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
+
 
                         <div className="text-right">
                             <Link to="/forgot-password" className="text-black text-sm hover:underline">
