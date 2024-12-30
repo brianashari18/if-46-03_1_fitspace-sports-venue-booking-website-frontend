@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ResetPass from "../assets/ResetPass.png";
 import Visibility from '@mui/icons-material/Visibility'; 
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {forgotPassword, resetPassword} from "../services/user-service.js";
+import {forgotPassword, resetPassword} from "../services/auth-service.js";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");

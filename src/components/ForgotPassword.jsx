@@ -1,7 +1,7 @@
 import { useState, createContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ForgotPass from "../assets/ForgotPass.png";
-import { forgotPassword } from "../services/user-service.js";
+import { forgotPassword } from "../services/auth-service.js";
 
 const EmailContext = createContext();
 

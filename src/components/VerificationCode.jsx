@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import VerifCode from "../assets/VerifCode.png";
-import {validateOtp} from "../services/user-service.js";
+import {validateOtp} from "../services/auth-service.js";
 
 const VerificationCode = () => {
   const location = useLocation();
