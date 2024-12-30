@@ -20,6 +20,7 @@ import SelectReview from "./components/SelectReview.jsx";
 import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import VenueDetail from "./components/VenueDetail.jsx";
 
 function App() {
     // State global untuk user
@@ -57,12 +58,12 @@ function App() {
                 <Route path="/reset-success" element={<ResetSuccess/>}/>
                 <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
 
-                {/* Protected routes */}
-                <Route element={<ProtectedRoute user={user}/>}>
+                <Route element={<ProtectedRoute/>}>
                     <Route path="/reset-password" element={<ResetPassword/>}/>
                     <Route path="/about-us" element={<AboutUs/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                     <Route path="/venue" element={<Venues/>}/>
+                    <Route path="/venueDetail/:name" element={<VenueDetail/>}/>
                     <Route path="/edit-profile" element={<EditProfile/>}/>
                     <Route path="/change-password" element={<ChangePassword/>}/>
                     <Route path="/order" element={<Order/>}/>
@@ -71,6 +72,7 @@ function App() {
                     <Route path="/write-review" element={<WriteReview/>}/>
                     <Route path="/review-success" element={<ReviewSuccess/>}/>
                 </Route>
+                {/* Or any default route */}
             </Routes>
 
             {/* Footer */}

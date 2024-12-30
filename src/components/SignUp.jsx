@@ -1,7 +1,6 @@
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import googleIcon from "../assets/google.png";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {registerUser} from "../services/auth-service.js";
 import {getCurrent} from "../services/user-service.js";
 
@@ -164,60 +163,58 @@ const SignUp = ({onLogin}) => {
                             onChange={(e) => setLastName(e.target.value)}
                         />
 
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <span
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                {showPassword ? (
-                    <Visibility/>
-                ) : (
-                    <VisibilityOff/>
-                )}
-              </span>
-                            {passwordError && (
-                                <div className="text-sm text-red-600">{passwordError}</div>
-                            )}
-                        </div>
+            <div>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+              {passwordError && (
+                <div className="text-sm text-red-600">{passwordError}</div>
+              )}
+            </div>
 
-                        <div className="relative">
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Confirm Password"
-                                className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                            />
-                            <span
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            >
-                {showConfirmPassword ? (
-                    <Visibility/>
-                ) : (
-                    <VisibilityOff/>
-                )}
-              </span>
-                            {confirmPasswordError && (
-                                <div className="text-sm text-red-600">{confirmPasswordError}</div>
-                            )}
-                        </div>
+            <div>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {showConfirmPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+              {confirmPasswordError && (
+                <div className="text-sm text-red-600">{confirmPasswordError}</div>
+              )}
+            </div>
 
-                        <button
-                            type="submit"
-                            className="w-full p-3 rounded-lg bg-[#738ffd] text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 mt-6"
-                            disabled={isSignUp}
-                        >
-                            {isSignUp ? "Signing Up..." : "SIGN UP"}
-                        </button>
-                    </form>
+            <button
+              type="submit"
+              className="w-full p-3 rounded-lg bg-[#738ffd] text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 mt-6"
+              disabled={isSignUp}
+            >
+              {isSignUp ? "SIGN UP" : "SIGN UP"}
+            </button>
+          </form>
 
                     <div className="w-full flex flex-col justify-center items-center max-w-sm space-y-6 mt-3">
                         <div className="text-center text-sm text-gray-600">
@@ -236,27 +233,26 @@ const SignUp = ({onLogin}) => {
                     </div>
                 </div>
 
-                {/* Right Section */}
-                <div
-                    className="w-1/2 bg-[#738FFD] rounded-r-lg rounded-l-[75px] h-full flex flex-col justify-center items-center p-8 sm:p-44">
-                    <div className="flex flex-col justify-center items-center text-white">
-                        <h1 className="font-extrabold text-3xl sm:text-4xl text-center mb-4 sm:mb-5">
-                            Welcome Back!
-                        </h1>
-                        <p className="font-semibold text-sm sm:text-lg text-center mb-10 sm:mb-20">
-                            Enter your personal details to use all of site features
-                        </p>
-                        <Link
-                            to="/sign-in"
-                            className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
-                        >
-                            SIGN IN
-                        </Link>
-                    </div>
-                </div>
-            </div>
+        {/* Right Section */}
+        <div className="w-1/2 bg-[#738FFD] rounded-r-lg rounded-l-[75px] h-full flex flex-col justify-center items-center p-8 sm:p-44">
+          <div className="flex flex-col justify-center items-center text-white">
+            <h1 className="font-extrabold text-3xl sm:text-4xl text-center mb-4 sm:mb-5">
+              Welcome Back!
+            </h1>
+            <p className="font-semibold text-sm sm:text-lg text-center mb-10 sm:mb-20">
+              Enter your personal details to use all of site features
+            </p>
+            <Link
+              to="/sign-in"
+              className="w-full p-3 bg-[#F5F5F5] hover:bg-white focus:ring-2 focus:ring-white text-[#738FFD] font-semibold rounded-lg text-center"
+            >
+              SIGN IN
+            </Link>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default SignUp;
