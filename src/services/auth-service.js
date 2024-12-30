@@ -1,16 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
+import {Navigate, Outlet} from "react-router-dom";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-export const getCurrent = async (token) => {
+export const registerUser = async (userData) => {
     try {
-        const response = await axios.get(baseUrl + '/users/current', {
+        const response = await axios.post(baseUrl + '/users', userData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
             },
         });
-
         return response.data;
     } catch (error) {
         console.error('Error during user registration:', error.response || error.message);
@@ -27,7 +26,8 @@ export const login = async (userData) => {
                 'Content-Type' : 'application/json',
             }
         });
-        localStorage.setItem("token",response.data.data.token)
+        localStorage.setItem("token",response.data.data.token);
+        localStorage.setItem("expired_at",response.data.data.expired_at);
         return response.data
     } catch (error){
         console.error('Error during Login ', error.response || error.message);
