@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.18.11:8080/api/auth';
+const BASE_URL = 'http://192.168.18.25:8080/api/auth';
 
 const AuthService = {
   async login(email, password) {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import hero1 from "../assets/hero1.png";
 import { ChevronDown, Star } from "lucide-react";
 import photos from "../../public/vite.svg";
@@ -24,12 +25,18 @@ export default function SportVenues() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9); // Set limit per page to 9
+
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [activeButton, setActiveButton] = useState(null); // State to track active button
 
   const navigate = useNavigate();
 
   const handleButtonClick = (location) => {
     setActiveButton(location); // Update active button state
+  };
+
+  const toggleDropdown = (dropdown) => {
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
 
   useEffect(() => {
@@ -56,39 +63,45 @@ export default function SportVenues() {
   const totalPages = Math.ceil(venues.length / itemsPerPage);
 
   return (
-      <div className="min-h-screen flex flex-col bg-gray-100">
-        <div className="bg-[#738FFD] mt-24 mx-20 p-10  rounded-lg shadow-xl flex flex-col md:flex-row justify-between items-center md:py-16 relative">
-          <div className="w-full md:w-1/2 text-left">
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-8">
-              Best Sport Center Location
-            </h1>
-            <div className="flex gap-4 flex-wrap">
-              <button
-                  className={`px-4 py-2 rounded-md ${
-                      activeButton === "Bandung" ? "bg-white text-black font-semibold" : "bg-[#E6FDA3] text-black"
-                  }`}
-                  onClick={() => handleButtonClick("Bandung")}
-              >
-                Bandung
-              </button>
-              <button
-                  className={`px-4 py-2 rounded-md ${
-                      activeButton === "Kabupaten Bandung" ? "bg-white text-black font-semibold" : "bg-[#E6FDA3] text-black"
-                  }`}
-                  onClick={() => handleButtonClick("Kabupaten Bandung")}
-              >
-                Kabupaten Bandung
-              </button>
-              <button
-                  className={`px-4 py-2 rounded-md ${
-                      activeButton === "Kabupaten Bandung Barat" ? "bg-white text-black font-semibold" : "bg-[#E6FDA3] text-black"
-                  }`}
-                  onClick={() => handleButtonClick("Kabupaten Bandung Barat")}
-              >
-                Kabupaten Bandung Barat
-              </button>
-            </div>
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <div className="bg-[#738FFD] mt-24 mx-20 p-10  rounded-lg shadow-xl flex flex-col md:flex-row justify-between items-center md:py-16 relative">
+        <div className="w-full md:w-1/2 text-left">
+          <h1 className="text-white text-4xl md:text-5xl font-bold mb-8">
+            Best Sport Center Location
+          </h1>
+          <div className="flex gap-4 flex-wrap">
+            <button
+              className={`px-4 py-2 rounded-md ${
+                activeButton === "Bandung"
+                  ? "bg-white text-black font-semibold"
+                  : "bg-[#E6FDA3] text-black"
+              }`}
+              onClick={() => handleButtonClick("Bandung")}
+            >
+              Bandung
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md ${
+                activeButton === "Kabupaten Bandung"
+                  ? "bg-white text-black font-semibold"
+                  : "bg-[#E6FDA3] text-black"
+              }`}
+              onClick={() => handleButtonClick("Kabupaten Bandung")}
+            >
+              Kabupaten Bandung
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md ${
+                activeButton === "Kabupaten Bandung Barat"
+                  ? "bg-white text-black font-semibold"
+                  : "bg-[#E6FDA3] text-black"
+              }`}
+              onClick={() => handleButtonClick("Kabupaten Bandung Barat")}
+            >
+              Kabupaten Bandung Barat
+            </button>
           </div>
+        </div>
 
           <div className="w-full md:w-1/2 flex justify-center items-end">
             <img
@@ -99,112 +112,126 @@ export default function SportVenues() {
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex gap-4 flex-wrap">
-            {/* Facility Dropdown */}
-            <div className="relative">
-              <button
-                  onClick={() => setIsFacilityOpen(!isFacilityOpen)}
-                  className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
+      {/* Filters */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex gap-4 flex-wrap">
+          {/* Facility Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => toggleDropdown("facility")}
+              className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
+            >
+              {selectedFacility || "Facility"}
+              <ChevronDown size={20} />
+            </button>
+            {openDropdown === "facility" && (
+              <div
+                className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50 transition-[transform,opacity] transform duration-300 ease-out scale-y-100 opacity-100"
+                onMouseLeave={() => setOpenDropdown(null)}
+                style={{ transformOrigin: "top" }}
               >
-                Facility
-                <ChevronDown size={20} />
-              </button>
-              {isFacilityOpen && (
-                  <div
-                      className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50"
-                      onMouseLeave={() => setIsFacilityOpen(false)}
-                  >
-                    {venues.map((venue) => (
-                        <div
-                            key={venue.id}
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                              setSelectedFacility(venue.name);
-                              setIsFacilityOpen(false);
-                            }}
-                        >
-                          {venue.name}
-                        </div>
-                    ))}
-                  </div>
-              )}
-            </div>
+                {"Futsal,Basketball,Badminton,Voli"
+                  .split(",")
+                  .map((facility, index) => (
+                    <React.Fragment key={facility}>
+                      <div
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setSelectedFacility(facility);
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        {facility}
+                      </div>
+                      {index < 3 && (
+                        <div className="border-t border-gray-200"></div>
+                      )}
+                    </React.Fragment>
+                  ))}
+              </div>
+            )}
+          </div>
 
-            {/* Rating Dropdown */}
-            <div className="relative">
-              <button
-                  onClick={() => setIsRatingOpen(!isRatingOpen)}
-                  className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
+          {/* Rating Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => toggleDropdown("rating")}
+              className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
+            >
+              {selectedRating || "Rating"}
+              <ChevronDown size={20} />
+            </button>
+            {openDropdown === "rating" && (
+              <div
+                className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50 transition-[transform,opacity] transform duration-300 ease-out scale-y-100 opacity-100"
+                onMouseLeave={() => setOpenDropdown(null)}
+                style={{ transformOrigin: "top" }}
               >
-                Rating
-                <ChevronDown size={20} />
-              </button>
-              {isRatingOpen && (
-                  <div
-                      className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50"
-                      onMouseLeave={() => setIsRatingOpen(false)}
-                  >
-                    {[
-                      "Lowest to Highest",
-                      "Highest to Lowest"
-                    ].map((rating) => (
-                        <div
-                            key={rating}
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                              setSelectedRating(rating);
-                              setIsRatingOpen(false);
-                            }}
-                        >
-                          {rating}
-                        </div>
-                    ))}
-                  </div>
-              )}
-            </div>
+                {["Lowest to Highest", "Highest to Lowest"].map(
+                  (rating, index) => (
+                    <React.Fragment key={rating}>
+                      <div
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setSelectedRating(rating);
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        {rating}
+                      </div>
+                      {index < 1 && (
+                        <div className="border-t border-gray-200"></div>
+                      )}
+                    </React.Fragment>
+                  )
+                )}
+              </div>
+            )}
+          </div>
 
-            {/* Price Dropdown */}
-            <div className="relative">
-              <button
-                  onClick={() => setIsPriceOpen(!isPriceOpen)}
-                  className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
+          {/* Price Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => toggleDropdown("price")}
+              className="bg-[#E6FDA3] px-4 py-2 rounded-md flex items-center gap-2"
+            >
+              {selectedPrice || "Price"}
+              <ChevronDown size={20} />
+            </button>
+            {openDropdown === "price" && (
+              <div
+                className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50 transition-[transform,opacity] transform duration-300 ease-out scale-y-100 opacity-100"
+                onMouseLeave={() => setOpenDropdown(null)}
+                style={{ transformOrigin: "top" }}
               >
-                {selectedPrice || "Price"}
-                <ChevronDown size={20} />
-              </button>
-              {isPriceOpen && (
-                  <div
-                      className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50"
-                      onMouseLeave={() => setIsPriceOpen(false)}
-                  >
-                    {[
-                      "Lowest to Highest",
-                      "Highest to Lowest",
-                      "Price Range"
-                    ].map((price) => (
-                        <div
-                            key={price}
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                              setSelectedPrice(price);
-                              setIsPriceOpen(false);
-                              if (price === "Price Range") {
-                                setShowPriceRange(true);
-                              } else {
-                                setShowPriceRange(false);
-                              }
-                            }}
-                        >
-                          {price}
-                        </div>
-                    ))}
-                  </div>
-              )}
-            </div>
+                {["Lowest to Highest", "Highest to Lowest", "Price Range"].map(
+                  (price, index) => (
+                    <React.Fragment key={price}>
+                      <div
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          setSelectedPrice(price);
+                          setOpenDropdown(null); // Tutup dropdown setelah memilih
+                          if (price === "Price Range") {
+                            setShowPriceRange(true); // Tampilkan input Price Range
+                          } else {
+                            setShowPriceRange(false); // Sembunyikan input Price Range
+                          }
+                        }}
+                      >
+                        {price}
+                      </div>
+                      {index < 2 && (
+                        <div className="border-t border-gray-200"></div>
+                      )}
+                    </React.Fragment>
+                  )
+                )}
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
         {/* Price Range Input */}
         {showPriceRange && (

@@ -83,3 +83,17 @@ export const resetPassword = async (userData) => {
             error.response?.data?.message )
     }
 }
+
+export const resendCode = async (email) => {
+    try {
+        return await axios.post(baseUrl + "/auth/forgot-password",email, {
+            headers :{
+                'Content-Type': 'application/json'
+            }
+        })
+    }catch (error) {
+        console.error(error.response || error.message);
+        throw new Error(
+            error.response?.data?.message )
+    }
+}

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import googleIcon from "../assets/google.png";
 import {registerUser} from "../services/auth-service.js";
@@ -114,6 +114,13 @@ const SignUp = ({onLogin}) => {
             console.error("Missing token or expired_at in callback URL.");
         }
     };
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.has("token") && searchParams.has("expired_at")) {
+            handleGoogleCallback(searchParams);
+        }
+    }, [window.location.search]);
 
     return (
         <div className="flex justify-center items-center min-h-screen  bg-gray-100">
