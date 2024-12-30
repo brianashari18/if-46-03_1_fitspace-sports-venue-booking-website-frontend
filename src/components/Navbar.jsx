@@ -1,31 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/yellow-logo.png";
+import iconProfile from "../assets/user-icon.png";
 import axios from "axios";
 
-const Navbar = ({ user, onLogout }) => {
+const Navbar = ({ user }) => {
     const navigate = useNavigate();
-
-    const handleLogout = async () => {
-        const token = localStorage.getItem("token");
-
-        try {
-            await axios.delete("http://localhost:8080/api/auth/logout", {
-                headers: {
-                    Authorization: token,
-                },
-            });
-
-            localStorage.removeItem("token");
-            localStorage.removeItem("tokenType");
-
-            onLogout();
-
-            navigate("/sign-in");
-        } catch (error) {
-            console.error("Failed to logout:", error);
-            alert("Logout failed. Please try again.");
-        }
-    };
 
     return (
         <section className="bg-primary flex justify-between items-center px-10 py-5">
@@ -46,15 +25,19 @@ const Navbar = ({ user, onLogout }) => {
                     <button className="font-poppins">Contact Us</button>
                 </a>
             </div>
-            <div className="text-primary2 flex justify-center gap-5">
+            <div className="text-primary2 flex justify-center gap-5 items-center">
                 {user ? (
                     <>
-                        <span className="font-poppins p-2 text-[#f5f5f5]">{user.email}</span>
                         <button
-                            onClick={handleLogout}
-                            className="font-poppins p-2 hover:bg-red-500 text-red-600"
+                            onClick={() => navigate("/edit-profile")}
+                            className="flex items-center gap-2 hover:underline"
                         >
-                            Logout
+                            <img
+                                src={iconProfile}
+                                alt="profile"
+                                className="w-8 h-8 rounded-full object-cover"
+                            />
+                            <span className="font-poppins p-2 text-[#f5f5f5]">{user.email}</span>
                         </button>
                     </>
                 ) : (

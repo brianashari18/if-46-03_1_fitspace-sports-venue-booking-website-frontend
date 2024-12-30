@@ -83,3 +83,24 @@ export const resetPassword = async (userData) => {
             error.response?.data?.message )
     }
 }
+
+export const changePassword = async (userData) => {
+    const token = localStorage.getItem("token");
+    try {
+        console.log(`TOKEN: ${token}`);
+        console.log(`DATA: ${JSON.stringify(userData)}`);
+        const response = axios.patch(baseUrl + '/auth/reset-password', userData ,{
+            headers :{
+                'Content-Type': 'application/json',
+                'Authorization' : token
+            }
+        })
+
+        console.log(`RESPONSE ${JSON.stringify(response)}`);
+        return response;
+    }catch (error) {
+        console.error(error.response || error.message);
+        throw new Error(
+            error.response?.data?.message )
+    }
+}
