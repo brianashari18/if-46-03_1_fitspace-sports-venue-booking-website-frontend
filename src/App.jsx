@@ -45,7 +45,7 @@ function App() {
     return (<Router>
         <div className="min-h-screen bg-gray-100">
             {/* Navbar menerima user dan handleLogout sebagai props */}
-            <Navbar user={user} onLogout={handleLogout}/>
+            <Navbar user={user}/>
             {/* Define Routes */}
             <Routes>
                 <Route
@@ -56,17 +56,17 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword/>}/>
                 <Route path="/verification-code" element={<VerificationCode/>}/>
                 <Route path="/reset-success" element={<ResetSuccess/>}/>
+                <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
 
                 <Route element={<ProtectedRoute/>}>
-                    <Route path="/reset-password" element={<ResetPassword/>}/>
                     <Route path="/about-us" element={<AboutUs/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                     <Route path="/venue" element={<Venues/>}/>
                     <Route path="/venueDetail/:name" element={<VenueDetail/>}/>
-                    <Route path="/edit-profile" element={<EditProfile/>}/>
-                    <Route path="/change-password" element={<ChangePassword/>}/>
-                    <Route path="/order" element={<Order/>}/>
+                    <Route path="/edit-profile" element={<EditProfile onLogout={handleLogout} user={user}/>}/>
+                    <Route path="/change-password" element={<ChangePassword onLogout={handleLogout} user={user}/>}/>
+                    <Route path="/order" element={<Order onLogout={handleLogout}/>}/>
                     <Route path="/home" element={<Homepage/>}/>
                     <Route path="/select-review" element={<SelectReview/>}/>
                     <Route path="/write-review" element={<WriteReview/>}/>
