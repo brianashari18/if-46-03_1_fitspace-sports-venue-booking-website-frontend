@@ -1,9 +1,12 @@
 import { useState } from "react";
 import profile from "../assets/profile.png";
 
-const WriteReview = ({ onClose, username, selectedFacility }) => {
+const WriteReview = ({ onClose, username, selectedFacility, facilityId }) => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+
+  console.log(selectedFacility)
+    console.log(facilityId)
 
   return (
       <div

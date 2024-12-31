@@ -3,6 +3,7 @@ import profile from "../assets/profile.png";
 
 const SelectReview = ({ facilities, onClose, username, onNext }) => {
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const [facilityId, setFacilityId] = useState(null)
 
   return (
       <div
@@ -44,20 +45,23 @@ const SelectReview = ({ facilities, onClose, username, onNext }) => {
             <h1 className="text-2xl font-bold text-center">
               What facility would you like to review?
             </h1>
-            <div className="flex flex-wrap justify-center gap-6">
-              {facilities.map((facility) => (
-                  <button
-                      key={facility}
-                      className={`px-8 py-3 rounded-full ${
-                          selectedFacility === facility
-                              ? "bg-[#E7FF8C] text-black hover:bg-[#E7FF8C]/90"
-                              : "border-2"
-                      }`}
-                      onClick={() => setSelectedFacility(facility)}
-                  >
-                    {facility}
-                  </button>
-              ))}
+              <div className="flex flex-wrap justify-center gap-6">
+                  {facilities.map((facility) => (
+                      <button
+                          key={facility.id} // Use id as a unique key
+                          onClick={() => {
+                              setSelectedFacility(facility.type); // Set the selected facility type
+                              setFacilityId(facility.id); // Set the facility id
+                          }}
+                          className={`px-8 py-3 rounded-full ${
+                              selectedFacility === facility.type
+                                  ? "bg-[#E7FF8C] text-black hover:bg-[#E7FF8C]/90"
+                                  : "border-2"
+                          }`}
+                      >
+                          {facility.type} {/* Display the facility type */}
+                      </button>
+                  ))}
             </div>
           </div>
 
@@ -73,7 +77,7 @@ const SelectReview = ({ facilities, onClose, username, onNext }) => {
                 className="bg-[#E7FF8C] text-black hover:bg-[#E7FF8C]/90 rounded-full px-10 py-4"
                 onClick={() => {
                   if (selectedFacility) {
-                    onNext(selectedFacility); // Trigger WriteReview modal
+                    onNext(selectedFacility, facilityId);
                   }
                 }}
             >
