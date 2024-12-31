@@ -119,21 +119,6 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-
-      {/* CSS for error message */}
-      <style>
-        {`
-          .error-message {
-            color: red !important;
-            font-size: 0.875rem !important;
-            margin-top: 0.5rem !important;
-            margin-left: 0.5rem !important;
-            background-color: white !important;
-            padding: 4px !important;
-            border-radius: 4px !important;
-          }
-        `}
-      </style>
     </EmailContext.Provider>
   );
 };

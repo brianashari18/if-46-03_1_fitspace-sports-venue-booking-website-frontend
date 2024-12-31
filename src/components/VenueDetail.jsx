@@ -412,7 +412,7 @@ export default function VenueDetail() {
                   username={user.first_name}
                   selectedFacility={selectedFacility}
                   facilityId={facilityId}
-              />zf
+              />
           )}
         </div>
       </div>
