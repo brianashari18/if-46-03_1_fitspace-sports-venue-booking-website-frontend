@@ -8,7 +8,6 @@ const EmailContext = createContext();
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [isContinueDisabled, setIsContinueDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -19,24 +18,27 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmailError("");
+    setEmailError(""); // Clear previous error
 
+    // Validate email input
     if (email.trim() === "") {
       setEmailError("Email is required.");
+      return;
     } else if (!isValidEmail(email)) {
       setEmailError("Enter a valid email address.");
+      return;
     }
-
-    const data = { email: email };
 
     setIsLoading(true);
     try {
-      const response = await forgotPassword(data);
-      console.log("API Response:", response);
-      navigate("/verification-code", { state: { email: data.email } });
+      const response = await forgotPassword({ email }); // Wrap email in an object
+      console.log("API Response:", response); // Debugging log
+      navigate("/verification-code", { state: { email } });
     } catch (error) {
-      console.error("Error:", error.message);
-      alert(error.message);
+      console.error("Error in API call:", error.message || error);
+      setEmailError(
+          error.response?.data?.message || "Failed to send reset email. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -50,76 +52,77 @@ const ForgotPassword = () => {
   const handleEmailChange = (e) => {
     const inputEmail = e.target.value;
     setEmail(inputEmail);
-    setEmailError("");
-    setIsContinueDisabled(inputEmail.trim() === "" || !isValidEmail(inputEmail));
+    setEmailError(""); // Clear error while typing
   };
 
   return (
-    <EmailContext.Provider value={{ email, setEmail }}>
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="bg-[#738FFD] rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
-          {/* Left Section */}
-          <div className="w-1/2 h-full flex flex-col justify-center items-center text-white p-8 sm:p-16 lg:p-32">
-            <h1 className="font-extrabold text-xl sm:text-3xl text-center mb-10">
-              FORGOT PASSWORD
-            </h1>
-            <p className="font-semibold text-sm sm:text-lg text-center sm:mb-16">
-              Enter your email account to reset your password!
-            </p>
+      <EmailContext.Provider value={{ email, setEmail }}>
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+          <div className="bg-[#738FFD] rounded-lg shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-[85rem] h-[35rem] flex">
+            {/* Left Section */}
+            <div className="w-1/2 h-full flex flex-col justify-center items-center text-white p-8 sm:p-16 lg:p-32">
+              <h1 className="font-extrabold text-xl sm:text-3xl text-center mb-10">
+                FORGOT PASSWORD
+              </h1>
+              <p className="font-semibold text-sm sm:text-lg text-center sm:mb-16">
+                Enter your email account to reset your password!
+              </p>
 
-            <form
-              className="w-60 max-w-sm space-y-4 mb-2"
-              onSubmit={handleSubmit}
-            >
-              <div>
-                <input
-                  type="text"
-                  placeholder="Email"
-                  className="w-full p-3 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-                {console.log("Error Message Debug:", emailError)} {/* Debug */}
-                {emailError && (
-                  <div className="error-message">{emailError}</div>
-                )}
-              </div>
-
-              <div className="w-full flex flex-col space-y-2 mt-6">
-                <button
-                  type="submit"
-                  className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
-                  disabled={isContinueDisabled || isLoading}
-                >
-                  {isLoading ? (
-                    <span className="loader inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  ) : (
-                    "Continue"
+              <form className="w-60 max-w-sm space-y-4 mb-2" onSubmit={handleSubmit}>
+                <div className="flex flex-col">
+                  <input
+                      type="text"
+                      placeholder="Email"
+                      className={`w-full p-3 rounded-lg border text-black ${
+                          emailError
+                              ? "border-blue-500 focus:ring-blue-500"
+                              : "border-gray-300 focus:ring-blue-500"
+                      } focus:outline-none focus:ring-2`}
+                      value={email}
+                      onChange={handleEmailChange}
+                  />
+                  {emailError && (
+                      <span className="text-[#E6FDA3] text-sm mt-1 pl-1">
+                    {emailError}
+                  </span>
                   )}
-                </button>
+                </div>
 
-                <Link
-                  to="/sign-in"
-                  className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
-                  onClick={handleCancel}
-                >
-                  Cancel
-                </Link>
-              </div>
-            </form>
-          </div>
+                <div className="w-full flex flex-col space-y-2 mt-6">
+                  <button
+                      type="submit"
+                      className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
+                      disabled={isLoading}
+                  >
+                    {isLoading ? (
+                        <span className="loader inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                        "Continue"
+                    )}
+                  </button>
 
-          {/* Right Section */}
-          <div className="bg-[#cad7fdb3] rounded-2xl flex justify-center items-center w-1/3 h-3/4 mx-auto my-auto">
-            <img
-              src={ForgotPass}
-              alt="Forgot Password"
-              className="w-96 h-96 object-contain"
-            />
+                  <Link
+                      to="/sign-in"
+                      className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
+                      onClick={handleCancel}
+                  >
+                    Cancel
+                  </Link>
+                </div>
+              </form>
+            </div>
+
+            {/* Right Section */}
+            <div className="bg-[#cad7fdb3] rounded-2xl flex justify-center items-center w-1/3 h-3/4 mx-auto my-auto">
+              <img
+                  src={ForgotPass}
+                  alt="Forgot Password"
+                  className="w-96 h-96 object-contain"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </EmailContext.Provider>
+      </EmailContext.Provider>
   );
 };
 

@@ -5,6 +5,7 @@ import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import { useLocation } from 'react-router-dom';
 import SelectReview from "./SelectReview"; // Ensure the correct path
 import WriteReview from "./WriteReview";
+import ReviewSuccess from "./ReviewSuccess.jsx";
 
 
 const scheduleData = [
@@ -104,16 +105,31 @@ export default function VenueDetail() {
     setIsSelectReviewOpen(!isSelectReviewOpen);
   };
 
-  const openWriteReviewModal = (facility) => {
-    setSelectedFacility(facility);
-    setFacilityId(facility)
-    setIsSelectReviewOpen(false);
-    setIsWriteReviewOpen(true);
+
+
+  const openWriteReviewModal = (facilityType, facilityId) => {
+    setSelectedFacility(facilityType); // Set the selected facility type
+    setFacilityId(facilityId); // Set the facility ID
+    setIsSelectReviewOpen(false); // Close the SelectReview modal
+    setIsWriteReviewOpen(true); // Open the WriteReview modal
   };
+
 
   const closeWriteReviewModal = () => {
     setIsWriteReviewOpen(false);
   };
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const handleReviewSubmitSuccess = () => {
+    setIsWriteReviewOpen(false); // Close the WriteReview modal
+    setIsSuccessModalOpen(true); // Open the success modal
+  };
+
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false); // Close the success modal
+  };
+
 
 
   return (
@@ -397,8 +413,7 @@ export default function VenueDetail() {
           {/* SelectReview Modal */}
           {isSelectReviewOpen && (
               <SelectReview
-                  facilities={venue.fields.map((field) => ({ id: field.field_id, type: field.type }))}
-
+                  facilities={venue.fields.map((field) => ({ id: field.id, type: field.type }))}
                   onClose={toggleSelectReviewModal}
                   username={user.first_name}
                   onNext={openWriteReviewModal} // Trigger WriteReview modal
@@ -412,8 +427,11 @@ export default function VenueDetail() {
                   username={user.first_name}
                   selectedFacility={selectedFacility}
                   facilityId={facilityId}
+                  onSubmit={handleReviewSubmitSuccess} // Trigger success modal on submit
               />
           )}
+          {isSuccessModalOpen && <ReviewSuccess onClose={closeSuccessModal} />}
+
         </div>
       </div>
   );

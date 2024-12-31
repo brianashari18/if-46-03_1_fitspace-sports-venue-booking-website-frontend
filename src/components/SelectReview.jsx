@@ -5,6 +5,11 @@ const SelectReview = ({ facilities, onClose, username, onNext }) => {
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [facilityId, setFacilityId] = useState(null)
 
+    const handleFacilitySelection = (facility) => {
+        setSelectedFacility(facility.type);
+        setFacilityId(facility.id);
+    };
+
   return (
       <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
@@ -49,10 +54,7 @@ const SelectReview = ({ facilities, onClose, username, onNext }) => {
                   {facilities.map((facility) => (
                       <button
                           key={facility.id} // Use id as a unique key
-                          onClick={() => {
-                              setSelectedFacility(facility.type); // Set the selected facility type
-                              setFacilityId(facility.id); // Set the facility id
-                          }}
+                          onClick={() => {handleFacilitySelection(facility)}}
                           className={`px-8 py-3 rounded-full ${
                               selectedFacility === facility.type
                                   ? "bg-[#E7FF8C] text-black hover:bg-[#E7FF8C]/90"
