@@ -5,6 +5,7 @@ import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import { useLocation } from 'react-router-dom';
 import SelectReview from "./SelectReview"; // Ensure the correct path
 import WriteReview from "./WriteReview";
+import ReviewSuccess from "./ReviewSuccess.jsx";
 
 
 const scheduleData = [
@@ -117,6 +118,18 @@ export default function VenueDetail() {
   const closeWriteReviewModal = () => {
     setIsWriteReviewOpen(false);
   };
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const handleReviewSubmitSuccess = () => {
+    setIsWriteReviewOpen(false); // Close the WriteReview modal
+    setIsSuccessModalOpen(true); // Open the success modal
+  };
+
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false); // Close the success modal
+  };
+
 
 
   return (
@@ -414,9 +427,11 @@ export default function VenueDetail() {
                   username={user.first_name}
                   selectedFacility={selectedFacility}
                   facilityId={facilityId}
-
+                  onSubmit={handleReviewSubmitSuccess} // Trigger success modal on submit
               />
           )}
+          {isSuccessModalOpen && <ReviewSuccess onClose={closeSuccessModal} />}
+
         </div>
       </div>
   );
