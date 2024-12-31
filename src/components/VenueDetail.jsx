@@ -104,12 +104,15 @@ export default function VenueDetail() {
     setIsSelectReviewOpen(!isSelectReviewOpen);
   };
 
-  const openWriteReviewModal = (facility) => {
-    setSelectedFacility(facility);
-    setFacilityId(facility)
-    setIsSelectReviewOpen(false);
-    setIsWriteReviewOpen(true);
+
+
+  const openWriteReviewModal = (facilityType, facilityId) => {
+    setSelectedFacility(facilityType); // Set the selected facility type
+    setFacilityId(facilityId); // Set the facility ID
+    setIsSelectReviewOpen(false); // Close the SelectReview modal
+    setIsWriteReviewOpen(true); // Open the WriteReview modal
   };
+
 
   const closeWriteReviewModal = () => {
     setIsWriteReviewOpen(false);
@@ -397,8 +400,7 @@ export default function VenueDetail() {
           {/* SelectReview Modal */}
           {isSelectReviewOpen && (
               <SelectReview
-                  facilities={venue.fields.map((field) => ({ id: field.field_id, type: field.type }))}
-
+                  facilities={venue.fields.map((field) => ({ id: field.id, type: field.type }))}
                   onClose={toggleSelectReviewModal}
                   username={user.first_name}
                   onNext={openWriteReviewModal} // Trigger WriteReview modal
@@ -412,7 +414,8 @@ export default function VenueDetail() {
                   username={user.first_name}
                   selectedFacility={selectedFacility}
                   facilityId={facilityId}
-              />zf
+
+              />
           )}
         </div>
       </div>
