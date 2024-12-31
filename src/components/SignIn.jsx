@@ -132,7 +132,7 @@ const SignIn = ({onLogin}) => {
                     <form className="w-full max-w-sm space-y-2 mb-2" onSubmit={handleSubmit}>
                         <div>
                             <input
-                                type="email"
+                                type="text"
                                 placeholder="Email"
                                 className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={email}
