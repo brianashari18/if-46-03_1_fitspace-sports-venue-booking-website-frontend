@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React,{ useState, useEffect } from "react";
 import axios from "axios";
 import hero1 from "../assets/hero1.png";
 import { ChevronDown, Star } from "lucide-react";
