@@ -62,10 +62,8 @@ export default function VenueDetail() {
 
   const { state } = useLocation();
   const venue = state?.venue;
-  console.log(venue)
 
   const user = JSON.parse(localStorage.getItem("user"))
-  console.log(user)
 
   const [selectedField, setSelectedField] = useState(venue.fields[0]?.type);
   const handleFieldChange = (e) => setSelectedField(e.target.value);
@@ -100,6 +98,7 @@ export default function VenueDetail() {
   const [isSelectReviewOpen, setIsSelectReviewOpen] = useState(false);
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const [facilityId, setFacilityId] = useState(null)
 
   const toggleSelectReviewModal = () => {
     setIsSelectReviewOpen(!isSelectReviewOpen);
@@ -107,6 +106,7 @@ export default function VenueDetail() {
 
   const openWriteReviewModal = (facility) => {
     setSelectedFacility(facility);
+    setFacilityId(facility)
     setIsSelectReviewOpen(false);
     setIsWriteReviewOpen(true);
   };
@@ -397,7 +397,8 @@ export default function VenueDetail() {
           {/* SelectReview Modal */}
           {isSelectReviewOpen && (
               <SelectReview
-                  facilities={venue.fields.map((field) => field.type)}
+                  facilities={venue.fields.map((field) => ({ id: field.field_id, type: field.type }))}
+
                   onClose={toggleSelectReviewModal}
                   username={user.first_name}
                   onNext={openWriteReviewModal} // Trigger WriteReview modal
@@ -410,7 +411,8 @@ export default function VenueDetail() {
                   onClose={closeWriteReviewModal}
                   username={user.first_name}
                   selectedFacility={selectedFacility}
-              />
+                  facilityId={facilityId}
+              />zf
           )}
         </div>
       </div>
