@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080/api'; // Adjust the base URL to match your backend setup
+const BASE_URL = import.meta.env.VITE_BASE_URL; // Adjust the base URL to match your backend setup
 
 const VenueService = {
     // Fetch all venues
