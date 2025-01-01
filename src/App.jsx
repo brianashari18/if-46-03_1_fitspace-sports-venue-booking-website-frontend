@@ -21,6 +21,7 @@ import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
 import Payment from "./components/Payment.jsx";
+import ConfirmPayment from "./components/ConfirmPayment.jsx";
 
 function App() {
     // State global untuk user
@@ -70,7 +71,8 @@ function App() {
                     <Route path="/home" element={<Homepage/>}/>
                     <Route path="/write-review" element={<WriteReview/>}/>
                     <Route path="/review-success" element={<ReviewSuccess/>}/>
-                    <Route path="/payment" element={<Payment/>}/>                        
+                    <Route path="/payment" element={<Payment/>}/>
+                    <Route path="/confirm-payment" element={<ConfirmPayment/>}/>                                            
                 {/* </Route> */}
                 {/* Or any default route */}
             </Routes>

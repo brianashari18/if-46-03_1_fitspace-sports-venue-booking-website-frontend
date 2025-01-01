@@ -208,7 +208,7 @@ const Payment = () => {
             </div>
           </div>
           {/* Reset Button */}
-          <div className="text-left w-[50rem]">
+          <div className="absolute bottom-0 text-left w-[50rem]">
             <button
               type="button"
               onClick={handleReset}
@@ -338,7 +338,7 @@ const Payment = () => {
               </div>
             </div>
           </div>
-          <div className="text-right w-[25rem]">
+          <div className="absolute bottom-0 text-right w-[25rem]">
             <button
               type="button"
               onClick={handleNext}
