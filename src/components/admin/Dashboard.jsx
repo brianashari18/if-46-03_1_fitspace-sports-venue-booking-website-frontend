@@ -3,14 +3,15 @@ import Sidebar from "./Sidebar";
 import UserManagement from "./UserManagement";
 import VenueManagement from "./VenueManagement";
 import FieldManagement from "./FieldManagement";
-import ReviewManagement from "./ReviewManagement"; // Add Review Management
+import ReviewManagement from "./ReviewManagement";
+import BookingManagement from "./BookingManagement"; // Add Booking Management
 import { useLocation } from "react-router-dom"; // For better routing
 
 const Dashboard = () => {
     const [activePage, setActivePage] = useState("Dashboard");
     const token = localStorage.getItem("token");
 
-    // Dynamically setting the active page using URL query parameters (optional, depending on your routing setup)
+    // Dynamically setting the active page using URL query parameters
     const location = useLocation();
 
     useEffect(() => {
@@ -29,7 +30,9 @@ const Dashboard = () => {
             case "Field Management":
                 return <FieldManagement token={token} />;
             case "Review Management":
-                return <ReviewManagement token={token} />; // Added Review Management content
+                return <ReviewManagement token={token} />;
+            case "Booking Management":
+                return <BookingManagement token={token} />; // Add Booking Management content
             default:
                 return (
                     <div className="p-6">

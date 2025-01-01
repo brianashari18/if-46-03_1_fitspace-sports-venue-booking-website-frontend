@@ -41,6 +41,14 @@ const Sidebar = ({ setActivePage, activePage }) => {
                 >
                     Review Management
                 </li>
+
+                {/* Booking Management Section */}
+                <li
+                    className={`py-2 px-4 hover:bg-blue-600 cursor-pointer ${activePage === "Booking Management" ? "bg-blue-600" : ""}`}
+                    onClick={() => setActivePage("Booking Management")}
+                >
+                    Booking Management
+                </li>
             </ul>
         </div>
     );

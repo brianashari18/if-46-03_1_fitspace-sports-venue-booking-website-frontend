@@ -20,14 +20,16 @@ import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
-import MyVenue from "./components/MyVenue.jsx";
-import AddVenueForm from "./components/AddVenueForm.jsx";
 import Payment from "./components/Payment.jsx";
 import ConfirmPayment from "./components/ConfirmPayment.jsx";
 import BookingSuccess from "./components/BookingSuccess.jsx";
 import Dashboard from "./components/admin/Dashboard.jsx";
+import MyVenue from "./components/MyVenue.jsx";
+import AddVenueForm from "./components/AddVenueForm.jsx";
+import AdminVerification from "./components/AdminVerification.jsx";
 
 function App() {
+    // State global untuk user
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : null;
@@ -47,24 +49,25 @@ function App() {
     };
 
     return (<Router>
-        <div className="min-h-screen flex flex-col">
-            {/* Navbar menerima user dan handleLogout sebagai props */}
-            <Navbar user={user}/>
-            {/* Define Routes */}
-            <div className="flex-grow bg-gray-100">
-            <Routes>
-                <Route
-                    path="/sign-in"
-                    element={<SignIn onLogin={handleLogin}/>}
-                />
-                <Route path="/sign-up" element={<SignUp onLogin={handleLogin}/>}/>
-                <Route path="/forgot-password" element={<ForgotPassword/>}/>
-                <Route path="/verification-code" element={<VerificationCode/>}/>
-                <Route path="/reset-success" element={<ResetSuccess/>}/>
-                <Route path="/reset-password" element={<ResetPassword/>}/>
-                <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
+            <div className="min-h-screen flex flex-col">
+                {/* Navbar menerima user dan handleLogout sebagai props */}
+                <Navbar user={user}/>
+                {/* Define Routes */}
+                <div className="flex-grow bg-gray-100">
+                    <Routes>
+                        <Route
+                            path="/sign-in"
+                            element={<SignIn onLogin={handleLogin}/>}
+                        />
+                        <Route path="/sign-up" element={<SignUp onLogin={handleLogin}/>}/>
+                        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                        <Route path="/verification-code" element={<VerificationCode/>}/>
 
-                {/* <Route element={<ProtectedRoute/>}> */}
+                        <Route path="/reset-success" element={<ResetSuccess/>}/>
+                        <Route path="/reset-password" element={<ResetPassword/>}/>
+                        <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
+
+                 <Route element={<ProtectedRoute/>}>
                     <Route path="/about-us" element={<AboutUs/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                     <Route path="/venue" element={<Venues/>}/>
@@ -80,14 +83,16 @@ function App() {
                     <Route path="/payment" element={<Payment/>}/>
                     <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
                     <Route path="/booking-success" element={<BookingSuccess/>}/>
-                <Route path="/admin-dashboard" element={<Dashboard />} />
-                {/* </Route> */}
+                     <Route element={<AdminVerification user={user}/>}>
+                    <Route path="/admin-dashboard" element={<Dashboard/>} />
+                     </Route>
+                 </Route>
                 {/* Or any default route */}
             </Routes>
             </div>
 
                 {/* Footer */}
-                <Footer />
+                <Footer/>
             </div>
         </Router>
     );
