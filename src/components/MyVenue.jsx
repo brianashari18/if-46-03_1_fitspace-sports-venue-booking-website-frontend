@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import SideBar from "./SideBar.jsx";
 import testImg from "../assets/hero.png";
-import { addVenue, getVenueFromAllOwner } from "../services/venue-service.js";
 import AddVenueForm from "./AddVenueForm";
 import AddFieldForm from "./AddFieldForm";
 import {addField} from "../services/field-service.js";
+import VenueService from "../services/venue-service.js";
 
 const ProgressBar = ({ value, color }) => {
     const progressBarStyle = {
@@ -37,7 +37,7 @@ const MyVenue = ({ onLogout, user }) => {
             try {
                 setLoading(true);
                 const token = localStorage.getItem("token");
-                const response = await getVenueFromAllOwner(token);
+                const response = await VenueService.getVenueFromAllOwner(token);
                 setVenueData(response.data);
             } catch (err) {
                 setError(err.message || "Failed to load venues.");
@@ -89,7 +89,7 @@ const MyVenue = ({ onLogout, user }) => {
     const handleAddVenue = async (formData) => {
         console.log("New Venue Data:", formData);
         const token = localStorage.getItem("token");
-        const result = await addVenue(token, formData);
+        const result = await VenueService.addVenue(token, formData);
         console.log(JSON.stringify(result));
         handleCloseModal();
     };

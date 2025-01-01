@@ -67,12 +67,15 @@ const SignIn = ({onLogin}) => {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:8080/api/auth/google/login";
+        console.log(`URL: ${import.meta.env.VITE_BASE_URL}`)
+        window.location.href = `${import.meta.env.VITE_BASE_URL}/auth/google/login`;
     };
 
     const handleGoogleCallback = async (searchParams) => {
         const token = searchParams.get("token");
         const expiredAt = searchParams.get("expired_at");
+
+        console.log(`TOKEN: ${token}`)
 
         if (token && expiredAt) {
             localStorage.setItem("token", token);
@@ -132,7 +135,7 @@ const SignIn = ({onLogin}) => {
                     <form className="w-full max-w-sm space-y-2 mb-2" onSubmit={handleSubmit}>
                         <div>
                             <input
-                                type="email"
+                                type="text"
                                 placeholder="Email"
                                 className="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={email}
@@ -141,7 +144,7 @@ const SignIn = ({onLogin}) => {
                             {emailError && <div className="text-sm text-red-600">{emailError}</div>}
                         </div>
 
-                        <div className="relative">
+                        <div className="relative flex items-center">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
@@ -149,15 +152,17 @@ const SignIn = ({onLogin}) => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                                className="absolute right-3 flex items-center justify-center text-gray-600 hover:text-gray-800"
+                                style={{ top: "50%", transform: "translateY(-50%)" }}
                             >
-                                {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
                             </button>
                         </div>
+                        {passwordError && <div className="text-sm text-red-600">{passwordError}</div>}
+
 
                         <div className="text-right">
                             <Link to="/forgot-password" className="text-black text-sm hover:underline">

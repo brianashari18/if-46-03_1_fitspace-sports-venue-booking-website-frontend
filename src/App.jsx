@@ -16,13 +16,16 @@ import Footer from "./components/Footer";
 import AboutUs from "./components/AboutUs";
 import ContactUs from "./components/ContactUs";
 import Homepage from "./components/Homepage.jsx";
-import SelectReview from "./components/SelectReview.jsx";
 import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
 import MyVenue from "./components/MyVenue.jsx";
 import AddVenueForm from "./components/AddVenueForm.jsx";
+import Payment from "./components/Payment.jsx";
+import ConfirmPayment from "./components/ConfirmPayment.jsx";
+import BookingSuccess from "./components/BookingSuccess.jsx";
+import Dashboard from "./components/admin/Dashboard.jsx";
 
 function App() {
     const [user, setUser] = useState(() => {
@@ -44,10 +47,11 @@ function App() {
     };
 
     return (<Router>
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen flex flex-col">
             {/* Navbar menerima user dan handleLogout sebagai props */}
             <Navbar user={user}/>
             {/* Define Routes */}
+            <div className="flex-grow bg-gray-100">
             <Routes>
                 <Route
                     path="/sign-in"
@@ -60,7 +64,7 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword/>}/>
                 <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
 
-                <Route element={<ProtectedRoute/>}>
+                {/* <Route element={<ProtectedRoute/>}> */}
                     <Route path="/about-us" element={<AboutUs/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                     <Route path="/venue" element={<Venues/>}/>
@@ -69,19 +73,24 @@ function App() {
                     <Route path="/change-password" element={<ChangePassword onLogout={handleLogout} user={user}/>}/>
                     <Route path="/order" element={<Order onLogout={handleLogout}/>}/>
                     <Route path="/home" element={<Homepage/>}/>
-                    <Route path="/select-review" element={<SelectReview/>}/>
                     <Route path="/write-review" element={<WriteReview/>}/>
                     <Route path="/review-success" element={<ReviewSuccess/>}/>
                     <Route path="/my-venue" element={<MyVenue onLogout={handleLogout} user={user}/>}/>
                     <Route path="/add-venue" element={<AddVenueForm onLogout={handleLogout} user={user}/>}/>
-                </Route>
+                    <Route path="/payment" element={<Payment/>}/>
+                    <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
+                    <Route path="/booking-success" element={<BookingSuccess/>}/>
+                <Route path="/admin-dashboard" element={<Dashboard />} />
+                {/* </Route> */}
                 {/* Or any default route */}
             </Routes>
+            </div>
 
-            {/* Footer */}
-            <Footer/>
-        </div>
-    </Router>);
+                {/* Footer */}
+                <Footer />
+            </div>
+        </Router>
+    );
 }
 
 export default App;

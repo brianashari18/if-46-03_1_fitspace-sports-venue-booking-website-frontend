@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import ResetPass from "../assets/ResetPass.png";
-import Visibility from '@mui/icons-material/Visibility'; 
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {forgotPassword, resetPassword} from "../services/auth-service.js";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { forgotPassword, resetPassword } from "../services/auth-service.js";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -17,7 +17,40 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const navigate = useNavigate(); 
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    isMinLength: false,
+    hasUpperCase: false,
+    hasLowerCase: false,
+    hasNumber: false,
+    hasSpecialCharacter: false,
+  });
+
+  const navigate = useNavigate();
+
+  const isValidPassword = (password) => {
+    const criteria = {
+      isMinLength: password.length >= 8,
+      hasUpperCase: /[A-Z]/.test(password),
+      hasLowerCase: /[a-z]/.test(password),
+      hasNumber: /\d/.test(password),
+      hasSpecialCharacter: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+
+    setPasswordCriteria(criteria);
+
+    const errors = [];
+    if (!criteria.isMinLength) errors.push("at least 8 characters");
+    if (!criteria.hasUpperCase) errors.push("an uppercase letter");
+    if (!criteria.hasLowerCase) errors.push("a lowercase letter");
+    if (!criteria.hasNumber) errors.push("a number");
+    if (!criteria.hasSpecialCharacter) errors.push("a special character");
+
+    return {
+      isValid: Object.values(criteria).every(Boolean),
+      message:
+        errors.length > 0 ? `Password must contain ${errors.join(", ")}.` : "",
+    };
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,8 +61,12 @@ const ResetPassword = () => {
 
     let isValid = true;
 
+    const passwordValidation = isValidPassword(password);
     if (password.trim() === "") {
       setPasswordError("Password cannot be empty");
+      isValid = false;
+    } else if (!passwordValidation.isValid) {
+      setPasswordError(passwordValidation.message);
       isValid = false;
     }
 
@@ -44,17 +81,16 @@ const ResetPassword = () => {
     }
 
     const userData = {
-      new_password : password,
-      confirmation_password: confirmPassword
-    }
+      new_password: password,
+      confirmation_password: confirmPassword,
+    };
 
     try {
       await resetPassword(userData);
       navigate("/reset-success");
-    }catch (error) {
+    } catch (error) {
       alert(error.message);
     }
-
   };
 
   return (
@@ -73,55 +109,50 @@ const ResetPassword = () => {
             className="w-60 max-w-sm space-y-2 mb-2"
             onSubmit={handleSubmit}
           >
-            <div className="relative">
+            <div className="relative flex items-center">
               <input
-                type={showPassword ? "text" : "password"} 
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  isValidPassword(e.target.value);
+                }}
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowPassword(!showPassword)} 
+                className="absolute right-3 flex items-center justify-center h-full text-gray-600 hover:text-gray-800"
+                onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                  <Visibility /> 
-                ) : (
-                  <VisibilityOff /> 
-                )}
+                {showPassword ? <Visibility /> : <VisibilityOff />}
               </button>
-              {passwordError && (
-                <div className="text-sm text-red-100">{passwordError}</div>
-              )}
             </div>
+            {passwordError && (
+              <div className="text-sm text-red-100 mt-1">{passwordError}</div>
+            )}
 
-            <div className="relative">
+            <div className="relative flex items-center">
               <input
-                type={showConfirmPassword ? "text" : "password"} 
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
-                className="w-full p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)} 
+                className="absolute right-3 flex items-center justify-center h-full text-gray-600 hover:text-gray-800"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? (
-                  <Visibility /> 
-                ) : (
-                  <VisibilityOff /> 
-                )}
+                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
               </button>
-              {confirmPasswordError && (
-                <div className="text-sm text-red-100">
-                  {confirmPasswordError}
-                </div>
-              )}
             </div>
+            {confirmPasswordError && (
+              <div className="text-sm text-red-100 mt-1">
+                {confirmPasswordError}
+              </div>
+            )}
 
             <button
               type="submit"

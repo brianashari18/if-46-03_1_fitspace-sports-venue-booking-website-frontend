@@ -1,6 +1,4 @@
 import SMS from "../assets/SMS.png";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 
 const BookingSuccess = () => {
   return (
@@ -12,17 +10,14 @@ const BookingSuccess = () => {
         </h1>
 
         <div className="max-w-2xl mx-auto bg-[#738FFD] rounded-lg p-8 text-center text-white">
-        <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-6">
             <img src={SMS} alt="Success Icon" className="w-16 h-16" />
-        </div>
-          <h2 className="text-3xl font-bold mb-4">Lorem Ipsum</h2>
+          </div>
+          <h2 className="text-3xl font-bold mb-4">Booking Confirmed!</h2>
           <p className="text-sm leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec
-            odio enim. Nullam pellentesque mauris quis tristique sollicitudin.
-            Maecenas ac lacus eget mi condimentum pretium ac quis mi. Fusce
-            viverra a ante at tempor. Nam feugiat at enim scelerisque semper.
-            Phasellus sit amet finibus arcu. Phasellus sed ultricies libero, ac
-            iaculis purus. Phasellus.
+            Your booking has been successfully completed. Thank you for choosing
+            our service! If you have any questions or need assistance, feel free to
+            contact our support team.
           </p>
         </div>
       </main>
@@ -31,4 +26,3 @@ const BookingSuccess = () => {
 };
 
 export default BookingSuccess;
-

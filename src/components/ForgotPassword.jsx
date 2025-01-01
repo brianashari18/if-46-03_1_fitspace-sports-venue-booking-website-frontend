@@ -8,8 +8,7 @@ const EmailContext = createContext();
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [isContinueDisabled, setIsContinueDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); // New state for loading
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const isValidEmail = (email) => {
@@ -19,34 +18,30 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmailError("");
+    setEmailError(""); // Clear previous error
 
+    // Validate email input
     if (email.trim() === "") {
-      setEmailError("Email cannot be empty.");
-      setIsContinueDisabled(true);
+      setEmailError("Email is required.");
       return;
-    }
-
-    if (!isValidEmail(email)) {
+    } else if (!isValidEmail(email)) {
       setEmailError("Enter a valid email address.");
-      setIsContinueDisabled(true);
       return;
     }
 
-    const data = { email: email };
-
-    setIsLoading(true); // Show loading indicator
+    setIsLoading(true);
     try {
-      const response = await forgotPassword(data);
-      console.log('API Response:', response);
-      console.log("Navigating to verification page...");
-      navigate("/verification-code", { state: { email: data.email } });
-
+      const response = await forgotPassword({ email }); // Wrap email in an object
+      console.log("API Response:", response); // Debugging log
+      navigate("/verification-code", { state: { email } });
     } catch (error) {
-      console.error('Error:', error.message);
-      alert(error.message);
+      console.error("Error in API call:", error.message || error);
+      setEmailError(
+          error.response?.data?.message || "Failed to send reset email. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
-
   };
 
   const handleCancel = () => {
@@ -57,8 +52,7 @@ const ForgotPassword = () => {
   const handleEmailChange = (e) => {
     const inputEmail = e.target.value;
     setEmail(inputEmail);
-    setIsContinueDisabled(inputEmail.trim() === "" || !isValidEmail(inputEmail));
-    setEmailError("");
+    setEmailError(""); // Clear error while typing
   };
 
   return (
@@ -74,20 +68,23 @@ const ForgotPassword = () => {
                 Enter your email account to reset your password!
               </p>
 
-              <form
-                  className="w-60 max-w-sm space-y-4 mb-2"
-                  onSubmit={handleSubmit}
-              >
-                <div>
+              <form className="w-60 max-w-sm space-y-4 mb-2" onSubmit={handleSubmit}>
+                <div className="flex flex-col">
                   <input
-                      type="email"
+                      type="text"
                       placeholder="Email"
-                      className="w-full p-3 rounded-lg border text-black border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className={`w-full p-3 rounded-lg border text-black ${
+                          emailError
+                              ? "border-blue-500 focus:ring-blue-500"
+                              : "border-gray-300 focus:ring-blue-500"
+                      } focus:outline-none focus:ring-2`}
                       value={email}
-                      onChange={handleEmailChange} // Update email value and validation on change
+                      onChange={handleEmailChange}
                   />
                   {emailError && (
-                      <div className="text-sm text-white mt-2">{emailError}</div>
+                      <span className="text-[#E6FDA3]text-sm mt-1 pl-1">
+                    {emailError}
+                  </span>
                   )}
                 </div>
 
@@ -95,7 +92,7 @@ const ForgotPassword = () => {
                   <button
                       type="submit"
                       className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
-                      disabled={isContinueDisabled || isLoading} // Disable when loading
+                      disabled={isLoading}
                   >
                     {isLoading ? (
                         <span className="loader inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -107,7 +104,7 @@ const ForgotPassword = () => {
                   <Link
                       to="/sign-in"
                       className="w-full p-3 rounded-lg bg-[#E6FDA3] text-[#738ffd] font-semibold hover:bg-[#F2FA5A] transition flex justify-center items-center"
-                      onClick={handleCancel} // Reset form when Cancel is clicked
+                      onClick={handleCancel}
                   >
                     Cancel
                   </Link>
