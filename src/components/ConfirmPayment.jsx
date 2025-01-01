@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Lapang from "../assets/Lapang.png";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import PaymentIlus from "../assets/PaymentIlus.png";
 
 const ConfirmPayment = () => {
+  const { state } = useLocation();
+  const { field, date, time } = state || {}
+  
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
+
+  const formatDate = (dateString) => {
+    const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString("en-GB", options);
+    return formattedDate;
+  };
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -30,23 +39,23 @@ const ConfirmPayment = () => {
             </div>
           </div>
 
-          <div className="bg-[#738FFD] rounded-lg shadow-lg w-[50rem] h-[20rem] p-8 text-white flex">
-            <div className="w-3/5 h-[16rem]">
+          <div className="bg-[#738FFD] rounded-lg shadow-lg w-[50rem] h-[20rem] p-8 pl-12 text-white flex">
+            <div className="w-1/2 h-[16rem]">
               <h2 className="text-xl font-bold mt-3">Booking Information</h2>
-              <div className="mt-10">
-                <p>Lapangan Futsal</p>
-                <p>Sport Center Tel-U</p>
+              <div className="mt-10 text-lg font-semibold">
+                <h3>Lapangan {field}</h3>
+                <h3>Sport Center Tel-U</h3>
               </div>
-              <div className="mt-5">
-                <p>Friday, 15 September 2025</p>
-                <p>15:00 - 17:00</p>
+              <div className="mt-5 text-lg font-semibold">
+                <h3>{formatDate(date)}</h3>
+                <h3>{time}</h3>
               </div>
             </div>
-            <div className="w-2/5 h-[16rem] flex justify-center">
+            <div className="w-1/2 h-full flex justify-center items-center">
               <img
-                src={Lapang}
+                src={PaymentIlus}
                 alt="Lapangan Futsal"
-                className="rounded-lg object-contain max-h-[14rem] max-w-[90%]"
+                className="rounded-lg object-contain max-h-[14rem] max-w-[100%]"
               />
             </div>
           </div>
@@ -59,12 +68,8 @@ const ConfirmPayment = () => {
               checked={isChecked}
               onChange={handleCheckboxChange}
             />
-            <label htmlFor="terms" className="text-sm text-[#475569]">
-              Saya telah membaca dan menyetujui {" "}
-              <a href="/syarat-ketentuan" className="text-[#3B82F6]">
-                S&K
-              </a>{" "}
-              yang berlaku
+            <label className="text-sm text-[#475569]">
+              Saya telah membaca dan menyetujui Syarat dan Ketentuan yang berlaku
             </label>
           </div>
 

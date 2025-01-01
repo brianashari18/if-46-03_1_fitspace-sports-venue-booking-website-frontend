@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation} from "react-router-dom";
 
 const Payment = () => {
   const navigate = useNavigate();
+  const {state} = useLocation();
 
   const [formData, setFormData] = useState({
     customerName: "",
@@ -39,6 +40,25 @@ const Payment = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+
+    if (id === "phoneNumber") {
+      const isNumeric = /^[0-9]*$/; // Hanya angka diperbolehkan
+      if (!isNumeric.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          phoneNumber: "Phone Number must contain only numbers",
+        }));
+        return;
+      }
+      if (value.length > 15) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          phoneNumber: "Phone Number cannot exceed 15 digits",
+        }));
+        return;
+      }
+    }
+    
     setFormData({
       ...formData,
       [id]: value,
@@ -75,7 +95,7 @@ const Payment = () => {
 
   const handleNext = () => {
     if (isFormValid()) {
-      navigate("/confirmation"); // Replace with your actual route
+      navigate("/confirm-payment" , {state : state}); // Replace with your actual route
     } else {
       alert("Please complete all required fields and select a payment method.");
     }
@@ -145,7 +165,7 @@ const Payment = () => {
               <div className="flex flex-col">
                 <label className="text-sm font-medium">Phone Number</label>
                 <input
-                  type="number"
+                  type="text"
                   id="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleChange}
@@ -196,19 +216,19 @@ const Payment = () => {
           <div className="bg-[#738FFD] rounded-lg shadow-lg w-[50rem] p-5 pl-8 text-white">
             <div className="flex justify-between text-lg font-medium">
               <span>Price</span>
-              <span>RP.10</span>
+              <span>Rp120.000</span>
             </div>
             <div className="flex justify-between text-lg font-medium mb-2">
               <span>Service Fee</span>
-              <span>RP.500</span>
+              <span>Rp14.400</span>
             </div>
             <div className="flex justify-between text-lg font-bold border-t border-white pt-2">
               <span>Total</span>
-              <span>RP.510</span>
+              <span>Rp134.400</span>
             </div>
           </div>
           {/* Reset Button */}
-          <div className="absolute bottom-0 text-left w-[50rem]">
+          <div className="absolute -bottom-14 text-left w-[50rem]">
             <button
               type="button"
               onClick={handleReset}
@@ -338,7 +358,7 @@ const Payment = () => {
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 text-right w-[25rem]">
+          <div className="absolute -bottom-14 text-right w-[25rem]">
             <button
               type="button"
               onClick={handleNext}
