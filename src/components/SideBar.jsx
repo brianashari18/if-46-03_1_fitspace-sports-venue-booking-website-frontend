@@ -32,7 +32,7 @@ const SideBar = ({onLogout}) => {
     };
 
     return (
-        <div className="bg-white border w-full h-full rounded-lg shadow-xl sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-[25rem] p-6">
+        <div className="min-h-svh bg-white border w-full h-full rounded-lg shadow-xl sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-[25rem] p-6">
             <h1 className="text-xl font-bold text-gray-400 text-start mb-6 ml-3 mt-5">
                 Profile
             </h1>
@@ -47,7 +47,7 @@ const SideBar = ({onLogout}) => {
                     <img src={OrderIcon} alt="Order Icon" className="w-6 h-6 mr-3"/>
                     Order
                 </Link>
-                <Link to="/add-venue"
+                <Link to="/my-venue"
                     className="font-semibold flex items-center px-5 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
                     <img src={AddVenue} alt="Store Icon" className="w-6 h-6 mr-3"/>
                     Venue
