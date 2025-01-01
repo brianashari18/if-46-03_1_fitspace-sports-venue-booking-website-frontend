@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import PaymentIlus from "../assets/PaymentIlus.png";
@@ -13,9 +14,11 @@ const ConfirmPayment = () => {
     taxPrice,
     totalPrice,
     selectedPaymentMethod = { category: "", method: "" },
+    formData,
   } = state || {};
 
   const [isChecked, setIsChecked] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const formatDate = (dateString) => {
@@ -36,18 +39,7 @@ const ConfirmPayment = () => {
     setIsChecked(!isChecked);
   };
 
-  const handleNext = () => {
-    if (isChecked) {
-      navigate("/booking-success");
-    } else {
-      alert("Harap menyetujui syarat dan ketentuan sebelum melanjutkan.");
-    }
-  };
-
-  console.log(selectedPaymentMethod)
-
   const getVirtualAccountNumber = (selectedPaymentMethod) => {
-    console.log("Selected Payment Method:", selectedPaymentMethod); // Log the selected payment method
     const virtualAccounts = {
       BCA: "VA-BCA-123456",
       BNI: "VA-BNI-789012",
@@ -60,33 +52,66 @@ const ConfirmPayment = () => {
       Visa: "CC-Visa-123456",
       Mastercard: "CC-Mastercard-789012",
     };
-  
-    switch (selectedPaymentMethod?.method) {
-      case "BCA":
-        return virtualAccounts.BCA;
-      case "BNI":
-        return virtualAccounts.BNI;
-      case "Mandiri":
-        return virtualAccounts.Mandiri;
-      case "BRI":
-        return virtualAccounts.BRI;
-      case "BSI":
-        return virtualAccounts.BSI;
-      case "GoPay":
-        return virtualAccounts.GoPay;
-      case "OVO":
-        return virtualAccounts.OVO;
-      case "ShopeePay":
-        return virtualAccounts.ShopeePay;
-      case "Visa":
-        return virtualAccounts.Visa;
-      case "Mastercard":
-        return virtualAccounts.Mastercard;
-      default:
-        return "Not available";
-    }
+
+    return virtualAccounts[selectedPaymentMethod?.method] || "Not available";
   };
 
+  const handleNext = async () => {
+    if (!isChecked) {
+      alert("Harap menyetujui syarat dan ketentuan sebelum melanjutkan.");
+      return;
+    }
+  
+    const bookingData = {
+      venue,
+      field,
+      date,
+      time,
+      price,
+      taxPrice,
+      totalPrice,
+      selectedPaymentMethod,
+      formData,
+    };
+
+
+    const bookingData2 = {
+      date: date, // Pastikan formatnya sesuai dengan LocalDate (yyyy-MM-dd)
+      time_slot: time, // Sesuaikan dengan properti backend
+      field_name: field, // Nama lapangan
+      price: String(price), // Konversi ke string karena di backend price bertipe String
+    };
+    
+
+  
+    try {
+      setIsSubmitting(true);
+      console.log("Sending booking data:", bookingData2); // Log data sebelum mengirim
+  
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/${venue.id}/bookings`, bookingData2, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": localStorage.getItem("token")
+        },
+      });
+  
+      console.log("Response data:", response.data); // Log data respons
+  
+      if (response.status !== 200) {
+        console.error("Response error:", response.data); // Log error details
+        throw new Error("Failed to save booking.");
+      }
+  
+      console.log("Booking successful:", response.data);
+      navigate("/booking-success");
+    } catch (error) {
+      console.error("Error saving booking:", error); // Log error
+      alert("Terjadi kesalahan saat menyimpan booking. Coba lagi nanti.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-[85rem] h-[45rem] flex">
@@ -201,9 +226,14 @@ const ConfirmPayment = () => {
           <div className="absolute bottom-0 text-right w-[25rem]">
             <button
               onClick={handleNext}
-              className="px-6 py-3 bg-[#E6FDA3] text-black font-semibold rounded-lg shadow-md hover:bg-[#F2FA5A] transition"
+              disabled={isSubmitting}
+              className={`px-6 py-3 font-semibold rounded-lg shadow-md transition ${
+                isSubmitting
+                  ? "bg-gray-300 text-gray-600"
+                  : "bg-[#E6FDA3] text-black hover:bg-[#F2FA5A]"
+              }`}
             >
-              Next
+              {isSubmitting ? "Next" : "Next"}
             </button>
           </div>
         </div>

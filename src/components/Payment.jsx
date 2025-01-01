@@ -135,18 +135,21 @@ const Payment = () => {
     return !hasErrors && selectedPaymentMethod;
   };
 
+console.log(formData)
+
   const handleNext = () => {
     if (isFormValid()) {
       console.log(`PRICE ${formattedPrice}`)
       navigate("/confirm-payment", {
         state: {
           ...state,
-          price: formattedPrice, // Pass the updated formatted price
+          price: formattedPrice, 
           taxPrice,
           totalPrice,
           selectedPaymentMethod,
+          formData
         },
-      }); // Replace with your actual route
+      }); 
     } else {
       alert("Please complete all required fields and select a payment method.");
     }
