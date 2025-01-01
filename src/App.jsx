@@ -20,13 +20,14 @@ import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
+import MyVenue from "./components/MyVenue.jsx";
+import AddVenueForm from "./components/AddVenueForm.jsx";
 import Payment from "./components/Payment.jsx";
 import ConfirmPayment from "./components/ConfirmPayment.jsx";
 import BookingSuccess from "./components/BookingSuccess.jsx";
 import Dashboard from "./components/admin/Dashboard.jsx";
 
 function App() {
-    // State global untuk user
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : null;
@@ -74,6 +75,8 @@ function App() {
                     <Route path="/home" element={<Homepage/>}/>
                     <Route path="/write-review" element={<WriteReview/>}/>
                     <Route path="/review-success" element={<ReviewSuccess/>}/>
+                    <Route path="/my-venue" element={<MyVenue onLogout={handleLogout} user={user}/>}/>
+                    <Route path="/add-venue" element={<AddVenueForm onLogout={handleLogout} user={user}/>}/>
                     <Route path="/payment" element={<Payment/>}/>
                     <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
                     <Route path="/booking-success" element={<BookingSuccess/>}/>

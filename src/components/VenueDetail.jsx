@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { Star } from "lucide-react"; // Assuming lucide-react is needed for stars
-import progresif from "../assets/progresif.png"; // Example image import
-import avatar1 from "../assets/avatar1.png"; // Example avatar image import
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SelectReview from "./SelectReview"; // Ensure the correct path
 import WriteReview from "./WriteReview";
 import ReviewSuccess from "./ReviewSuccess.jsx";
+import { useState } from 'react';
+import { Star } from 'lucide-react'; // Assuming lucide-react is needed for stars
+import progresif from '../assets/progresif.png'; // Example image import
+import avatar1 from '../assets/avatar1.png'; // Example avatar image import
+import { useLocation } from 'react-router-dom';
 
 const scheduleData = [
   { date: "2024-12-11", day: "11 Des", dayName: "Monday" },
@@ -63,10 +64,12 @@ export default function VenueDetail() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${venue.latitude},${venue.longitude}&zoom=15&size=600x300&markers=${venue.latitude},${venue.longitude}&key=${import.meta.env.VITE_API_KEY}`;
+
   const [selectedField, setSelectedField] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [fieldPrice] = useState(120000); 
+  const [fieldPrice] = useState(120000);
 
   const handleFieldChange = (e) => setSelectedField(e.target.value);
 
@@ -192,18 +195,21 @@ export default function VenueDetail() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Location Section */}
-        <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-xl font-bold mb-4">LOCATION</h2>
-          <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
-            <img
-              src={""}
-              alt="Location Map"
-              className="w-full h-full object-cover rounded-lg"
-            />
+        <div className="container mx-auto px-4 py-8">
+          {/* Location Section */}
+          <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
+            <h2 className="text-xl font-bold mb-4">LOCATION</h2>
+            <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
+              <a href={`https://www.google.com/maps?q=${venue.latitude},${venue.longitude}`} target="_blank"
+                 rel="noopener noreferrer">
+                <img
+                    src={mapUrl} // URL gambar peta statis
+                    alt="Location Map"
+                    className="w-full h-full object-cover rounded-lg cursor-pointer"
+                />
+              </a>
+            </div>
           </div>
-        </div>
 
         {/* Booking Form */}
         <div className="flex flex-wrap gap-4 mb-4">
