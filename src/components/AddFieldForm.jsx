@@ -1,24 +1,55 @@
 import { useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebaseConfig"; // Import Firebase storage
-import { v4 as uuidv4 } from "uuid"; // For unique file names
 import headerImage from "../assets/add-venue-icon.png";
+import {addField} from "../services/field-service.js";
 
-const AddFieldForm = ({ onSubmit, onCancel }) => {
+const AddFieldForm = ({ onSubmit, onCancel, venueId }) => {
     const [formData, setFormData] = useState({
         price: "",
         type: "",
         images: [], // Store image files temporarily
     });
 
-    const [errors, setErrors] = useState({}); // State for validation errors
-    const [uploading, setUploading] = useState(false); // State to track upload progress
+    const [errors, setErrors] = useState({});
+    const [uploading, setUploading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const newErrors = {};
+        if (!formData.price.trim()) newErrors.price = "Price is required";
+        if (!formData.type.trim()) newErrors.type = "Type is required";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        try {
+            setUploading(true);
+
+            const fieldData = {
+                price: parseInt(formData.price, 10),
+                type: formData.type,
+            };
+
+            const token = localStorage.getItem("token");
+
+            await addField(token, venueId, fieldData, formData.images);
+
+            console.log("Field added successfully!");
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        } finally {
+            setUploading(false);
+        }
+    };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        setErrors((prev) => ({ ...prev, [name]: "" })); // Clear error on input change
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
     const handleImageAdd = (file) => {
@@ -35,70 +66,6 @@ const AddFieldForm = ({ onSubmit, onCancel }) => {
             ...prev,
             images: prev.images.filter((_, i) => i !== index), // Remove file by index
         }));
-    };
-
-    const uploadImages = async (files) => {
-        const uploadedUrls = [];
-        for (const file of files) {
-            const storageRef = ref(storage, `fields/${uuidv4()}-${file.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
-
-            const url = await new Promise((resolve, reject) => {
-                uploadTask.on(
-                    "state_changed",
-                    (snapshot) => {
-                        const progress =
-                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log(`Upload is ${progress}% done`);
-                        setUploading(true);
-                    },
-                    (error) => {
-                        console.error("Upload failed:", error);
-                        setUploading(false);
-                        reject(error);
-                    },
-                    async () => {
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        resolve(downloadURL);
-                    }
-                );
-            });
-            uploadedUrls.push(url);
-        }
-        setUploading(false);
-        return uploadedUrls;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        // Validate inputs
-        const newErrors = {};
-        if (!formData.price.trim()) newErrors.price = "Price is required";
-        if (!formData.type.trim()) newErrors.type = "Type is required";
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
-
-        try {
-            setUploading(true);
-            const uploadedUrls = await uploadImages(formData.images); // Upload all images
-            const gallery = uploadedUrls.map((url) => ({ photo_url: url })); // Format for backend
-
-            const payload = {
-                price: parseInt(formData.price, 10),
-                type: formData.type,
-                gallery,
-            };
-
-            await onSubmit(payload); // Send to backend
-        } catch (error) {
-            console.error("Error uploading images or submitting form:", error);
-        } finally {
-            setUploading(false);
-        }
     };
 
     return (
@@ -209,5 +176,6 @@ const AddFieldForm = ({ onSubmit, onCancel }) => {
         </div>
     );
 };
+
 
 export default AddFieldForm;
