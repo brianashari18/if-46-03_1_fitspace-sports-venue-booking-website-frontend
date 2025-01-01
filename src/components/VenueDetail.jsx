@@ -153,6 +153,7 @@ export default function VenueDetail() {
 
     navigate("/payment", {
       state: {
+        venue,
         field: selectedField,
         date: selectedDate,
         time: selectedTime,

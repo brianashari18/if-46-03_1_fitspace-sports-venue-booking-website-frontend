@@ -1,5 +1,4 @@
 import React,{ useState, useEffect } from "react";
-import axios from "axios";
 import hero1 from "../assets/hero1.png";
 import { ChevronDown, Star } from "lucide-react";
 import photos from "../../public/vite.svg";
@@ -8,8 +7,6 @@ import VenueService from "../services/venue-service"; // Import VenueService
 
 export default function SportVenues() {
   // State to manage dropdown visibility
-  const [isFacilityOpen, setIsFacilityOpen] = useState(false);
-  const [isRatingOpen, setIsRatingOpen] = useState(false);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
 
   // State to manage selected values for dropdowns
