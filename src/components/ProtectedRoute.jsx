@@ -11,6 +11,8 @@ const ProtectedRoute = () => {
     if (isTokenValid) {
         return <Outlet />;
     } else {
+        localStorage.removeItem("token");
+        localStorage.removeItem("expired_at");
         localStorage.removeItem("user");
         return <Navigate to="/sign-in" replace />;
     }

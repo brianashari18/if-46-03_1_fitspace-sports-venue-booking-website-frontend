@@ -7,7 +7,6 @@ import avatar2 from '../assets/avatar2.png'; // Import avatar2
 import avatar3 from '../assets/avatar3.png'; // Import avatar3
 import { useLocation } from 'react-router-dom';
 
-
 const scheduleData = [
   { date : '2024-12-11', day: '11 Des', dayName: 'Monday' },
   { date :'2024-12-12' , day: '12 Des', dayName: 'Tuesday' },
@@ -49,6 +48,8 @@ export default function VenueDetail() {
   const { state } = useLocation();
   const venue = state?.venue;
   console.log(venue)
+
+  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${venue.latitude},${venue.longitude}&zoom=15&size=600x300&markers=${venue.latitude},${venue.longitude}&key=${import.meta.env.VITE_API_KEY}`;
 
   const [selectedField, setSelectedField] = useState(venue.fields[0]?.type);
   const handleFieldChange = (e) => setSelectedField(e.target.value);
@@ -124,11 +125,14 @@ export default function VenueDetail() {
           <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
             <h2 className="text-xl font-bold mb-4">LOCATION</h2>
             <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
-              <img
-                  src={""}
-                  alt="Location Map"
-                  className="w-full h-full object-cover rounded-lg"
-              />
+              <a href={`https://www.google.com/maps?q=${venue.latitude},${venue.longitude}`} target="_blank"
+                 rel="noopener noreferrer">
+                <img
+                    src={mapUrl} // URL gambar peta statis
+                    alt="Location Map"
+                    className="w-full h-full object-cover rounded-lg cursor-pointer"
+                />
+              </a>
             </div>
           </div>
 

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/yellow-logo.png";
 import iconProfile from "../assets/user-icon.png";
-import axios from "axios";
 
 const Navbar = ({ user }) => {
     const navigate = useNavigate();
