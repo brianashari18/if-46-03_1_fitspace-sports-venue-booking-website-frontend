@@ -23,6 +23,7 @@ import VenueDetail from "./components/VenueDetail.jsx";
 import Payment from "./components/Payment.jsx";
 import ConfirmPayment from "./components/ConfirmPayment.jsx";
 import BookingSuccess from "./components/BookingSuccess.jsx";
+import Dashboard from "./components/admin/Dashboard.jsx";
 
 function App() {
     // State global untuk user
@@ -45,10 +46,11 @@ function App() {
     };
 
     return (<Router>
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen flex flex-col">
             {/* Navbar menerima user dan handleLogout sebagai props */}
             <Navbar user={user}/>
             {/* Define Routes */}
+            <div className="flex-grow bg-gray-100">
             <Routes>
                 <Route
                     path="/sign-in"
@@ -74,15 +76,18 @@ function App() {
                     <Route path="/review-success" element={<ReviewSuccess/>}/>
                     <Route path="/payment" element={<Payment/>}/>
                     <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
-                    <Route path="/booking-success" element={<BookingSuccess/>}/>                                            
+                    <Route path="/booking-success" element={<BookingSuccess/>}/>
+                <Route path="/admin-dashboard" element={<Dashboard />} />
                 {/* </Route> */}
                 {/* Or any default route */}
             </Routes>
+            </div>
 
-            {/* Footer */}
-            <Footer/>
-        </div>
-    </Router>);
+                {/* Footer */}
+                <Footer />
+            </div>
+        </Router>
+    );
 }
 
 export default App;

@@ -82,7 +82,7 @@ const ForgotPassword = () => {
                       onChange={handleEmailChange}
                   />
                   {emailError && (
-                      <span className="text-[#E6FDA3] text-sm mt-1 pl-1">
+                      <span className="text-[#E6FDA3]text-sm mt-1 pl-1">
                     {emailError}
                   </span>
                   )}
