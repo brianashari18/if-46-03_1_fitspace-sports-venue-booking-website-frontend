@@ -166,6 +166,52 @@ const adminService = {
                 throw error;
             }
         },
+
+    // Fetch all bookings
+    getAllBookings: async (token) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/bookings/all`, {
+                headers: {
+                    'Authorization': token,
+                },
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+            throw error;
+        }
+    },
+
+    updateBooking: async (bookingId, bookingData, token) => {
+        try {
+            const response = await axios.patch(`${BASE_URL}/bookings/${bookingId}/update`, bookingData, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data.data;
+        } catch (error) {
+            console.error(`Error updating booking with ID ${bookingId}:`, error);
+            throw error;
+        }
+    },
+
+    deleteBooking: async (bookingId, token) => {
+        try {
+            const response = await axios.delete(`${BASE_URL}/bookings/${bookingId}/delete`, {
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error(`Error deleting booking with ID ${bookingId}:`, error);
+            throw error;
+        }
+    },
+
 };
 
 export default adminService;
