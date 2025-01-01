@@ -24,6 +24,9 @@ import Payment from "./components/Payment.jsx";
 import ConfirmPayment from "./components/ConfirmPayment.jsx";
 import BookingSuccess from "./components/BookingSuccess.jsx";
 import Dashboard from "./components/admin/Dashboard.jsx";
+import MyVenue from "./components/MyVenue.jsx";
+import AddVenueForm from "./components/AddVenueForm.jsx";
+import AdminVerification from "./components/AdminVerification.jsx";
 
 function App() {
     // State global untuk user
@@ -59,11 +62,12 @@ function App() {
                         <Route path="/sign-up" element={<SignUp onLogin={handleLogin}/>}/>
                         <Route path="/forgot-password" element={<ForgotPassword/>}/>
                         <Route path="/verification-code" element={<VerificationCode/>}/>
+
                         <Route path="/reset-success" element={<ResetSuccess/>}/>
                         <Route path="/reset-password" element={<ResetPassword/>}/>
                         <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
 
-                {/* <Route element={<ProtectedRoute/>}> */}
+                 <Route element={<ProtectedRoute/>}>
                     <Route path="/about-us" element={<AboutUs/>}/>
                     <Route path="/contact-us" element={<ContactUs/>}/>
                     <Route path="/venue" element={<Venues/>}/>
@@ -79,8 +83,10 @@ function App() {
                     <Route path="/payment" element={<Payment/>}/>
                     <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
                     <Route path="/booking-success" element={<BookingSuccess/>}/>
-                <Route path="/admin-dashboard" element={<Dashboard />} />
-                {/* </Route> */}
+                     <Route element={<AdminVerification user={user}/>}>
+                    <Route path="/admin-dashboard" element={<Dashboard/>} />
+                     </Route>
+                 </Route>
                 {/* Or any default route */}
             </Routes>
             </div>
