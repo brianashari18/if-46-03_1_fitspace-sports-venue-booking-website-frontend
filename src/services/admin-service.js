@@ -74,7 +74,7 @@ const adminService = {
     // Delete a venue by ID
     deleteVenue: async (venueId, token) => {
         try {
-            const response = await axios.delete(`${BASE_URL}/venues/${venueId}`, {
+            const response = await axios.delete(`${BASE_URL}/venues/${venueId}/delete`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': token,
@@ -102,37 +102,6 @@ const adminService = {
         }
     },
 
-    // Create a new field
-    createField: async (fieldData, token) => {
-        try {
-            const response = await axios.post(`${BASE_URL}/fields`, fieldData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token,
-                },
-            });
-            return response.data.data; // Assuming the response contains `data` for the created field
-        } catch (error) {
-            console.error('Error creating field:', error);
-            throw error;
-        }
-    },
-
-    // Update a field
-    updateField: async (fieldId, fieldData, token) => {
-        try {
-            const response = await axios.patch(`${BASE_URL}/fields/${fieldId}`, fieldData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token,
-                },
-            });
-            return response.data.data;
-        } catch (error) {
-            console.error(`Error updating field with ID ${fieldId}:`, error);
-            throw error;
-        }
-    },
 
     // Delete a field
     deleteField: async (fieldId, token) => {
@@ -165,22 +134,6 @@ const adminService = {
         }
     },
 
-    // Create a new review for a field
-    createReview: async (fieldId, reviewData, token) => {
-        try {
-            const response = await axios.post(`${BASE_URL}/fields/${fieldId}/reviews`, reviewData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token,
-                },
-            });
-            return response.data.data;
-        } catch (error) {
-            console.error('Error creating review:', error);
-            throw error;
-        }
-    },
-
     // Update an existing review
     updateReview: async (reviewId, reviewData, token) => {
         try {
@@ -198,20 +151,21 @@ const adminService = {
     },
 
     // Delete a review
-    deleteReview: async (reviewId, token) => {
-        try {
-            const response = await axios.delete(`${BASE_URL}/reviews/${reviewId}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token,
-                },
-            });
-            return response.data;
-        } catch (error) {
-            console.error(`Error deleting review with ID ${reviewId}:`, error);
-            throw error;
-        }
-    },
+        // Delete a review
+        deleteReview: async (reviewId, token) => {
+            try {
+                const response = await axios.delete(`${BASE_URL}/reviews/${reviewId}`, {
+                    headers: {
+                        'Authorization': token, // Pass token for authorization
+                        'Content-Type': 'application/json', // Ensure content type is correct
+                    },
+                });
+                return response.data;
+            } catch (error) {
+                console.error(`Error deleting review with ID ${reviewId}:`, error);
+                throw error;
+            }
+        },
 };
 
 export default adminService;
