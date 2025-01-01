@@ -67,12 +67,15 @@ const SignIn = ({onLogin}) => {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:8080/api/auth/google/login";
+        console.log(`URL: ${import.meta.env.VITE_BASE_URL}`)
+        window.location.href = `${import.meta.env.VITE_BASE_URL}/auth/google/login`;
     };
 
     const handleGoogleCallback = async (searchParams) => {
         const token = searchParams.get("token");
         const expiredAt = searchParams.get("expired_at");
+
+        console.log(`TOKEN: ${token}`)
 
         if (token && expiredAt) {
             localStorage.setItem("token", token);

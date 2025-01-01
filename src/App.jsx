@@ -20,9 +20,13 @@ import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
+import Payment from "./components/Payment.jsx";
+import ConfirmPayment from "./components/ConfirmPayment.jsx";
+import BookingSuccess from "./components/BookingSuccess.jsx";
 import Dashboard from "./components/admin/Dashboard.jsx";
 
 function App() {
+    // State global untuk user
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : null;
@@ -31,6 +35,7 @@ function App() {
     const handleLogin = (userData) => {
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
+        console.log(`DATA: ${JSON.stringify(userData)}`);
     };
 
     const handleLogout = () => {
@@ -40,35 +45,43 @@ function App() {
         localStorage.removeItem("expired_at");
     };
 
-    return (
-        <Router>
-            <div className="min-h-screen flex flex-col">
-                {/* Navbar */}
-                <Navbar user={user} />
+    return (<Router>
+        <div className="min-h-screen flex flex-col">
+            {/* Navbar menerima user dan handleLogout sebagai props */}
+            <Navbar user={user}/>
+            {/* Define Routes */}
+            <div className="flex-grow bg-gray-100">
+            <Routes>
+                <Route
+                    path="/sign-in"
+                    element={<SignIn onLogin={handleLogin}/>}
+                />
+                <Route path="/sign-up" element={<SignUp onLogin={handleLogin}/>}/>
+                <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                <Route path="/verification-code" element={<VerificationCode/>}/>
+                <Route path="/reset-success" element={<ResetSuccess/>}/>
+                <Route path="/reset-password" element={<ResetPassword/>}/>
+                <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
 
-                {/* Main Content */}
-                <div className="flex-grow bg-gray-100">
-                    <Routes>
-                        <Route path="/sign-in" element={<SignIn onLogin={handleLogin} />} />
-                        <Route path="/sign-up" element={<SignUp onLogin={handleLogin} />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/verification-code" element={<VerificationCode />} />
-                        <Route path="/reset-success" element={<ResetSuccess />} />
-                        <Route path="/reset-password" element={<ResetPassword />} />
-                        <Route path="/" element={<SignIn onLogin={handleLogin} />} />
-                        <Route path="/about-us" element={<AboutUs />} />
-                        <Route path="/contact-us" element={<ContactUs />} />
-                        <Route path="/venue" element={<Venues />} />
-                        <Route path="/venueDetail/:name" element={<VenueDetail />} />
-                        <Route path="/edit-profile" element={<EditProfile onLogout={handleLogout} user={user} />} />
-                        <Route path="/change-password" element={<ChangePassword onLogout={handleLogout} user={user} />} />
-                        <Route path="/order" element={<Order onLogout={handleLogout} />} />
-                        <Route path="/home" element={<Homepage />} />
-                        <Route path="/write-review" element={<WriteReview />} />
-                        <Route path="/review-success" element={<ReviewSuccess />} />
-                        <Route path="/admin-dashboard" element={<Dashboard />} />
-                    </Routes>
-                </div>
+                {/* <Route element={<ProtectedRoute/>}> */}
+                    <Route path="/about-us" element={<AboutUs/>}/>
+                    <Route path="/contact-us" element={<ContactUs/>}/>
+                    <Route path="/venue" element={<Venues/>}/>
+                    <Route path="/venueDetail/:name" element={<VenueDetail/>}/>
+                    <Route path="/edit-profile" element={<EditProfile onLogout={handleLogout} user={user}/>}/>
+                    <Route path="/change-password" element={<ChangePassword onLogout={handleLogout} user={user}/>}/>
+                    <Route path="/order" element={<Order onLogout={handleLogout}/>}/>
+                    <Route path="/home" element={<Homepage/>}/>
+                    <Route path="/write-review" element={<WriteReview/>}/>
+                    <Route path="/review-success" element={<ReviewSuccess/>}/>
+                    <Route path="/payment" element={<Payment/>}/>
+                    <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
+                    <Route path="/booking-success" element={<BookingSuccess/>}/>
+                <Route path="/admin-dashboard" element={<Dashboard />} />
+                {/* </Route> */}
+                {/* Or any default route */}
+            </Routes>
+            </div>
 
                 {/* Footer */}
                 <Footer />
