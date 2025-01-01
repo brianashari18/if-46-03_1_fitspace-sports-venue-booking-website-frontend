@@ -22,6 +22,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
 import Payment from "./components/Payment.jsx";
 import ConfirmPayment from "./components/ConfirmPayment.jsx";
+import BookingSuccess from "./components/BookingSuccess.jsx";
 
 function App() {
     // State global untuk user
@@ -72,7 +73,8 @@ function App() {
                     <Route path="/write-review" element={<WriteReview/>}/>
                     <Route path="/review-success" element={<ReviewSuccess/>}/>
                     <Route path="/payment" element={<Payment/>}/>
-                    <Route path="/confirm-payment" element={<ConfirmPayment/>}/>                                            
+                    <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
+                    <Route path="/booking-success" element={<BookingSuccess/>}/>                                            
                 {/* </Route> */}
                 {/* Or any default route */}
             </Routes>

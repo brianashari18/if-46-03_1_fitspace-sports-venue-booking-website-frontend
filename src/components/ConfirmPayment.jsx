@@ -12,7 +12,7 @@ const ConfirmPayment = () => {
 
   const handleNext = () => {
     if (isChecked) {
-      navigate("/payment-success");
+      navigate("/booking-success");
     } else {
       alert("Harap menyetujui syarat dan ketentuan sebelum melanjutkan.");
     }
