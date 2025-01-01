@@ -4,14 +4,35 @@ import PaymentIlus from "../assets/PaymentIlus.png";
 
 const ConfirmPayment = () => {
   const { state } = useLocation();
-  const { field, date, time } = state || {}
+
+  console.log(`DATA: ${JSON.stringify(state)}`)
+
+  const {
+    field,
+    date,
+    time,
+    price,
+    taxPrice,
+    totalPrice,
+    selectedPaymentMethod,
+  } = state || {};
   
+  console.log("Total:", price);
+
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
 
   const formatDate = (dateString) => {
-    const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString("en-GB", options);
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-GB",
+      options
+    );
     return formattedDate;
   };
 
@@ -33,9 +54,14 @@ const ConfirmPayment = () => {
         {/* Left Side */}
         <div className="w-2/3 flex flex-col items-center gap-6 py-8">
           <div className="w-[50rem]">
-            <p className="text-lg font-semibold">1. Customer Detail and Payment Option</p>
+            <p className="text-lg font-semibold">
+              1. Customer Detail and Payment Option
+            </p>
             <div className="w-full h-2 bg-gray-200 rounded mt-2">
-              <div className="h-full bg-green-500 rounded" style={{ width: "100%" }}></div>
+              <div
+                className="h-full bg-green-500 rounded"
+                style={{ width: "100%" }}
+              ></div>
             </div>
           </div>
 
@@ -69,7 +95,8 @@ const ConfirmPayment = () => {
               onChange={handleCheckboxChange}
             />
             <label className="text-sm text-[#475569]">
-              Saya telah membaca dan menyetujui Syarat dan Ketentuan yang berlaku
+              Saya telah membaca dan menyetujui Syarat dan Ketentuan yang
+              berlaku
             </label>
           </div>
 
@@ -86,40 +113,43 @@ const ConfirmPayment = () => {
         {/* Right Side */}
         <div className="w-1/3 flex flex-col items-center gap-6 py-8">
           <div className="w-[25rem] text-start">
-            <p className="text-lg font-semibold">2. Review and Confirm Payment</p>
+            <p className="text-lg font-semibold">
+              2. Review and Confirm Payment
+            </p>
             <div className="w-full h-2 bg-gray-200 rounded mt-2">
-              <div className="h-full bg-blue-400 rounded" style={{ width: "100%" }}></div>
+              <div
+                className="h-full bg-blue-400 rounded"
+                style={{ width: "100%" }}
+              ></div>
             </div>
           </div>
 
           <div className="bg-[#738FFD] rounded-lg shadow-lg w-[25rem] h-[20rem] p-6 text-white">
             <h2 className="text-lg font-bold mb-4">Payment Details</h2>
             <div className="mb-4">
-              <p className="text-sm">Virtual Account Mandiri</p>
+              <p className="text-sm">{selectedPaymentMethod?.category} {selectedPaymentMethod?.method}</p>
               <p className="text-xl font-semibold">986969696969696</p>
             </div>
             <div className="text-sm">
               <div className="flex justify-between mb-2">
                 <span>Price</span>
-                <span>Rp. 1000</span>
+                <span>{price}</span>
               </div>
               <div className="flex justify-between mb-2">
-                <span>Service Fee</span>
-                <span>Rp. 500</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>PPN 90%</span>
-                <span>Rp. 900</span>
+                <span>Tax Fee 12%</span>
+                <span>{taxPrice}</span>
               </div>
               <div className="flex justify-between font-bold text-lg mt-4">
                 <span>Total</span>
-                <span>Rp. 2400</span>
+                <span>{totalPrice}</span>
               </div>
             </div>
           </div>
 
           <div className="w-[25rem]">
-            <h3 className="text-black font-semibold text-base mb-2">Venue Terms and Condition</h3>
+            <h3 className="text-black font-semibold text-base mb-2">
+              Venue Terms and Condition
+            </h3>
             <ul className="text-sm text-[#475569] list-disc pl-5">
               <li>Reschedule hanya bisa dilakukan sebelum H-3 Jadwal Main.</li>
               <li>Dilarang merokok dalam lapangan.</li>
