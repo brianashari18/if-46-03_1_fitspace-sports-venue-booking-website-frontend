@@ -208,7 +208,8 @@ const VenueManagement = () => {
                 <tr>
                     <th className="border border-gray-300 p-2">ID</th>
                     <th className="border border-gray-300 p-2">Name</th>
-                    <th className="border border-gray-300 p-2">City</th>
+                    <th className="border border-gray-300 p-2">Phone Number</th>
+                    <th className="border border-gray-300 p-2">Address</th>
                     <th className="border border-gray-300 p-2">Actions</th>
                 </tr>
                 </thead>
@@ -218,7 +219,9 @@ const VenueManagement = () => {
                         <tr key={venue.id}>
                             <td className="border border-gray-300 p-2 text-center">{venue.id}</td>
                             <td className="border border-gray-300 p-2">{venue.name}</td>
-                            <td className="border border-gray-300 p-2">{venue.city_or_regency}</td>
+                            <td className="border border-gray-300 p-2">{venue.phone_number}</td>
+                            <td className="border border-gray-300 p-2">{venue.street} - {venue.district}, {venue.city_or_regency},
+                                {venue.province}</td>
                             <td className="border border-gray-300 p-2 text-center">
                                 <button
                                     className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
