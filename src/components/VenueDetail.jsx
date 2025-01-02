@@ -169,7 +169,7 @@ export default function VenueDetail() {
       {/* Hero Section */}
       <div className="relative h-[500px]">
         <img
-          src={progresif}
+          src={venue.fields.length > 0 && venue.fields[0].gallery.length > 0 ? `http://localhost:8080${venue.fields[0].gallery[0].photo_url}` : "https://staticg.sportskeeda.com/editor/2022/11/a9ef8-16681658086025-1920.jpg"}
           alt="Progresif Sport Centre"
           className="object-cover w-full h-full"
         />

@@ -8,7 +8,7 @@ const AddVenueForm = ({ onSubmit, onCancel }) => {
         name: "",
         phone_number: "",
         street: "",
-        province: "",
+        province: "Jawa Barat",
         city_or_regency: "",
         district: "",
         postal_code: "",

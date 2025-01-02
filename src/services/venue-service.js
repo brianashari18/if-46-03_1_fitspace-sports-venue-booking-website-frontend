@@ -106,6 +106,14 @@ const VenueService = {
             );
         }
     },
+
+    deleteVenue: async (token, venueId) => {
+        const config = {
+            headers: { Authorization: token },
+        };
+        return await axios.delete(`${BASE_URL}/venues/${venueId}`, config);
+    },
+
 };
 
 export default VenueService;
