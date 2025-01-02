@@ -318,7 +318,7 @@ const MyVenue = ({ onLogout, user }) => {
                                                 className="border rounded-lg shadow p-4 flex flex-col items-center"
                                             >
                                                 <img
-                                                    src={`http://localhost:8080${field.gallery[0]}`}
+                                                    src={`http://localhost:8080${field.gallery[0].photo_url}`}
                                                     alt={field.type}
                                                     className="w-full h-60 object-cover rounded mb-4"
                                                 />

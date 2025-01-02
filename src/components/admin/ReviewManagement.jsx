@@ -9,10 +9,8 @@ const ReviewManagement = () => {
         comment: "",
         rating: "",
     });
-
     const token = localStorage.getItem("token");
 
-    // Fetch all reviews on component mount
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -28,19 +26,20 @@ const ReviewManagement = () => {
         fetchReviews();
     }, [token]);
 
-    // Handle delete review
     const handleDelete = async (reviewId) => {
-        try {
-            await adminService.deleteReview(reviewId, token);
-            setReviews(reviews.filter((review) => review.id !== reviewId)); // Update state after deletion
-            alert("Review deleted successfully");
-        } catch (error) {
-            console.error("Failed to delete review:", error);
-            alert("Failed to delete review");
+        const confirmDelete = window.confirm("Are you sure you want to delete this review?");
+        if (confirmDelete) {
+            try {
+                await adminService.deleteReview(reviewId, token);
+                setReviews(reviews.filter((review) => review.id !== reviewId)); // Update state after deletion
+                alert("Review deleted successfully");
+            } catch (error) {
+                console.error("Failed to delete review:", error);
+                alert("Failed to delete review");
+            }
         }
     };
 
-    // Handle review edit
     const handleEdit = (review) => {
         setFormState({
             id: review.id,
@@ -49,15 +48,13 @@ const ReviewManagement = () => {
         });
     };
 
-    // Handle form submission for updating a review
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Update existing review
             const updatedReview = await adminService.updateReview(formState.id, formState, token);
             setReviews(reviews.map((review) => (review.id === formState.id ? updatedReview : review)));
             alert("Review updated successfully");
-            setFormState({ id: "", comment: "", rating: "" }); // Reset form after submission
+            setFormState({ id: "", comment: "", rating: "" });
         } catch (error) {
             console.error("Failed to update review:", error);
             alert("Failed to update review");

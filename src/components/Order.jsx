@@ -22,7 +22,7 @@ const Order = ({ onLogout }) => {
         // Fetch schedule details for each booking
         const fetchedSchedules = {};
         for (const order of fetchedOrders) {
-          const schedule = await OrderService.getSchedule(localStorage.getItem("token"), order.schedule_id);
+          const schedule = await OrderService.getSchedule(localStorage.getItem("token"), order.id);
           fetchedSchedules[order.id] = schedule;
         }
         setSchedules(fetchedSchedules);
