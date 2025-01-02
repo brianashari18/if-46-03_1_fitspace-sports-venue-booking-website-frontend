@@ -3,6 +3,7 @@ import SideBar from "./SideBar.jsx";
 import AddVenueForm from "./AddVenueForm";
 import AddFieldForm from "./AddFieldForm";
 import VenueService from "../services/venue-service.js";
+import {addField} from "../services/field-service.js";
 
 const ProgressBar = ({ value, color }) => {
     const progressBarStyle = {

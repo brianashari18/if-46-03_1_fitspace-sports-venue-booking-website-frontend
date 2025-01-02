@@ -181,6 +181,7 @@ export default function VenueDetail() {
 
 
 
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
