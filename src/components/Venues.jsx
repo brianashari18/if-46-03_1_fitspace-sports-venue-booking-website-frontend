@@ -220,7 +220,7 @@ export default function SportVenues() {
                   >
                     <div className="relative h-48">
                       <img
-                          src={photos}
+                          src={venue.fields.length > 0 && venue.fields[0].gallery.length > 0 ? `http://localhost:8080${venue.fields[0].gallery[0].photo_url}` : "https://staticg.sportskeeda.com/editor/2022/11/a9ef8-16681658086025-1920.jpg"}
                           alt="Venue"
                           className="object-cover w-full h-full"
                       />

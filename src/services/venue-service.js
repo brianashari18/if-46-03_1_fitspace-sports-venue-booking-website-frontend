@@ -67,7 +67,28 @@ const VenueService = {
                 error.response?.data?.errors || "Failed to update Rating."
             );
         }
-    }
+    },
+
+    // Delete a specific review
+    deleteReview: async (fieldId, reviewId) => {
+        try {
+            const response = await axios.delete(`${BASE_URL}/${fieldId}/reviews/${reviewId}`);
+            return response.data.data; // Assuming response structure: { data: 'Review Deleted Successfully' }
+        } catch (error) {
+            console.error(`Error deleting review with ID ${reviewId}:`, error);
+            throw new Error(
+                error.response?.data?.errors || `Failed to delete review with ID ${reviewId}.`
+            );
+        }
+    },
+
+    deleteVenue: async (token, venueId) => {
+        const config = {
+            headers: { Authorization: token },
+        };
+        return await axios.delete(`${BASE_URL}/venues/${venueId}`, config);
+    },
+
 };
 
 export default VenueService;

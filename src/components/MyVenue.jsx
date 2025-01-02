@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import SideBar from "./SideBar.jsx";
-import testImg from "../assets/hero.png";
 import AddVenueForm from "./AddVenueForm";
 import AddFieldForm from "./AddFieldForm";
 import VenueService from "../services/venue-service.js";
@@ -37,6 +36,8 @@ const MyVenue = ({ onLogout, user }) => {
                 setLoading(true);
                 const token = localStorage.getItem("token");
                 const response = await VenueService.getVenueFromAllOwner(token);
+                console.log(`DATA: ${JSON.stringify(response.data)}`);
+                console.log(`FIELDS: ${JSON.stringify(response.data[0].fields[0].gallery[0].photo_url)}`);
                 setVenueData(response.data);
             } catch (err) {
                 setError(err.message || "Failed to load venues.");
@@ -85,13 +86,32 @@ const MyVenue = ({ onLogout, user }) => {
         setCurrentVenueId(null);
     };
 
-    const handleAddVenue = async (formData) => {
-        console.log("New Venue Data:", formData);
-        const token = localStorage.getItem("token");
-        const result = await VenueService.addVenue(token, formData);
-        console.log(JSON.stringify(result));
-        handleCloseModal();
+    const fetchVenues = async () => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem("token");
+            const response = await VenueService.getVenueFromAllOwner(token);
+            setVenueData(response.data);
+        } catch (err) {
+            setError(err.message || "Failed to load venues.");
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const handleAddVenue = async (formData) => {
+        try {
+            const token = localStorage.getItem("token");
+            await VenueService.addVenue(token, formData);
+            alert("Venue added successfully.");
+            handleCloseModal(); // Tutup modal setelah berhasil
+            await fetchVenues(); // Refresh data venue
+        } catch (error) {
+            console.error("Error adding venue:", error);
+            alert(error.message || "Failed to add venue.");
+        }
+    };
+
 
     const handleAddField = async (formData) => {
         console.log("New Field Data for Venue ID", currentVenueId, ":", formData);
@@ -100,6 +120,22 @@ const MyVenue = ({ onLogout, user }) => {
         console.log(JSON.stringify(result));
         handleCloseFieldModal();
     };
+
+    const handleDeleteVenue = async (venueId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this venue?");
+        if (!confirmDelete) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            await VenueService.deleteVenue(token, venueId);
+            setVenueData((prevData) => prevData.filter((venue) => venue.id !== venueId));
+            alert("Venue deleted successfully.");
+        } catch (err) {
+            console.error("Error deleting venue:", err);
+            alert(err.message || "Failed to delete the venue.");
+        }
+    };
+
 
     if (loading) return <div>Loading...</div>;
 
@@ -165,7 +201,7 @@ const MyVenue = ({ onLogout, user }) => {
                         <div key={venue.id} className="bg-white rounded-lg shadow-xl mb-6">
                             <div className="relative w-full h-96 rounded-lg overflow-hidden opacity-90">
                                 <img
-                                    src={testImg}
+                                    src={venue.fields.length > 0 && venue.fields[0].gallery.length > 0 ? `http://localhost:8080${venue.fields[0].gallery[0].photo_url}` : "https://staticg.sportskeeda.com/editor/2022/11/a9ef8-16681658086025-1920.jpg"}
                                     alt={venue.name}
                                     className="w-full h-full object-cover"
                                 />
@@ -176,6 +212,18 @@ const MyVenue = ({ onLogout, user }) => {
                             </div>
 
                             <div className="p-8 relative">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div>
+                                        <h3 className="text-xl font-bold">{venue.name}</h3>
+                                        <p className="text-gray-500">{venue.city_or_regency}, {venue.province}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => handleDeleteVenue(venue.id)}
+                                        className="p-2 text-white bg-red-500 rounded hover:bg-red-600 transition"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                                 <div
                                     className="flex items-center justify-between w-full max-w-4xl mx-auto mb-6 space-x-8">
                                     {(() => {
