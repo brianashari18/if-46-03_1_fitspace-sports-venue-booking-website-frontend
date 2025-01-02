@@ -20,14 +20,16 @@ import WriteReview from "./components/WriteReview.jsx";
 import ReviewSuccess from "./components/ReviewSuccess.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import VenueDetail from "./components/VenueDetail.jsx";
-import MyVenue from "./components/MyVenue.jsx";
-import AddVenueForm from "./components/AddVenueForm.jsx";
 import Payment from "./components/Payment.jsx";
 import ConfirmPayment from "./components/ConfirmPayment.jsx";
 import BookingSuccess from "./components/BookingSuccess.jsx";
 import Dashboard from "./components/admin/Dashboard.jsx";
+import MyVenue from "./components/MyVenue.jsx";
+import AddVenueForm from "./components/AddVenueForm.jsx";
+import AdminVerification from "./components/AdminVerification.jsx";
 
 function App() {
+    // State global untuk user
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : null;
@@ -60,35 +62,39 @@ function App() {
                         <Route path="/sign-up" element={<SignUp onLogin={handleLogin}/>}/>
                         <Route path="/forgot-password" element={<ForgotPassword/>}/>
                         <Route path="/verification-code" element={<VerificationCode/>}/>
+
                         <Route path="/reset-success" element={<ResetSuccess/>}/>
                         <Route path="/reset-password" element={<ResetPassword/>}/>
                         <Route path="/" element={<SignIn onLogin={handleLogin}/>}/>
 
-                        {/* <Route element={<ProtectedRoute/>}> */}
-                        <Route path="/about-us" element={<AboutUs/>}/>
-                        <Route path="/contact-us" element={<ContactUs/>}/>
-                        <Route path="/venue" element={<Venues/>}/>
-                        <Route path="/venueDetail/:name" element={<VenueDetail/>}/>
-                        <Route
-                            path="/edit-profile"
-                            element={<EditProfile
-                                onLogout={handleLogout}
-                                user={user}
-                                onUserUpdate={setUser}
-                            />}
-                        />
-                        <Route path="/change-password" element={<ChangePassword onLogout={handleLogout} user={user}/>}/>
-                        <Route path="/order" element={<Order onLogout={handleLogout}/>}/>
-                        <Route path="/home" element={<Homepage/>}/>
-                        <Route path="/write-review" element={<WriteReview/>}/>
-                        <Route path="/review-success" element={<ReviewSuccess/>}/>
-                        <Route path="/my-venue" element={<MyVenue onLogout={handleLogout} user={user}/>}/>
-                        <Route path="/add-venue" element={<AddVenueForm onLogout={handleLogout} user={user}/>}/>
-                        <Route path="/payment" element={<Payment/>}/>
-                        <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
-                        <Route path="/booking-success" element={<BookingSuccess/>}/>
-                        <Route path="/admin-dashboard" element={<Dashboard/>}/>
-                        {/* </Route> */}
+                        <Route element={<ProtectedRoute/>}>
+                            <Route path="/about-us" element={<AboutUs/>}/>
+                            <Route path="/contact-us" element={<ContactUs/>}/>
+                            <Route path="/venue" element={<Venues/>}/>
+                            <Route path="/venueDetail/:name" element={<VenueDetail/>}/>
+                            <Route
+                                path="/edit-profile"
+                                element={<EditProfile
+                                    onLogout={handleLogout}
+                                    user={user}
+                                    onUserUpdate={setUser}
+                                />}
+                            />
+                            <Route path="/change-password"
+                                   element={<ChangePassword onLogout={handleLogout} user={user}/>}/>
+                            <Route path="/order" element={<Order onLogout={handleLogout}/>}/>
+                            <Route path="/home" element={<Homepage/>}/>
+                            <Route path="/write-review" element={<WriteReview/>}/>
+                            <Route path="/review-success" element={<ReviewSuccess/>}/>
+                            <Route path="/my-venue" element={<MyVenue onLogout={handleLogout} user={user}/>}/>
+                            <Route path="/add-venue" element={<AddVenueForm onLogout={handleLogout} user={user}/>}/>
+                            <Route path="/payment" element={<Payment/>}/>
+                            <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
+                            <Route path="/booking-success" element={<BookingSuccess/>}/>
+                            <Route element={<AdminVerification user={user}/>}>
+                                <Route path="/admin-dashboard" element={<Dashboard/>}/>
+                            </Route>
+                        </Route>
                         {/* Or any default route */}
                     </Routes>
                 </div>

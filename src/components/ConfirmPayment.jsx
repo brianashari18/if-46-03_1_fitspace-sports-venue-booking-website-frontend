@@ -1,25 +1,24 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import PaymentIlus from "../assets/PaymentIlus.png";
 
 const ConfirmPayment = () => {
   const { state } = useLocation();
-
-  console.log(`DATA: ${JSON.stringify(state)}`)
-
   const {
+    venue,
     field,
     date,
     time,
     price,
     taxPrice,
     totalPrice,
-    selectedPaymentMethod,
+    selectedPaymentMethod = { category: "", method: "" },
+    formData,
   } = state || {};
-  
-  console.log("Total:", price);
 
   const [isChecked, setIsChecked] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const formatDate = (dateString) => {
@@ -40,14 +39,79 @@ const ConfirmPayment = () => {
     setIsChecked(!isChecked);
   };
 
-  const handleNext = () => {
-    if (isChecked) {
-      navigate("/booking-success");
-    } else {
-      alert("Harap menyetujui syarat dan ketentuan sebelum melanjutkan.");
-    }
+  const getVirtualAccountNumber = (selectedPaymentMethod) => {
+    const virtualAccounts = {
+      BCA: "VA-BCA-123456",
+      BNI: "VA-BNI-789012",
+      Mandiri: "VA-Mandiri-345678",
+      BRI: "VA-BRI-901234",
+      BSI: "VA-BSI-567890",
+      GoPay: "EW-GoPay-123456",
+      OVO: "EW-OVO-789012",
+      ShopeePay: "EW-ShopeePay-345678",
+      Visa: "CC-Visa-123456",
+      Mastercard: "CC-Mastercard-789012",
+    };
+
+    return virtualAccounts[selectedPaymentMethod?.method] || "Not available";
   };
 
+  const handleNext = async () => {
+    if (!isChecked) {
+      alert("Harap menyetujui syarat dan ketentuan sebelum melanjutkan.");
+      return;
+    }
+  
+    const bookingData = {
+      venue,
+      field,
+      date,
+      time,
+      price,
+      taxPrice,
+      totalPrice,
+      selectedPaymentMethod,
+      formData,
+    };
+
+
+    const bookingData2 = {
+      date: date, // Pastikan formatnya sesuai dengan LocalDate (yyyy-MM-dd)
+      time_slot: time, // Sesuaikan dengan properti backend
+      field_name: field, // Nama lapangan
+      price: String(price), // Konversi ke string karena di backend price bertipe String
+    };
+    
+
+  
+    try {
+      setIsSubmitting(true);
+      console.log("Sending booking data:", bookingData2); // Log data sebelum mengirim
+  
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/${venue.id}/bookings`, bookingData2, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": localStorage.getItem("token")
+        },
+      });
+  
+      console.log("Response data:", response.data); // Log data respons
+  
+      if (response.status !== 200) {
+        console.error("Response error:", response.data); // Log error details
+        throw new Error("Failed to save booking.");
+      }
+  
+      console.log("Booking successful:", response.data);
+      navigate("/booking-success");
+    } catch (error) {
+      console.error("Error saving booking:", error); // Log error
+      alert("Terjadi kesalahan saat menyimpan booking. Coba lagi nanti.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-[85rem] h-[45rem] flex">
@@ -70,7 +134,7 @@ const ConfirmPayment = () => {
               <h2 className="text-xl font-bold mt-3">Booking Information</h2>
               <div className="mt-10 text-lg font-semibold">
                 <h3>Lapangan {field}</h3>
-                <h3>Sport Center Tel-U</h3>
+                <h3>{venue?.name}</h3>
               </div>
               <div className="mt-5 text-lg font-semibold">
                 <h3>{formatDate(date)}</h3>
@@ -127,8 +191,10 @@ const ConfirmPayment = () => {
           <div className="bg-[#738FFD] rounded-lg shadow-lg w-[25rem] h-[20rem] p-6 text-white">
             <h2 className="text-lg font-bold mb-4">Payment Details</h2>
             <div className="mb-4">
-              <p className="text-sm">{selectedPaymentMethod?.category} {selectedPaymentMethod?.method}</p>
-              <p className="text-xl font-semibold">986969696969696</p>
+              <p className="text-sm">
+                {selectedPaymentMethod?.category} {selectedPaymentMethod?.method}
+              </p>
+              <p className="text-xl font-semibold">{getVirtualAccountNumber(selectedPaymentMethod)}</p>
             </div>
             <div className="text-sm">
               <div className="flex justify-between mb-2">
@@ -160,9 +226,14 @@ const ConfirmPayment = () => {
           <div className="absolute bottom-0 text-right w-[25rem]">
             <button
               onClick={handleNext}
-              className="px-6 py-3 bg-[#E6FDA3] text-black font-semibold rounded-lg shadow-md hover:bg-[#F2FA5A] transition"
+              disabled={isSubmitting}
+              className={`px-6 py-3 font-semibold rounded-lg shadow-md transition ${
+                isSubmitting
+                  ? "bg-gray-300 text-gray-600"
+                  : "bg-[#E6FDA3] text-black hover:bg-[#F2FA5A]"
+              }`}
             >
-              Next
+              {isSubmitting ? "Next" : "Next"}
             </button>
           </div>
         </div>

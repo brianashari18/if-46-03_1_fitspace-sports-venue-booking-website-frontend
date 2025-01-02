@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import SideBar from "./SideBar.jsx";
 import AddVenueForm from "./AddVenueForm";
 import AddFieldForm from "./AddFieldForm";
-import {addField} from "../services/field-service.js";
 import VenueService from "../services/venue-service.js";
 
 const ProgressBar = ({ value, color }) => {
