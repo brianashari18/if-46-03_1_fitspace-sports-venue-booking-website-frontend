@@ -33,18 +33,6 @@ const VenueService = {
         }
     },
 
-    // Fetch a single venue by ID
-    getVenueById: async (venueId) => {
-        try {
-            const response = await axios.get(`${BASE_URL}/venues/${venueId}`);
-            return response.data.data; // Assuming response structure: { data: {...venue} }
-        } catch (error) {
-            console.error(`Error fetching venue with ID ${venueId}:`, error);
-            throw new Error(
-                error.response?.data?.errors || `Failed to fetch venue with ID ${venueId}.`
-            );
-        }
-    },
 
     // Add a new venue
     addVenue: async (token, venueData) => {
@@ -64,48 +52,22 @@ const VenueService = {
         }
     },
 
-    // Fetch reviews for a specific field
-    getReviewsByField: async (fieldId) => {
+    updateRating : async (token, Rating, venuesId) => {
         try {
-            const response = await axios.get(`${BASE_URL}/${fieldId}/reviews`);
-            return response.data.data; // Assuming response structure: { data: [...reviews] }
-        } catch (error) {
-            console.error(`Error fetching reviews for field ID ${fieldId}:`, error);
-            throw new Error(
-                error.response?.data?.errors || `Failed to fetch reviews for field ID ${fieldId}.`
-            );
-        }
-    },
-
-    // Submit a review for a specific field
-    submitReview: async (fieldId, reviewData) => {
-        try {
-            const response = await axios.post(`${BASE_URL}/fields/${fieldId}/reviews`, reviewData, {
+            const response = await axios.patch(`${BASE_URL}/venues/${venuesId}/rating`, Rating, {
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: token,
                 },
             });
-            return response.data.data; // Assuming response structure: { data: {...review} }
-        } catch (error) {
-            console.error(`Error submitting review for field ID ${fieldId}:`, error);
+            return response.data;
+        }catch (error) {
+            console.error("Error updating Rating :", error);
             throw new Error(
-                error.response?.data?.errors || `Failed to submit review for field ID ${fieldId}.`
+                error.response?.data?.errors || "Failed to update Rating."
             );
         }
-    },
-
-    // Delete a specific review
-    deleteReview: async (fieldId, reviewId) => {
-        try {
-            const response = await axios.delete(`${BASE_URL}/${fieldId}/reviews/${reviewId}`);
-            return response.data.data; // Assuming response structure: { data: 'Review Deleted Successfully' }
-        } catch (error) {
-            console.error(`Error deleting review with ID ${reviewId}:`, error);
-            throw new Error(
-                error.response?.data?.errors || `Failed to delete review with ID ${reviewId}.`
-            );
-        }
-    },
+    }
 };
 
 export default VenueService;

@@ -58,7 +58,7 @@ const adminService = {
     // Update an existing venue
     updateVenue: async (venueId, venueData, token) => {
         try {
-            const response = await axios.patch(`${BASE_URL}/venues/${venueId}`, venueData, {
+            const response = await axios.patch(`${BASE_URL}/venues/${venueId}/update`, venueData, {
                 headers: {
                     'Authorization': token,
                     'Content-Type': 'application/json',

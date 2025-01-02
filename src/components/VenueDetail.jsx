@@ -7,6 +7,7 @@ import { Star } from 'lucide-react'; // Assuming lucide-react is needed for star
 import progresif from '../assets/progresif.png'; // Example image import
 import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import { useLocation } from 'react-router-dom';
+import VenueService from "../services/venue-service.js";
 
 const scheduleData = [
   { date: "2024-12-11", day: "11 Des", dayName: "Monday" },
@@ -164,6 +165,21 @@ export default function VenueDetail() {
       },
     });
   };
+
+  const overallRating = venue.fields.length > 0
+      ? venue.fields
+          .filter((field) => field.reviews.length > 0) // Only include fields with reviews
+          .reduce((sum, field) => {
+            const totalReviews = field.reviews.length;
+            const averageFieldRating = field.reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
+            return sum + averageFieldRating;
+          }, 0) /
+      venue.fields.filter((field) => field.reviews.length > 0).length // Divide by the count of fields with reviews
+      : 0;
+
+  VenueService.updateRating(localStorage.getItem("token"),overallRating,venue.id)
+
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -362,168 +378,163 @@ export default function VenueDetail() {
         </div>
 
         {/* Reviews Section */}
-        <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-2">{venue.rating}</h2>
-            <div className="flex justify-center mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < venue.rating
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
-            <p className="text-sm text-gray-500">
-              based on {allReviews.length} reviews
-            </p>
-          </div>
-
-          {/* Rating Bars */}
-          <div className="space-y-4 mb-8">
-            {venue.fields.map((field) => {
-              // Calculate the average rating for the current field
-              const totalReviews = field.reviews.length;
-              const averageRating =
-                totalReviews > 0
-                  ? field.reviews.reduce(
-                      (sum, review) => sum + review.rating,
-                      0
-                    ) / totalReviews
-                  : 0;
-
-              return (
-                <div key={field.id} className="space-y-1">
-                  <div className="text-sm font-medium">{field.type}</div>
-                  {/* Display the average rating as the progress bar value */}
-                  <ProgressBar value={averageRating * 20} />
-                </div>
-              );
-            })}
-          </div>
-
           <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">Reviews</h2>
+              <h2 className="text-3xl font-bold mb-2">{overallRating.toFixed(1)}</h2>
+              <div className="flex justify-center mb-2">
+                {[...Array(5)].map((_, i) => (
+                    <Star
+                        key={i}
+                        className={`w-5 h-5 ${
+                            i < Math.round(overallRating)
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-gray-300"
+                        }`}
+                    />
+                ))}
+              </div>
+              <p className="text-sm text-gray-500">
+                based on {allReviews.length} reviews
+              </p>
             </div>
 
-            {/* Display Current Reviews */}
+            {/* Rating Bars */}
             <div className="space-y-4 mb-8">
-              {currentReviews.map((review, idx) => {
-                // Find the field type for the current review
-                const fieldType = venue.fields.find(
-                  (field) => field.id === review.field_id
-                )?.type;
+              {venue.fields.map((field) => {
+                // Calculate the average rating for the current field
+                const totalReviews = field.reviews.length;
+                const averageRating =
+                    totalReviews > 0
+                        ? field.reviews.reduce(
+                        (sum, review) => sum + review.rating,
+                        0
+                    ) / totalReviews
+                        : 0;
 
                 return (
-                  <div
-                    key={idx}
-                    className="p-4 bg-white shadow-md rounded-lg mb-4"
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Dynamically set the avatar or use a default */}
-                      <img
-                        src={avatar1} // Use a default avatar
-                        alt="User Avatar"
-                        width={48}
-                        height={48}
-                        className="rounded-full"
-                      />
-
-                      <div>
-                        <div className="font-medium">{`${
-                          review.user.first_name || "undefined"
-                        }`}</div>
-                        {/* Display the field type */}
-                        <div className="text-sm text-gray-500">{fieldType}</div>
-                        <div className="flex mb-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < review.rating
-                                  ? "fill-yellow-400 text-yellow-400"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <p className="text-sm font-medium">{review.comment}</p>
-                      </div>
+                    <div key={field.id} className="space-y-1">
+                      <div className="text-sm font-medium">{field.type}</div>
+                      {/* Display the average rating as the progress bar value */}
+                      <ProgressBar value={averageRating * 20}/>
                     </div>
-                  </div>
                 );
               })}
             </div>
 
-            {/* Pagination Controls */}
-            <div className="flex justify-center items-center space-x-4">
-              <button
-                className={`px-4 py-2 rounded-lg ${
-                  currentPage === 1
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <p className="text-sm font-medium">
-                Page {currentPage} of {totalPages}
-              </p>
-              <button
-                className={`px-4 py-2 rounded-lg ${
-                  currentPage === totalPages
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
+            <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold mb-2">Reviews</h2>
+              </div>
+
+              {/* Display Current Reviews */}
+              <div className="space-y-4 mb-8">
+                {currentReviews.map((review, idx) => {
+                  const fieldType = venue.fields.find(
+                      (field) => field.id === review.field_id
+                  )?.type;
+
+                  return (
+                      <div
+                          key={idx}
+                          className="p-4 bg-white shadow-md rounded-lg mb-4"
+                      >
+                        <div className="flex items-start gap-4">
+                          <img
+                              src={avatar1} // Use a default avatar
+                              alt="User Avatar"
+                              width={48}
+                              height={48}
+                              className="rounded-full"
+                          />
+
+                          <div>
+                            <div className="font-medium">{review.user.first_name}</div>
+                            <div className="text-sm text-gray-500">{fieldType}</div>
+                            <div className="flex mb-1">
+                              {[...Array(5)].map((_, i) => (
+                                  <Star
+                                      key={i}
+                                      className={`w-4 h-4 ${
+                                          i < review.rating
+                                              ? "fill-yellow-400 text-yellow-400"
+                                              : "text-gray-300"
+                                      }`}
+                                  />
+                              ))}
+                            </div>
+                            <p className="text-sm font-medium">{review.comment}</p>
+                          </div>
+                        </div>
+                      </div>
+                  );
+                })}
+              </div>
+
+
+              {/* Pagination Controls */}
+              <div className="flex justify-center items-center space-x-4">
+                <button
+                    className={`px-4 py-2 rounded-lg ${
+                        currentPage === 1
+                            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                <p className="text-sm font-medium">
+                  Page {currentPage} of {totalPages}
+                </p>
+                <button
+                    className={`px-4 py-2 rounded-lg ${
+                        currentPage === totalPages
+                            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+
             </div>
+            {/* Write a Review Button */}
+            <button
+                className="w-full bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg"
+                onClick={toggleSelectReviewModal}
+            >
+              Write a Review
+            </button>
           </div>
-          {/* Write a Review Button */}
-          <button
-            className="w-full bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg"
-            onClick={toggleSelectReviewModal}
-          >
-            Write a Review
-          </button>
+
+          {/* SelectReview Modal */}
+          {isSelectReviewOpen && (
+              <SelectReview
+                  facilities={venue.fields.map((field) => ({
+                    id: field.id,
+                    type: field.type,
+                  }))}
+                  onClose={toggleSelectReviewModal}
+                  username={user.first_name}
+                  onNext={openWriteReviewModal} // Trigger WriteReview modal
+              />
+          )}
+
+          {/* WriteReview Modal */}
+          {isWriteReviewOpen && (
+              <WriteReview
+                  onClose={closeWriteReviewModal}
+                  username={user.first_name}
+                  selectedFacility={selectedFacility}
+                  facilityId={facilityId}
+                  onSubmit={handleReviewSubmitSuccess} // Trigger success modal on submit
+              />
+          )}
+          {isSuccessModalOpen && <ReviewSuccess onClose={closeSuccessModal}/>}
         </div>
-
-        {/* SelectReview Modal */}
-        {isSelectReviewOpen && (
-          <SelectReview
-            facilities={venue.fields.map((field) => ({
-              id: field.id,
-              type: field.type,
-            }))}
-            onClose={toggleSelectReviewModal}
-            username={user.first_name}
-            onNext={openWriteReviewModal} // Trigger WriteReview modal
-          />
-        )}
-
-        {/* WriteReview Modal */}
-        {isWriteReviewOpen && (
-          <WriteReview
-            onClose={closeWriteReviewModal}
-            username={user.first_name}
-            selectedFacility={selectedFacility}
-            facilityId={facilityId}
-            onSubmit={handleReviewSubmitSuccess} // Trigger success modal on submit
-          />
-        )}
-        {isSuccessModalOpen && <ReviewSuccess onClose={closeSuccessModal} />}
-      </div>
     </div>
   );
 }
