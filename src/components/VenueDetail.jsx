@@ -9,13 +9,13 @@ import { useLocation } from 'react-router-dom';
 import VenueService from "../services/venue-service.js";
 
 const scheduleData = [
-  { date: "2024-12-11", day: "11 Des", dayName: "Monday" },
-  { date: "2024-12-12", day: "12 Des", dayName: "Tuesday" },
-  { date: "2024-12-13", day: "13 Des", dayName: "Wednesday" },
-  { date: "2024-12-14", day: "14 Des", dayName: "Thursday" },
-  { date: "2024-12-15", day: "15 Des", dayName: "Friday" },
-  { date: "2024-12-16", day: "16 Des", dayName: "Saturday" },
-  { date: "2024-12-17", day: "17 Des", dayName: "Sunday" },
+  { date: "2024-12-16", day: "16 Des", dayName: "Monday" },
+  { date: "2024-12-17", day: "17 Des", dayName: "Tuesday" },
+  { date: "2024-12-18", day: "18 Des", dayName: "Wednesday" },
+  { date: "2024-12-19", day: "19 Des", dayName: "Thursday" },
+  { date: "2024-12-20", day: "20 Des", dayName: "Friday" },
+  { date: "2024-12-21", day: "21 Des", dayName: "Saturday" },
+  { date: "2024-12-22", day: "22 Des", dayName: "Sunday" },
 ];
 
 const timeSlots = [
