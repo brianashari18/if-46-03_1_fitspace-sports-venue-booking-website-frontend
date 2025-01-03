@@ -197,35 +197,42 @@ export default function VenueDetail() {
               {venue.street} - {venue.district}, {venue.city_or_regency},{" "}
               {venue.province}
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 items-center">
               {venue.fields.map((field, j) => (
-                <span
-                  key={j}
-                  className="bg-gray-200 px-3 py-1 rounded-md text-sm"
-                >
-                  {field.type}
-                </span>
+                  <span
+                      key={j}
+                      className="bg-gray-200 px-3 py-1 rounded-md text-sm"
+                  >
+          {field.type}
+        </span>
               ))}
+              <button
+                  className="ml-3 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition"
+                  onClick={() => navigate("/gallery", {state: {venue}})}
+              >
+                Gallery
+              </button>
             </div>
           </div>
         </div>
+
       </div>
 
-        <div className="container mx-auto px-4 py-8">
-          {/* Location Section */}
-          <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
-            <h2 className="text-xl font-bold mb-4">LOCATION</h2>
-            <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
-              <a href={`https://www.google.com/maps?q=${venue.latitude},${venue.longitude}`} target="_blank"
-                 rel="noopener noreferrer">
-                <img
-                    src={mapUrl} // URL gambar peta statis
-                    alt="Location Map"
-                    className="w-full h-full object-cover rounded-lg cursor-pointer"
-                />
-              </a>
-            </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Location Section */}
+        <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-xl font-bold mb-4">LOCATION</h2>
+          <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
+            <a href={`https://www.google.com/maps?q=${venue.latitude},${venue.longitude}`} target="_blank"
+               rel="noopener noreferrer">
+              <img
+                  src={mapUrl} // URL gambar peta statis
+                  alt="Location Map"
+                  className="w-full h-full object-cover rounded-lg cursor-pointer"
+              />
+            </a>
           </div>
+        </div>
 
         {/* Booking Form */}
         <div className="flex flex-wrap gap-4 mb-4">

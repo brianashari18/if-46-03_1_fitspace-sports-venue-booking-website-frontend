@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
-import headerImage from "../assets/add-venue-icon.png";
-import { addField } from "../services/field-service.js";
 
-const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
+const UpdateFieldForm = ({ field, onSubmit, onCancel }) => {
+    const MAX_UPLOAD_SIZE = 10 * 1024 * 1024;
+
+    const [removedImages, setRemovedImages] = useState([]);
+
     const [formData, setFormData] = useState({
-        price: "",
-        type: "",
-        images: [], // Store image files temporarily
+        price: field.price || "",
+        type: field.type || "",
+        images: field.gallery ? field.gallery.map((item) => item.photo_url) : [], // Existing images
+        newImages: [], // For newly added images
     });
 
     const [errors, setErrors] = useState({});
@@ -30,22 +33,18 @@ const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
         try {
             setUploading(true);
 
-            const fieldData = {
+            const updatedData = {
                 price: parseInt(formData.price, 10),
                 type: formData.type,
+                gallery: formData.images,
+                newImages: formData.newImages,
+                removedImages,
             };
 
-            const token = localStorage.getItem("token");
 
-            await addField(token, venueId, fieldData, formData.images);
-
-            console.log("Field added successfully!");
-            if (onSuccess) {
-                onSuccess(); // Call success callback
-            }
+            await onSubmit(updatedData);
         } catch (error) {
-            console.error("Error submitting form:", error);
-            alert(error.message || "Failed to add field.");
+            console.error("Error updating field:", error);
         } finally {
             setUploading(false);
         }
@@ -57,8 +56,6 @@ const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
         setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
-    const MAX_UPLOAD_SIZE = 10 * 1024 * 1024;
-
     const handleImageAdd = (file) => {
         if (file.size > MAX_UPLOAD_SIZE) {
             alert(`File size exceeds the maximum limit of ${MAX_UPLOAD_SIZE / (1024 * 1024)} MB.`);
@@ -66,16 +63,25 @@ const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
         }
         setFormData((prev) => ({
             ...prev,
-            images: [...prev.images, file], // Add file to images array
+            newImages: [...prev.newImages, file],
         }));
     };
 
-    const handleImageRemove = (index) => {
-        setFormData((prev) => ({
-            ...prev,
-            images: prev.images.filter((_, i) => i !== index), // Remove file by index
-        }));
+    const handleImageRemove = (index, isExisting) => {
+        if (isExisting) {
+            setFormData((prev) => ({
+                ...prev,
+                images: prev.images.filter((_, i) => i !== index),
+            }));
+            setRemovedImages((prev) => [...prev, formData.images[index]]);
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                newImages: prev.newImages.filter((_, i) => i !== index),
+            }));
+        }
     };
+
 
     return (
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
@@ -90,19 +96,17 @@ const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
                     onClick={handleSubmit}
                     disabled={uploading}
                     className={`p-2 text-white rounded-lg font-semibold ${
-                        uploading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+                        uploading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
                     }`}
                 >
-                    {uploading ? "Uploading..." : "Save Field"}
+                    {uploading ? "Updating..." : "Save Changes"}
                 </button>
             </div>
 
-            {/* Header */}
             <div className="flex items-start mb-6">
-                <img src={headerImage} alt="Header" className="w-16 h-16 mr-4" />
                 <div>
-                    <h2 className="text-2xl font-bold">Add Field</h2>
-                    <p className="text-gray-600">Fill in your field details</p>
+                    <h2 className="text-2xl font-bold">Update Field</h2>
+                    <p className="text-gray-600">Modify your field details</p>
                 </div>
             </div>
 
@@ -158,12 +162,27 @@ const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
                     {formData.images.map((image, index) => (
                         <div key={index} className="relative w-24 h-24">
                             <img
-                                src={URL.createObjectURL(image)} // Display local image preview
+                                src={`http://localhost:8080${image}`}
                                 alt={`Field ${index}`}
                                 className="w-full h-full object-cover rounded-lg shadow"
                             />
                             <button
-                                onClick={() => handleImageRemove(index)}
+                                onClick={() => handleImageRemove(index, true)}
+                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                            >
+                                x
+                            </button>
+                        </div>
+                    ))}
+                    {formData.newImages.map((image, index) => (
+                        <div key={index} className="relative w-24 h-24">
+                            <img
+                                src={URL.createObjectURL(image)}
+                                alt={`New Field ${index}`}
+                                className="w-full h-full object-cover rounded-lg shadow"
+                            />
+                            <button
+                                onClick={() => handleImageRemove(index, false)}
                                 className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
                             >
                                 x
@@ -187,9 +206,8 @@ const AddFieldForm = ({ onSubmit, onCancel, venueId, onSuccess }) => {
                 </div>
             </div>
 
-
         </div>
     );
 };
 
-export default AddFieldForm;
+export default UpdateFieldForm;

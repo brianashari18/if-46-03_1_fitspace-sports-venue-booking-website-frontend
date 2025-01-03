@@ -27,6 +27,7 @@ import Dashboard from "./components/admin/Dashboard.jsx";
 import MyVenue from "./components/MyVenue.jsx";
 import AddVenueForm from "./components/AddVenueForm.jsx";
 import AdminVerification from "./components/AdminVerification.jsx";
+import GalleryPage from "./components/GalleryPage.jsx";
 
 function App() {
     // State global untuk user
@@ -91,6 +92,7 @@ function App() {
                             <Route path="/payment" element={<Payment/>}/>
                             <Route path="/confirm-payment" element={<ConfirmPayment/>}/>
                             <Route path="/booking-success" element={<BookingSuccess/>}/>
+                            <Route path="/gallery" element={<GalleryPage />} />
                             <Route element={<AdminVerification user={user}/>}>
                                 <Route path="/admin-dashboard" element={<Dashboard/>}/>
                             </Route>

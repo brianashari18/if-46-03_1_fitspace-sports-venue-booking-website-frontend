@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import SideBar from "./SideBar.jsx";
 import AddVenueForm from "./AddVenueForm";
 import AddFieldForm from "./AddFieldForm";
 import VenueService from "../services/venue-service.js";
+import UpdateFieldForm from "./UpdateFieldForm.jsx";
+import {addField, deleteField, updateField} from "../services/field-service.js";
 
-const ProgressBar = ({ value, color }) => {
+const ProgressBar = ({value, color}) => {
     const progressBarStyle = {
         width: `${value}%`,
         height: "10px",
@@ -21,7 +23,7 @@ const ProgressBar = ({ value, color }) => {
 
 const ITEMS_PER_PAGE = 2;
 
-const MyVenue = ({ onLogout, user }) => {
+const MyVenue = ({onLogout, user}) => {
     const [venueData, setVenueData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -29,6 +31,8 @@ const MyVenue = ({ onLogout, user }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFieldModalOpen, setIsFieldModalOpen] = useState(false);
     const [currentVenueId, setCurrentVenueId] = useState(null);
+    const [isUpdateFieldModalOpen, setIsUpdateFieldModalOpen] = useState(false);
+    const [currentField, setCurrentField] = useState(null);
 
     useEffect(() => {
         const fetchVenues = async () => {
@@ -37,7 +41,6 @@ const MyVenue = ({ onLogout, user }) => {
                 const token = localStorage.getItem("token");
                 const response = await VenueService.getVenueFromAllOwner(token);
                 console.log(`DATA: ${JSON.stringify(response.data)}`);
-                console.log(`FIELDS: ${JSON.stringify(response.data[0].fields[0].gallery[0].photo_url)}`);
                 setVenueData(response.data);
             } catch (err) {
                 setError(err.message || "Failed to load venues.");
@@ -55,6 +58,18 @@ const MyVenue = ({ onLogout, user }) => {
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
+
+    const handleOpenUpdateFieldModal = (venue, field) => {
+        setCurrentField(field);
+        setCurrentVenueId(venue.id);
+        setIsUpdateFieldModalOpen(true);
+    };
+
+    const handleCloseUpdateFieldModal = () => {
+        setIsUpdateFieldModalOpen(false);
+        setCurrentField(null);
+    };
+
 
     const handleNext = () => {
         if (currentPage < totalPages) {
@@ -85,6 +100,22 @@ const MyVenue = ({ onLogout, user }) => {
         setIsFieldModalOpen(false);
         setCurrentVenueId(null);
     };
+
+    const handleDeleteField = async (venueId, fieldId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this field?");
+        if (!confirmDelete) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            await deleteField(token, venueId, fieldId); // Tambahkan API untuk deleteField di `VenueService`
+            alert("Field deleted successfully.");
+            await fetchVenues(); // Refresh data venue
+        } catch (error) {
+            console.error("Error deleting field:", error);
+            alert(error.message || "Failed to delete field.");
+        }
+    };
+
 
     const fetchVenues = async () => {
         try {
@@ -136,16 +167,21 @@ const MyVenue = ({ onLogout, user }) => {
         }
     };
 
+    const handleAddFieldSuccess = async () => {
+        handleCloseFieldModal(); // Tutup modal
+        await fetchVenues(); // Refresh data venue
+    };
+
 
     if (loading) return <div>Loading...</div>;
 
     if (error) return <div>Error: {error}</div>;
 
-    if (!venueData.length) {
+    if (venueData.length === 0) {
         return (
             <div className="flex min-h-screen bg-[#F5F5F5]">
                 <div className="flex-shrink-0 w-64">
-                    <SideBar onLogout={onLogout} />
+                    <SideBar onLogout={onLogout}/>
                 </div>
                 <div className="flex flex-grow items-center justify-center">
                     <div className="text-center">
@@ -178,7 +214,7 @@ const MyVenue = ({ onLogout, user }) => {
 
     return (
         <div className="flex justify-start min-h-screen bg-[#F5F5F5]">
-            <SideBar onLogout={onLogout} />
+            <SideBar onLogout={onLogout}/>
 
             <div className="p-6 w-full">
                 <div className="flex justify-between items-center mb-6">
@@ -314,19 +350,27 @@ const MyVenue = ({ onLogout, user }) => {
                                         venue.fields.map((field) => (
                                             <div
                                                 key={field.id}
-                                                className="border rounded-lg shadow p-4 flex flex-col items-center"
+                                                className="border rounded-lg shadow p-4 flex flex-col items-center relative cursor-pointer"
+                                                onClick={() => handleOpenUpdateFieldModal(venue, field)} // Klik langsung untuk edit
                                             >
+                                                {/* Tombol Delete */}
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Mencegah buka modal saat klik delete
+                                                        handleDeleteField(venue.id, field.id);
+                                                    }}
+                                                    className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none shadow-md transition"
+                                                >
+                                                    ✕
+                                                </button>
+
                                                 <img
-                                                    src={`http://localhost:8080${field.gallery[0].photo_url}`}
+                                                    src={`http://localhost:8080${field.gallery[0]?.photo_url}`}
                                                     alt={field.type}
                                                     className="w-full h-60 object-cover rounded mb-4"
                                                 />
-                                                <h3 className="font-bold text-lg mb-2">
-                                                    {field.type}
-                                                </h3>
-                                                <p className="text-gray-500">
-                                                    Rp {field.price.toLocaleString()}
-                                                </p>
+                                                <h3 className="font-bold text-lg mb-2">{field.type}</h3>
+                                                <p className="text-gray-500">Rp {field.price.toLocaleString()}</p>
                                             </div>
                                         ))
                                     ) : (
@@ -335,6 +379,7 @@ const MyVenue = ({ onLogout, user }) => {
                                         </div>
                                     )}
                                 </div>
+
 
                                 <button
                                     onClick={() => handleOpenFieldModal(venue.id)}
@@ -387,10 +432,39 @@ const MyVenue = ({ onLogout, user }) => {
                             onSubmit={handleAddField}
                             onCancel={handleCloseFieldModal}
                             venueId={currentVenueId}
+                            onSuccess={handleAddFieldSuccess} // Tambahkan ini
                         />
                     </div>
                 </div>
             )}
+
+            {isUpdateFieldModalOpen && currentField && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white w-full max-w-4xl h-[90vh] overflow-y-auto rounded-lg shadow-lg p-6">
+                        <UpdateFieldForm
+                            field={currentField}
+                            onSubmit={async (formData) => {
+                                if (!currentVenueId) {
+                                    alert("Venue ID is missing. Cannot update field.");
+                                    return;
+                                }
+                                try {
+                                    const token = localStorage.getItem("token");
+                                    await updateField(token, currentVenueId, currentField.id, formData); // Fungsi updateField di service
+                                    alert("Field updated successfully.");
+                                    await fetchVenues(); // Refresh data venue
+                                    handleCloseUpdateFieldModal(); // Tutup modal
+                                } catch (error) {
+                                    console.error("Error updating field:", error);
+                                    alert(error.message || "Failed to update field.");
+                                }
+                            }}
+                            onCancel={handleCloseUpdateFieldModal}
+                        />
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
