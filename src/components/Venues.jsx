@@ -154,7 +154,7 @@ export default function SportVenues() {
               {openDropdown === "facility" && (
                   <div className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md w-48 z-50">
                     {/* Facility options */}
-                    {["Futsal", "Basket", "Badminton", "Voli"].map((facility) => (
+                    {["Futsal", "Basketball", "Badminton", "Volleyball"].map((facility) => (
                         <div
                             key={facility}
                             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"

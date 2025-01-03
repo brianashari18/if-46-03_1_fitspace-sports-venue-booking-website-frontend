@@ -9,15 +9,49 @@ import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import { useLocation } from 'react-router-dom';
 import VenueService from "../services/venue-service.js";
 
-const scheduleData = [
-  { date: "2024-12-11", day: "11 Des", dayName: "Monday" },
-  { date: "2024-12-12", day: "12 Des", dayName: "Tuesday" },
-  { date: "2024-12-13", day: "13 Des", dayName: "Wednesday" },
-  { date: "2024-12-14", day: "14 Des", dayName: "Thursday" },
-  { date: "2024-12-15", day: "15 Des", dayName: "Friday" },
-  { date: "2024-12-16", day: "16 Des", dayName: "Saturday" },
-  { date: "2024-12-17", day: "17 Des", dayName: "Sunday" },
-];
+function generateWeeklySchedule(date) {
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const schedule = [];
+
+    // Cari hari Senin di minggu ini
+    let currentDay = new Date(date);
+    let diff = currentDay.getDay() - 1; // 0 untuk Minggu, 1 untuk Senin, dst.
+    if (diff < 0) {
+        diff = 6; // Jika hari ini Minggu, mundur 6 hari
+    }
+    currentDay.setDate(currentDay.getDate() - diff);
+
+    for (let i = 0; i < 7; i++) {
+        const loopDate = new Date(currentDay); // Membuat salinan agar currentDay tidak berubah
+        loopDate.setDate(currentDay.getDate() + i);
+
+        const year = loopDate.getFullYear();
+        const month = String(loopDate.getMonth() + 1).padStart(2, '0');
+        const dayOfMonth = String(loopDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${dayOfMonth}`;
+        const formattedDay = `${dayOfMonth} ${getMonthName(loopDate.getMonth())}`;
+        const dayName = daysOfWeek[loopDate.getDay()];
+
+        schedule.push({
+            date: formattedDate,
+            day: formattedDay,
+            dayName: dayName,
+        });
+    }
+    console.log(`TESTSCH: ${JSON.stringify(schedule)}`)
+
+    return schedule;
+}
+
+function getMonthName(monthIndex) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    return monthNames[monthIndex];
+}
+
+const today = new Date();
+const scheduleData = generateWeeklySchedule(today);
 
 const timeSlots = [
   { time: "06:00 - 07:00" },
@@ -277,7 +311,7 @@ export default function VenueDetail() {
                 scheduleData
                   .filter((day) =>
                     selectedFieldSchedules.some(
-                      (s) => s.date === day.date && s.status === "available"
+                      (s) => s.date === day.date && s.status.toLowerCase() === "available"
                     )
                   )
                   .map((availableDay, idx) => (
@@ -304,8 +338,10 @@ export default function VenueDetail() {
                 timeSlots
                   .filter((slot) =>
                     selectedFieldSchedules.some(
-                      (s) =>
-                        s.timeSlot === slot.time && s.status === "available"
+                      (s) => {
+                          console.log(`SDATE: ${s.timeSlot}, DDATE: ${slot.time}, ST: ${s.status.toLowerCase()}\nCO: ${s.timeSlot === slot.time && s.status.toLowerCase() === "available"}`);
+                          return s.timeSlot === slot.time && s.status.toLowerCase() === "available"
+                      }
                     )
                   )
                   .map((availableSlot, idx) => (
@@ -362,7 +398,8 @@ export default function VenueDetail() {
                       );
 
                       // Determine availability based on status
-                      const isAvailable = schedule?.status === "available";
+                      console.log(`SCH: ${JSON.stringify(schedule)}`);
+                      const isAvailable = schedule?.status.toLowerCase() === "available";
 
                       return (
                         <div
@@ -394,7 +431,7 @@ export default function VenueDetail() {
         {/* Reviews Section */}
           <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">{overallRating.toFixed(1)}</h2>
+              <h2 className="text-3xl font-bold mb-2">{overallRating ? overallRating.toFixed(1) : 0.0}</h2>
               <div className="flex justify-center mb-2">
                 {[...Array(5)].map((_, i) => (
                     <Star
@@ -424,6 +461,7 @@ export default function VenueDetail() {
                         0
                     ) / totalReviews
                         : 0;
+
 
                 return (
                     <div key={field.id} className="space-y-1">
