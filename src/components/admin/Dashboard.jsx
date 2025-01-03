@@ -4,14 +4,12 @@ import UserManagement from "./UserManagement";
 import VenueManagement from "./VenueManagement";
 import FieldManagement from "./FieldManagement";
 import ReviewManagement from "./ReviewManagement";
-import BookingManagement from "./BookingManagement"; // Add Booking Management
-import { useLocation } from "react-router-dom"; // For better routing
-
+import BookingManagement from "./BookingManagement";
+import { useLocation } from "react-router-dom";
 const Dashboard = () => {
     const [activePage, setActivePage] = useState("Dashboard");
     const token = localStorage.getItem("token");
 
-    // Dynamically setting the active page using URL query parameters
     const location = useLocation();
 
     useEffect(() => {

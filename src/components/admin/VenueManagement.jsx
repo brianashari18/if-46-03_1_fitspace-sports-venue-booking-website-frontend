@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import adminService from '../../services/admin-service';
+import React, { useEffect, useState } from "react";
+import adminService from "../../services/admin-service";
 
 const VenueManagement = () => {
     const [venues, setVenues] = useState([]);
@@ -15,18 +15,15 @@ const VenueManagement = () => {
         latitude: "",
         longitude: "",
     });
-
-    // Retrieve token from localStorage
     const token = localStorage.getItem("token");
 
-    // Fetch all venues on component mount
     useEffect(() => {
         const fetchVenues = async () => {
             try {
                 const venueList = await adminService.getAllVenues(token);
                 setVenues(venueList);
             } catch (error) {
-                console.error('Failed to fetch venues:', error);
+                console.error("Failed to fetch venues:", error);
             } finally {
                 setLoading(false);
             }
@@ -35,21 +32,23 @@ const VenueManagement = () => {
         fetchVenues();
     }, [token]);
 
-    // Handle delete venue
     const handleDelete = async (venueId) => {
-        try {
-            await adminService.deleteVenue(venueId, token);
-            setVenues(venues.filter((venue) => venue.id !== venueId)); // Update state after deletion
-            alert('Venue deleted successfully');
-        } catch (error) {
-            console.error('Failed to delete venue:', error);
-            alert('Failed to delete venue');
+        const confirmDelete = window.confirm("Are you sure you want to delete this venue?");
+        if (confirmDelete) {
+            try {
+                await adminService.deleteVenue(venueId, token);
+                setVenues(venues.filter((venue) => venue.id !== venueId));
+                alert("Venue deleted successfully");
+            } catch (error) {
+                console.error("Failed to delete venue:", error);
+                alert("Failed to delete venue");
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting Form Data:", formState); // Log to debug the form data
+        console.log("Submitting Form Data:", formState);
         try {
             if (formState.id) {
                 // Update venue
@@ -62,15 +61,13 @@ const VenueManagement = () => {
                 setVenues([...venues, newVenue]);
                 alert("Venue created successfully");
             }
-            // Reset the form state
             resetForm();
         } catch (error) {
-            console.error("Failed to submit form:", error.response?.data || error.message); // Improved error logging
+            console.error("Failed to submit form:", error.response?.data || error.message);
             alert("Failed to submit form");
         }
     };
 
-    // Handle edit button click
     const handleEdit = (venue) => {
         setFormState({
             id: venue.id,
@@ -86,7 +83,6 @@ const VenueManagement = () => {
         });
     };
 
-    // Reset form state
     const resetForm = () => {
         setFormState({
             name: "",
@@ -186,11 +182,8 @@ const VenueManagement = () => {
                     />
                 </div>
                 <div className="flex gap-4 mt-4">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                    >
-                        {formState.id ? 'Update Venue' : 'Create Venue'}
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                        {formState.id ? "Update Venue" : "Create Venue"}
                     </button>
                     <button
                         type="button"
@@ -220,8 +213,9 @@ const VenueManagement = () => {
                             <td className="border border-gray-300 p-2 text-center">{venue.id}</td>
                             <td className="border border-gray-300 p-2">{venue.name}</td>
                             <td className="border border-gray-300 p-2">{venue.phone_number}</td>
-                            <td className="border border-gray-300 p-2">{venue.street} - {venue.district}, {venue.city_or_regency},
-                                {venue.province}</td>
+                            <td className="border border-gray-300 p-2">
+                                {venue.street} - {venue.district}, {venue.city_or_regency}, {venue.province}
+                            </td>
                             <td className="border border-gray-300 p-2 text-center">
                                 <button
                                     className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
@@ -240,7 +234,7 @@ const VenueManagement = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="4" className="border border-gray-300 p-2 text-center">
+                        <td colSpan="5" className="border border-gray-300 p-2 text-center">
                             No venues found.
                         </td>
                     </tr>

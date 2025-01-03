@@ -5,8 +5,12 @@ import searchIcon from '../assets/search-icon.png';
 import calendarIcon from '../assets/calendar-icon.png';
 import securityIcon from '../assets/security-icon.png';
 import starIcon from '../assets/star-icon.png';
+import {useNavigate} from "react-router-dom";
 
 const Homepage = () => {
+
+    const navigate = useNavigate();
+
     const venues = [
         { name: 'FUTSAL', image: venueImage },
         { name: 'BASKET', image: venueImage },
@@ -27,10 +31,10 @@ const Homepage = () => {
                         top-rated venues and secure your spot with just a few clicks!
                     </p>
                     <div className="flex gap-4">
-                        <button className="bg-white text-black px-6 py-2 rounded-md font-medium shadow-md hover:bg-gray-200">
+                        <button className="bg-white text-black px-6 py-2 rounded-md font-medium shadow-md hover:bg-gray-200" onClick={() => navigate("/venue")}>
                             BOOK NOW
                         </button>
-                        <button className="bg-lime-500 text-black px-6 py-2 rounded-md font-medium shadow-md hover:bg-lime-400">
+                        <button className="bg-lime-500 text-black px-6 py-2 rounded-md font-medium shadow-md hover:bg-lime-400" onClick={() => navigate("/venue")}>
                             EXPLORE
                         </button>
                     </div>

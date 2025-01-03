@@ -5,7 +5,6 @@ const UserManagement = ({ token }) => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch all users on component mount
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -21,15 +20,17 @@ const UserManagement = ({ token }) => {
         fetchUsers();
     }, [token]);
 
-    // Handle delete user
     const handleDelete = async (userId) => {
-        try {
-            await adminService.deleteUser(userId, token);
-            setUsers(users.filter((user) => user.id !== userId)); // Update state after deletion
-            alert('User deleted successfully');
-        } catch (error) {
-            console.error('Failed to delete user:', error);
-            alert('Failed to delete user');
+        const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+        if (confirmDelete) {
+            try {
+                await adminService.deleteUser(userId, token);
+                setUsers(users.filter((user) => user.id !== userId)); // Update state after deletion
+                alert('User deleted successfully');
+            } catch (error) {
+                console.error('Failed to delete user:', error);
+                alert('Failed to delete user');
+            }
         }
     };
 

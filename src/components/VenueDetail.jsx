@@ -20,24 +20,24 @@ const scheduleData = [
 ];
 
 const timeSlots = [
-  { time: "06:00 - 07:00", price: "Rp120.000" },
-  { time: "07:00 - 08:00", price: "Rp120.000" },
-  { time: "08:00 - 09:00", price: "Rp120.000" },
-  { time: "09:00 - 10:00", price: "Rp120.000" },
-  { time: "10:00 - 11:00", price: "Rp120.000" },
-  { time: "11:00 - 12:00", price: "Rp120.000" },
-  { time: "12:00 - 13:00", price: "Rp120.000" },
-  { time: "13:00 - 14:00", price: "Rp120.000" },
-  { time: "14:00 - 15:00", price: "Rp120.000" },
-  { time: "15:00 - 16:00", price: "Rp120.000" },
-  { time: "16:00 - 17:00", price: "Rp120.000" },
-  { time: "17:00 - 18:00", price: "Rp120.000" },
-  { time: "18:00 - 19:00", price: "Rp120.000" },
-  { time: "19:00 - 20:00", price: "Rp120.000" },
-  { time: "20:00 - 21:00", price: "Rp120.000" },
-  { time: "21:00 - 22:00", price: "Rp120.000" },
-  { time: "22:00 - 23:00", price: "Rp120.000" },
-  { time: "23:00 - 24:00", price: "Rp120.000" },
+  { time: "06:00 - 07:00" },
+  { time: "07:00 - 08:00" },
+  { time: "08:00 - 09:00" },
+  { time: "09:00 - 10:00" },
+  { time: "10:00 - 11:00" },
+  { time: "11:00 - 12:00" },
+  { time: "12:00 - 13:00" },
+  { time: "13:00 - 14:00" },
+  { time: "14:00 - 15:00" },
+  { time: "15:00 - 16:00" },
+  { time: "16:00 - 17:00" },
+  { time: "17:00 - 18:00" },
+  { time: "18:00 - 19:00" },
+  { time: "19:00 - 20:00" },
+  { time: "20:00 - 21:00" },
+  { time: "21:00 - 22:00" },
+  { time: "22:00 - 23:00" },
+  { time: "23:00 - 24:00" },
 ];
 
 // Custom Progress Bar component
@@ -62,6 +62,7 @@ function ProgressBar({ value }) {
 export default function VenueDetail() {
   const { state } = useLocation();
   const venue = state?.venue;
+  console.log("venue: ",venue)
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -90,6 +91,7 @@ export default function VenueDetail() {
     scheduleDetailsByField.find((field) => field.fieldType === selectedField)
       ?.schedules || [];
 
+  console.log(scheduleDetailsByField)
   {
     /* Reviews Section */
   }
@@ -161,7 +163,7 @@ export default function VenueDetail() {
         field: selectedField,
         date: selectedDate,
         time: selectedTime,
-        price: fieldPrice,
+        price: price,
       },
     });
   };
@@ -179,6 +181,11 @@ export default function VenueDetail() {
 
   VenueService.updateRating(localStorage.getItem("token"),overallRating,venue.id)
 
+  // Find the price for the selected field
+  const selectedFieldData = venue.fields.find(
+      (field) => field.type === selectedField
+  );
+  const price = selectedFieldData ? selectedFieldData.price : 0;
 
 
   return (
@@ -368,7 +375,7 @@ export default function VenueDetail() {
                         >
                           <div className="text-center">
                             <div className="text-sm font-medium">
-                              {slot.price}
+                              Rp{price.toLocaleString()}
                             </div>
                             <div className="text-xs">
                               {isAvailable ? "Available" : "Not Available"}

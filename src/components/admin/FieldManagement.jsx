@@ -4,11 +4,8 @@ import adminService from '../../services/admin-service';
 const FieldManagement = () => {
     const [fields, setFields] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    // Retrieve token from localStorage
     const token = localStorage.getItem("token");
 
-    // Fetch all fields on component mount
     useEffect(() => {
         const fetchFields = async () => {
             try {
@@ -24,15 +21,20 @@ const FieldManagement = () => {
         fetchFields();
     }, [token]);
 
-    // Handle delete field
     const handleDelete = async (fieldId) => {
-        try {
-            await adminService.deleteField(fieldId, token);
-            setFields(fields.filter((field) => field.id !== fieldId)); // Update state after deletion
-            alert('Field deleted successfully');
-        } catch (error) {
-            console.error('Failed to delete field:', error);
-            alert('Failed to delete field');
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this field?"
+        );
+
+        if (confirmDelete) {
+            try {
+                await adminService.deleteField(fieldId, token);
+                setFields(fields.filter((field) => field.id !== fieldId)); // Update state after deletion
+                alert("Field deleted successfully");
+            } catch (error) {
+                console.error("Failed to delete field:", error);
+                alert("Failed to delete field");
+            }
         }
     };
 
@@ -73,7 +75,7 @@ const FieldManagement = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="6" className="border border-gray-300 p-2 text-center">
+                        <td colSpan="4" className="border border-gray-300 p-2 text-center">
                             No fields found.
                         </td>
                     </tr>
