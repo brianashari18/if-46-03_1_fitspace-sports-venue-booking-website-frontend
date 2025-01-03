@@ -159,11 +159,9 @@ export default function VenueDetail() {
             const totalReviews = field.reviews.length;
             const averageFieldRating = field.reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
             return sum + averageFieldRating;
-          }, 0) /
-      venue.fields.filter((field) => field.reviews.length > 0).length
-      : 0;
+          }, 0) / venue.fields.filter((field) => field.reviews.length > 0).length : 0;
 
-  VenueService.updateRating(localStorage.getItem("token"),overallRating,venue.id)
+  VenueService.updateRating(localStorage.getItem("token"),overallRating > 0? overallRating : 0,venue.id)
 
   // Find the price for the selected field
   const selectedFieldData = venue.fields.find(
@@ -377,13 +375,13 @@ export default function VenueDetail() {
         {/* Reviews Section */}
           <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">{overallRating.toFixed(1)}</h2>
+              <h2 className="text-3xl font-bold mb-2">{overallRating.toFixed(1) > 0 ? overallRating : 0}</h2>
               <div className="flex justify-center mb-2">
                 {[...Array(5)].map((_, i) => (
                     <Star
                         key={i}
                         className={`w-5 h-5 ${
-                            i < Math.round(overallRating)
+                            i < overallRating
                                 ? "fill-yellow-400 text-yellow-400"
                                 : "text-gray-300"
                         }`}
