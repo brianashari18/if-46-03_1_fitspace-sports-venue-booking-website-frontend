@@ -36,7 +36,7 @@ const timeSlots = [
   { time: "20:00 - 21:00" },
   { time: "21:00 - 22:00" },
   { time: "22:00 - 23:00" },
-  { time: "23:00 - 24:00" },
+  { time: "23:00 - 00:00" },
 ];
 
 function ProgressBar({ value }) {
@@ -68,7 +68,6 @@ export default function VenueDetail() {
   const [selectedField, setSelectedField] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [fieldPrice] = useState(120000);
 
   const allReviews = venue.fields.flatMap((field) => field.reviews);
   const [currentPage, setCurrentPage] = useState(1);
@@ -274,31 +273,30 @@ export default function VenueDetail() {
 
             {/* Time Slot Selection */}
             <select
-              className="p-2 border border-gray-300 rounded-lg"
-              value={selectedTime}
-              onChange={(e) => {
-                setSelectedTime(e.target.value); // Update state
-                console.log("Selected Time:", e.target.value); // Debug log
-              }}
-              disabled={!selectedField} // Disable if no field is selected
+                className="p-2 border border-gray-300 rounded-lg"
+                value={selectedTime}
+                onChange={(e) => {
+                  setSelectedTime(e.target.value); // Update state
+                  console.log("Selected Time:", e.target.value); // Debug log
+                }}
+                disabled={!selectedField || !selectedDate} // Disable if no field or date is selected
             >
               <option value="" disabled>
                 Select Time
               </option>
               {selectedField &&
-                timeSlots
-                  .filter((slot) =>
-                    selectedFieldSchedules.some(
-                      (s) =>
-                        s.timeSlot === slot.time && s.status === "available"
-                    )
-                  )
-                  .map((availableSlot, idx) => (
-                    <option key={idx} value={availableSlot.time}>
-                      {availableSlot.time}
-                    </option>
-                  ))}
+                  selectedFieldSchedules
+                      .filter(
+                          (s) =>
+                              s.status === "available" && s.date === selectedDate // Filter by available status and selected date
+                      )
+                      .map((availableSlot, idx) => (
+                          <option key={idx} value={availableSlot.timeSlot}>
+                            {availableSlot.timeSlot}
+                          </option>
+                      ))}
             </select>
+
           </div>
           <button
             className="bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg"

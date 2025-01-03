@@ -7,7 +7,7 @@ const VenueService = {
     getAllVenues: async () => {
         try {
             const response = await axios.get(`${BASE_URL}/venues`);
-            return response.data.data; // Assuming response structure: { data: [...venues] }
+            return response.data.data;
         } catch (error) {
             console.error("Error fetching venues:", error);
             throw new Error(

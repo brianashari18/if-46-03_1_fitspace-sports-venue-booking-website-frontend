@@ -79,6 +79,8 @@ export default function SportVenues() {
     setActiveButton(null); // Reset active button
   };
 
+  console.log(venues)
+
   return (
       <div className="min-h-screen flex flex-col bg-gray-100">
         <div className="bg-[#738FFD] mt-24 mx-20 p-10 rounded-lg shadow-xl flex flex-col md:flex-row justify-between items-center md:py-16 relative">

@@ -79,7 +79,7 @@ const ConfirmPayment = () => {
       date: date, // Pastikan formatnya sesuai dengan LocalDate (yyyy-MM-dd)
       time_slot: time, // Sesuaikan dengan properti backend
       field_name: field, // Nama lapangan
-      price: String(price), // Konversi ke string karena di backend price bertipe String
+      price: String(totalPrice), // Konversi ke string karena di backend price bertipe String
     };
     
 
