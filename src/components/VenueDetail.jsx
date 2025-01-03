@@ -103,22 +103,34 @@ export default function VenueDetail() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
-  function normalizeDate(date) {
+  function normalizeDate(date) {// Debug log
+    if (!date || isNaN(new Date(date))) { // Check for invalid or undefined date
+      return null; // Return null or handle invalid date appropriately
+    }
     return new Date(date).toISOString().split("T")[0];
   }
+
 
   const handleFieldChange = (e) => setSelectedField(e.target.value);
 
 // Fix the logic for selectedFieldSchedules
+
   const scheduleDetailsByField = venue.fields.map((field) => {
     return {
       fieldType: field.type,
       schedules:
-          field.fieldSchedules?.map((scheduleItem) => ({
-            timeSlot: scheduleItem.schedule?.time_slot,
-            status: scheduleItem.status.toLowerCase(), // Ensure status is lowercase
-            date: normalizeDate(scheduleItem.schedule?.date), // Normalize date
-          })) || [],
+          field.fieldSchedules?.map((scheduleItem) => {
+            const normalizedDate = normalizeDate(scheduleItem.schedule?.date); // Normalize date safely
+            if (!normalizedDate) {
+              console.warn(`Skipping schedule with invalid date:`, scheduleItem);
+              return null; // Skip invalid schedules
+            }
+            return {
+              timeSlot: scheduleItem.schedule?.time_slot,
+              status: scheduleItem.status.toLowerCase(), // Ensure status is lowercase
+              date: normalizedDate, // Use normalized date
+            };
+          }).filter((schedule) => schedule !== null) || [], // Filter out invalid schedules
     };
   });
 
