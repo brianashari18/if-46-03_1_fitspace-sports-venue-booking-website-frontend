@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import SelectReview from "./SelectReview"; // Ensure the correct path
+import SelectReview from "./SelectReview";
 import WriteReview from "./WriteReview";
 import ReviewSuccess from "./ReviewSuccess.jsx";
 import { useState } from 'react';
-import { Star } from 'lucide-react'; // Assuming lucide-react is needed for stars
-import progresif from '../assets/progresif.png'; // Example image import
-import avatar1 from '../assets/avatar1.png'; // Example avatar image import
+import { Star } from 'lucide-react';
+import avatar1 from '../assets/avatar1.png';
 import { useLocation } from 'react-router-dom';
 import VenueService from "../services/venue-service.js";
 
@@ -40,7 +39,6 @@ const timeSlots = [
   { time: "23:00 - 24:00" },
 ];
 
-// Custom Progress Bar component
 function ProgressBar({ value }) {
   const progressBarStyle = {
     width: `${value}%`,
@@ -65,7 +63,6 @@ export default function VenueDetail() {
   console.log("venue: ",venue)
 
   const user = JSON.parse(localStorage.getItem("user"));
-
   const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${venue.latitude},${venue.longitude}&zoom=15&size=600x300&markers=${venue.latitude},${venue.longitude}&key=${import.meta.env.VITE_API_KEY}`;
 
   const [selectedField, setSelectedField] = useState("");
@@ -73,8 +70,19 @@ export default function VenueDetail() {
   const [selectedTime, setSelectedTime] = useState("");
   const [fieldPrice] = useState(120000);
 
-  const handleFieldChange = (e) => setSelectedField(e.target.value);
+  const allReviews = venue.fields.flatMap((field) => field.reviews);
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 5;
+  const startIndex = (currentPage - 1) * reviewsPerPage;
+  const endIndex = startIndex + reviewsPerPage;
+  const currentReviews = allReviews.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(allReviews.length / reviewsPerPage);
+  const [isSelectReviewOpen, setIsSelectReviewOpen] = useState(false);
+  const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
+  const [selectedFacility, setSelectedFacility] = useState(null);
+  const [facilityId, setFacilityId] = useState(null);
 
+  const handleFieldChange = (e) => setSelectedField(e.target.value);
   const scheduleDetailsByField = venue.fields.map((field) => {
     return {
       fieldType: field.type,
@@ -86,42 +94,19 @@ export default function VenueDetail() {
         })) || [],
     };
   });
-
   const selectedFieldSchedules =
     scheduleDetailsByField.find((field) => field.fieldType === selectedField)
       ?.schedules || [];
-
-  console.log(scheduleDetailsByField)
-  {
-    /* Reviews Section */
-  }
-  // Combine all reviews from all fields
-  const allReviews = venue.fields.flatMap((field) => field.reviews);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
-
-  const startIndex = (currentPage - 1) * reviewsPerPage;
-  const endIndex = startIndex + reviewsPerPage;
-
-  const currentReviews = allReviews.slice(startIndex, endIndex);
-
-  const totalPages = Math.ceil(allReviews.length / reviewsPerPage);
-
-  const [isSelectReviewOpen, setIsSelectReviewOpen] = useState(false);
-  const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
-  const [selectedFacility, setSelectedFacility] = useState(null);
-  const [facilityId, setFacilityId] = useState(null);
 
   const toggleSelectReviewModal = () => {
     setIsSelectReviewOpen(!isSelectReviewOpen);
   };
 
   const openWriteReviewModal = (facilityType, facilityId) => {
-    setSelectedFacility(facilityType); // Set the selected facility type
-    setFacilityId(facilityId); // Set the facility ID
-    setIsSelectReviewOpen(false); // Close the SelectReview modal
-    setIsWriteReviewOpen(true); // Open the WriteReview modal
+    setSelectedFacility(facilityType);
+    setFacilityId(facilityId);
+    setIsSelectReviewOpen(false);
+    setIsWriteReviewOpen(true);
   };
 
   const closeWriteReviewModal = () => {
@@ -131,15 +116,15 @@ export default function VenueDetail() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const handleReviewSubmitSuccess = () => {
-    setIsWriteReviewOpen(false); // Close the WriteReview modal
-    setIsSuccessModalOpen(true); // Open the success modal
+    setIsWriteReviewOpen(false);
+    setIsSuccessModalOpen(true);
   };
 
   const closeSuccessModal = () => {
-    setIsSuccessModalOpen(false); // Close the success modal
+    setIsSuccessModalOpen(false);
   };
 
-  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
+  const navigate = useNavigate();
 
   const handleBooking = () => {
     if (!selectedField) {
@@ -170,13 +155,13 @@ export default function VenueDetail() {
 
   const overallRating = venue.fields.length > 0
       ? venue.fields
-          .filter((field) => field.reviews.length > 0) // Only include fields with reviews
+          .filter((field) => field.reviews.length > 0)
           .reduce((sum, field) => {
             const totalReviews = field.reviews.length;
             const averageFieldRating = field.reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
             return sum + averageFieldRating;
           }, 0) /
-      venue.fields.filter((field) => field.reviews.length > 0).length // Divide by the count of fields with reviews
+      venue.fields.filter((field) => field.reviews.length > 0).length
       : 0;
 
   VenueService.updateRating(localStorage.getItem("token"),overallRating,venue.id)
