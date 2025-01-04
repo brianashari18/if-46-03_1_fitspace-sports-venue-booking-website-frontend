@@ -60,3 +60,17 @@ export const deleteField = async (token, venueId, fieldId) => {
         throw new Error(error.response?.data?.errors || "Failed to delete field.");
     }
 };
+
+export const getField = async (token, venueId, fieldId) => {
+    try {
+        const response = await axios.get(`${baseUrl}/venues/${venueId}/fields/${fieldId}`, {
+            headers: {
+                Authorization: token,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting field:", error);
+        throw new Error(error.response?.data?.errors || "Failed to delete field.");
+    }
+};

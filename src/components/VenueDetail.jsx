@@ -4,50 +4,47 @@ import WriteReview from "./WriteReview";
 import ReviewSuccess from "./ReviewSuccess.jsx";
 import { useState } from 'react';
 import { Star } from 'lucide-react'; // Assuming lucide-react is needed for stars
-import progresif from '../assets/progresif.png'; // Example image import
 import avatar1 from '../assets/avatar1.png'; // Example avatar image import
 import { useLocation } from 'react-router-dom';
 import VenueService from "../services/venue-service.js";
 
 function generateWeeklySchedule(date) {
-    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const schedule = [];
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const schedule = [];
+  let currentDay = new Date(date);
+  let diff = currentDay.getDay() - 1; // 0 untuk Minggu, 1 untuk Senin, dst.
+  if (diff < 0) {
+    diff = 6; // Jika hari ini Minggu, mundur 6 hari
+  }
+  currentDay.setDate(currentDay.getDate() - diff);
 
-    // Cari hari Senin di minggu ini
-    let currentDay = new Date(date);
-    let diff = currentDay.getDay() - 1; // 0 untuk Minggu, 1 untuk Senin, dst.
-    if (diff < 0) {
-        diff = 6; // Jika hari ini Minggu, mundur 6 hari
-    }
-    currentDay.setDate(currentDay.getDate() - diff);
+  for (let i = 0; i < 7; i++) {
+    const loopDate = new Date(currentDay); // Membuat salinan agar currentDay tidak berubah
+    loopDate.setDate(currentDay.getDate() + i);
 
-    for (let i = 0; i < 7; i++) {
-        const loopDate = new Date(currentDay); // Membuat salinan agar currentDay tidak berubah
-        loopDate.setDate(currentDay.getDate() + i);
+    const year = loopDate.getFullYear();
+    const month = String(loopDate.getMonth() + 1).padStart(2, '0');
+    const dayOfMonth = String(loopDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${dayOfMonth}`;
+    const formattedDay = `${dayOfMonth} ${getMonthName(loopDate.getMonth())}`;
+    const dayName = daysOfWeek[loopDate.getDay()];
 
-        const year = loopDate.getFullYear();
-        const month = String(loopDate.getMonth() + 1).padStart(2, '0');
-        const dayOfMonth = String(loopDate.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${dayOfMonth}`;
-        const formattedDay = `${dayOfMonth} ${getMonthName(loopDate.getMonth())}`;
-        const dayName = daysOfWeek[loopDate.getDay()];
+    schedule.push({
+      date: formattedDate,
+      day: formattedDay,
+      dayName: dayName,
+    });
+  }
+  console.log(JSON.stringify(schedule))
 
-        schedule.push({
-            date: formattedDate,
-            day: formattedDay,
-            dayName: dayName,
-        });
-    }
-    console.log(`TESTSCH: ${JSON.stringify(schedule)}`)
-
-    return schedule;
+  return schedule;
 }
 
 function getMonthName(monthIndex) {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-    return monthNames[monthIndex];
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  return monthNames[monthIndex];
 }
 
 const today = new Date();
@@ -71,7 +68,7 @@ const timeSlots = [
   { time: "20:00 - 21:00" },
   { time: "21:00 - 22:00" },
   { time: "22:00 - 23:00" },
-  { time: "23:00 - 24:00" },
+  { time: "23:00 - 00:00" },
 ];
 
 // Custom Progress Bar component
@@ -84,12 +81,12 @@ function ProgressBar({ value }) {
   };
 
   return (
-    <div
-      className="relative w-full bg-gray-200 rounded-full h-2.5"
-      style={{ height: "8px", borderRadius: "5px" }}
-    >
-      <div style={progressBarStyle}></div>
-    </div>
+      <div
+          className="relative w-full bg-gray-200 rounded-full h-2.5"
+          style={{ height: "8px", borderRadius: "5px" }}
+      >
+        <div style={progressBarStyle}></div>
+      </div>
   );
 }
 
@@ -105,25 +102,41 @@ export default function VenueDetail() {
   const [selectedField, setSelectedField] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [fieldPrice] = useState(120000);
+
+  function normalizeDate(date) {// Debug log
+    if (!date || isNaN(new Date(date))) { // Check for invalid or undefined date
+      return null; // Return null or handle invalid date appropriately
+    }
+    return new Date(date).toISOString().split("T")[0];
+  }
+
 
   const handleFieldChange = (e) => setSelectedField(e.target.value);
+
+// Fix the logic for selectedFieldSchedules
 
   const scheduleDetailsByField = venue.fields.map((field) => {
     return {
       fieldType: field.type,
       schedules:
-        field.fieldSchedules?.map((scheduleItem) => ({
-          timeSlot: scheduleItem.schedule?.time_slot,
-          status: scheduleItem.status,
-          date: scheduleItem.schedule?.date,
-        })) || [],
+          field.fieldSchedules?.map((scheduleItem) => {
+            const normalizedDate = normalizeDate(scheduleItem.schedule?.date); // Normalize date safely
+            if (!normalizedDate) {
+              console.warn(`Skipping schedule with invalid date:`, scheduleItem);
+              return null; // Skip invalid schedules
+            }
+            return {
+              timeSlot: scheduleItem.schedule?.time_slot,
+              status: scheduleItem.status.toLowerCase(), // Ensure status is lowercase
+              date: normalizedDate, // Use normalized date
+            };
+          }).filter((schedule) => schedule !== null) || [], // Filter out invalid schedules
     };
   });
 
   const selectedFieldSchedules =
-    scheduleDetailsByField.find((field) => field.fieldType === selectedField)
-      ?.schedules || [];
+      scheduleDetailsByField.find((field) => field.fieldType === selectedField)
+          ?.schedules || [];
 
   console.log(scheduleDetailsByField)
   {
@@ -221,217 +234,218 @@ export default function VenueDetail() {
   );
   const price = selectedFieldData ? selectedFieldData.price : 0;
 
+  console.log("Selected Field Schedules:", selectedFieldSchedules);
+  console.log("Schedule Data:", scheduleData);
+
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Hero Section */}
-      <div className="relative h-[500px]">
-        <img
-          src={venue.fields.length > 0 && venue.fields[0].gallery.length > 0 ? `http://localhost:8080${venue.fields[0].gallery[0].photo_url}` : "https://staticg.sportskeeda.com/editor/2022/11/a9ef8-16681658086025-1920.jpg"}
-          alt="Progresif Sport Centre"
-          className="object-cover w-full h-full"
-        />
-        <div className="absolute inset-0 bg-black/40">
-          <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-16">
-            <h1 className="text-4xl font-bold text-white mb-4">{venue.name}</h1>
-            <p className="text-white/90 mb-6">
-              {venue.street} - {venue.district}, {venue.city_or_regency},{" "}
-              {venue.province}
-            </p>
-            <div className="flex flex-wrap gap-3 items-center">
-              {venue.fields.map((field, j) => (
-                  <span
-                      key={j}
-                      className="bg-gray-200 px-3 py-1 rounded-md text-sm"
-                  >
+      <div className="min-h-screen flex flex-col">
+        {/* Hero Section */}
+        <div className="relative h-[500px]">
+          <img
+              src={venue.fields.length > 0 && venue.fields[0].gallery.length > 0 ? `http://localhost:8080${venue.fields[0].gallery[0].photo_url}` : "https://staticg.sportskeeda.com/editor/2022/11/a9ef8-16681658086025-1920.jpg"}
+              alt="Progresif Sport Centre"
+              className="object-cover w-full h-full"
+          />
+          <div className="absolute inset-0 bg-black/40">
+            <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-16">
+              <h1 className="text-4xl font-bold text-white mb-4">{venue.name}</h1>
+              <p className="text-white/90 mb-6">
+                {venue.street} - {venue.district}, {venue.city_or_regency},{" "}
+                {venue.province}
+              </p>
+              <div className="flex flex-wrap gap-3 items-center">
+                {venue.fields.map((field, j) => (
+                    <span
+                        key={j}
+                        className="bg-gray-200 px-3 py-1 rounded-md text-sm"
+                    >
           {field.type}
         </span>
-              ))}
-              <button
-                  className="ml-3 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition"
-                  onClick={() => navigate("/gallery", {state: {venue}})}
-              >
-                Gallery
-              </button>
+                ))}
+                <button
+                    className="ml-3 bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition"
+                    onClick={() => navigate("/gallery", {state: {venue}})}
+                >
+                  Gallery
+                </button>
+              </div>
             </div>
           </div>
+
         </div>
 
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Location Section */}
-        <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-xl font-bold mb-4">LOCATION</h2>
-          <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
-            <a href={`https://www.google.com/maps?q=${venue.latitude},${venue.longitude}`} target="_blank"
-               rel="noopener noreferrer">
-              <img
-                  src={mapUrl} // URL gambar peta statis
-                  alt="Location Map"
-                  className="w-full h-full object-cover rounded-lg cursor-pointer"
-              />
-            </a>
+        <div className="container mx-auto px-4 py-8">
+          {/* Location Section */}
+          <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
+            <h2 className="text-xl font-bold mb-4">LOCATION</h2>
+            <div className="h-[300px] bg-gray-200 rounded-lg mb-6">
+              <a href={`https://www.google.com/maps?q=${venue.latitude},${venue.longitude}`} target="_blank"
+                 rel="noopener noreferrer">
+                <img
+                    src={mapUrl} // URL gambar peta statis
+                    alt="Location Map"
+                    className="w-full h-full object-cover rounded-lg cursor-pointer"
+                />
+              </a>
+            </div>
           </div>
-        </div>
 
-        {/* Booking Form */}
-        <div className="flex flex-wrap gap-4 mb-4">
-          <div className="flex gap-4">
-            {/* Field Selection */}
-            <select
-              className="p-2 border border-gray-300 rounded-lg"
-              onChange={handleFieldChange}
-              value={selectedField}
-            >
-              <option value="" disabled>
-                Select Field
-              </option>
-              {venue.fields.map((field, i) => (
-                <option key={i} value={field.type}>
-                  {field.type}
+          {/* Booking Form */}
+          <div className="flex flex-wrap gap-4 mb-4">
+            <div className="flex gap-4">
+              {/* Field Selection */}
+              <select
+                  className="p-2 border border-gray-300 rounded-lg"
+                  onChange={handleFieldChange}
+                  value={selectedField}
+              >
+                <option value="" disabled>
+                  Select Field
                 </option>
-              ))}
-            </select>
-
-            {/* Date Selection */}
-            <select
-              className="p-2 border border-gray-300 rounded-lg"
-              value={selectedDate}
-              onChange={(e) => {
-                setSelectedDate(e.target.value); // Update state
-                console.log("Selected Date:", e.target.value); // Debug log
-              }}
-              disabled={!selectedField} // Disable if no field is selected
-            >
-              <option value="" disabled>
-                Select Date
-              </option>
-              {selectedField &&
-                scheduleData
-                  .filter((day) =>
-                    selectedFieldSchedules.some(
-                      (s) => s.date === day.date && s.status.toLowerCase() === "available"
-                    )
-                  )
-                  .map((availableDay, idx) => (
-                    <option key={idx} value={availableDay.date}>
-                      {availableDay.day}
+                {venue.fields.map((field, i) => (
+                    <option key={i} value={field.type}>
+                      {field.type}
                     </option>
-                  ))}
-            </select>
-
-            {/* Time Slot Selection */}
-            <select
-              className="p-2 border border-gray-300 rounded-lg"
-              value={selectedTime}
-              onChange={(e) => {
-                setSelectedTime(e.target.value); // Update state
-                console.log("Selected Time:", e.target.value); // Debug log
-              }}
-              disabled={!selectedField} // Disable if no field is selected
-            >
-              <option value="" disabled>
-                Select Time
-              </option>
-              {selectedField &&
-                timeSlots
-                  .filter((slot) =>
-                    selectedFieldSchedules.some(
-                      (s) => {
-                          console.log(`SDATE: ${s.timeSlot}, DDATE: ${slot.time}, ST: ${s.status.toLowerCase()}\nCO: ${s.timeSlot === slot.time && s.status.toLowerCase() === "available"}`);
-                          return s.timeSlot === slot.time && s.status.toLowerCase() === "available"
-                      }
-                    )
-                  )
-                  .map((availableSlot, idx) => (
-                    <option key={idx} value={availableSlot.time}>
-                      {availableSlot.time}
-                    </option>
-                  ))}
-            </select>
-          </div>
-          <button
-            className="bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg"
-            onClick={handleBooking}
-            disabled={!selectedField || !selectedDate || !selectedTime} // Disable button if selections are incomplete
-          >
-            Book Now
-          </button>
-        </div>
-
-        {/* Schedule Section */}
-        <div className="mb-12 p-6 bg-[#E6FDA3]">
-          <h3 className="text-lg font-semibold mb-4">
-            Check Available Schedule
-          </h3>
-          <div className="overflow-x-auto">
-            <div className="min-w-[800px]">
-              <div className="grid grid-cols-8 gap-2 mb-4">
-                <div className="font-medium">Time</div>
-                {/* Map days with background */}
-                {scheduleData.map((day) => (
-                  <div
-                    key={day.day}
-                    className="text-center bg-[#F5F5F5] p-4 rounded-lg"
-                  >
-                    <div className="font-medium">{day.day}</div>
-                    <div className="text-sm text-gray-500">{day.dayName}</div>
-                  </div>
                 ))}
-              </div>
+              </select>
 
-              {/* Scrollable Time Slots */}
-              <div
-                className="overflow-y-auto"
-                style={{
-                  maxHeight: "250px", // Adjust to show only 5 time slots
-                }}
+              {/* Date Selection */}
+              <select
+                  className="p-2 border border-gray-300 rounded-lg"
+                  value={selectedDate}
+                  onChange={(e) => {
+                    setSelectedDate(e.target.value); // Update state
+                    console.log("Selected Date:", e.target.value); // Debug log
+                  }}
+                  disabled={!selectedField} // Disable if no field is selected
               >
-                {timeSlots.map((slot, idx) => (
-                  <div key={idx} className="grid grid-cols-8 gap-2 mb-2">
-                    <div className="font-medium">{slot.time}</div>
-                    {scheduleData.map((day, i) => {
-                      // Find the schedule that matches both timeSlot and date
-                      const schedule = selectedFieldSchedules.find(
-                        (s) => s.timeSlot === slot.time && s.date === day.date
-                      );
+                <option value="" disabled>
+                  Select Date
+                </option>
+                {selectedField &&
+                    scheduleData
+                        .filter((day) =>
+                            selectedFieldSchedules.some(
+                                (s) => s.date === day.date && s.status === "available"
+                            )
+                        )
+                        .map((availableDay, idx) => (
+                            <option key={idx} value={availableDay.date}>
+                              {availableDay.day}
+                            </option>
+                        ))}
+              </select>
 
-                      // Determine availability based on status
-                      console.log(`SCH: ${JSON.stringify(schedule)}`);
-                      const isAvailable = schedule?.status.toLowerCase() === "available";
+              {/* Time Slot Selection */}
+              <select
+                  className="p-2 border border-gray-300 rounded-lg"
+                  value={selectedTime}
+                  onChange={(e) => {
+                    setSelectedTime(e.target.value); // Update state
+                    console.log("Selected Time:", e.target.value); // Debug log
+                  }}
+                  disabled={!selectedField || !selectedDate} // Disable if no field or date is selected
+              >
+                <option value="" disabled>
+                  Select Time
+                </option>
+                {selectedField &&
+                    selectedFieldSchedules
+                        .filter(
+                            (s) =>
+                                s.date === normalizeDate(selectedDate) && // Ensure it matches the selected date
+                                s.status === "available" // Ensure the status is "available"
+                        )
+                        .map((availableSlot, idx) => (
+                            <option key={idx} value={availableSlot.timeSlot}>
+                              {availableSlot.timeSlot}
+                            </option>
+                        ))}
+              </select>
 
-                      return (
-                        <div
-                          key={i}
-                          className={`p-2 rounded-lg flex justify-center items-center ${
-                            isAvailable
-                              ? "bg-[#F5F5F5] text-black"
-                              : "bg-[#F8B6B6] text-[#a83434]"
-                          }`}
-                        >
-                          <div className="text-center">
-                            <div className="text-sm font-medium">
-                              Rp{price.toLocaleString()}
-                            </div>
-                            <div className="text-xs">
-                              {isAvailable ? "Available" : "Not Available"}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
+            </div>
+            <button
+                className="bg-[#E7FF8C] text-gray-800 hover:bg-[#d9ff66] p-2 rounded-lg"
+                onClick={handleBooking}
+                disabled={!selectedField || !selectedDate || !selectedTime} // Disable button if selections are incomplete
+            >
+              Book Now
+            </button>
+          </div>
+
+          {/* Schedule Section */}
+          <div className="mb-12 p-6 bg-[#E6FDA3]">
+            <h3 className="text-lg font-semibold mb-4">
+              Check Available Schedule
+            </h3>
+            <div className="overflow-x-auto">
+              <div className="min-w-[800px]">
+                <div className="grid grid-cols-8 gap-2 mb-4">
+                  <div className="font-medium">Time</div>
+                  {/* Map days with background */}
+                  {scheduleData.map((day) => (
+                      <div
+                          key={day.day}
+                          className="text-center bg-[#F5F5F5] p-4 rounded-lg"
+                      >
+                        <div className="font-medium">{day.day}</div>
+                        <div className="text-sm text-gray-500">{day.dayName}</div>
+                      </div>
+                  ))}
+                </div>
+
+                {/* Scrollable Time Slots */}
+                <div
+                    className="overflow-y-auto"
+                    style={{
+                      maxHeight: "250px", // Adjust to show only 5 time slots
+                    }}
+                >
+                  {timeSlots.map((slot, idx) => (
+                      <div key={idx} className="grid grid-cols-8 gap-2 mb-2">
+                        <div className="font-medium">{slot.time}</div>
+                        {scheduleData.map((day, i) => {
+                          // Find the schedule that matches both timeSlot and date
+                          const schedule = selectedFieldSchedules.find(
+                              (s) => s.timeSlot === slot.time && s.date === day.date
+                          );
+
+                          // Determine availability based on status
+                          console.log(`SCH: ${JSON.stringify(schedule)}`);
+                          const isAvailable = schedule?.status.toLowerCase() === "available";
+
+                          return (
+                              <div
+                                  key={i}
+                                  className={`p-2 rounded-lg flex justify-center items-center ${
+                                      isAvailable
+                                          ? "bg-[#F5F5F5] text-black"
+                                          : "bg-[#F8B6B6] text-[#a83434]"
+                                  }`}
+                              >
+                                <div className="text-center">
+                                  <div className="text-sm font-medium">
+                                    Rp{price.toLocaleString()}
+                                  </div>
+                                  <div className="text-xs">
+                                    {isAvailable ? "Available" : "Not Available"}
+                                  </div>
+                                </div>
+                              </div>
+                          );
+                        })}
+                      </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Reviews Section */}
+          {/* Reviews Section */}
           <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">{overallRating ? overallRating.toFixed(1) : 0.0}</h2>
+              <h2 className="text-3xl font-bold mb-2">{overallRating? overallRating : 0}</h2>
               <div className="flex justify-center mb-2">
                 {[...Array(5)].map((_, i) => (
                     <Star
@@ -587,6 +601,6 @@ export default function VenueDetail() {
           )}
           {isSuccessModalOpen && <ReviewSuccess onClose={closeSuccessModal}/>}
         </div>
-    </div>
+      </div>
   );
 }

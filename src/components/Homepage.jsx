@@ -12,10 +12,10 @@ const Homepage = () => {
     const navigate = useNavigate();
 
     const venues = [
-        { name: 'FUTSAL', image: venueImage },
-        { name: 'BASKET', image: venueImage },
-        { name: 'BADMINTON', image: venueImage },
-        { name: 'VOLI', image: venueImage },
+        { name: 'FUTSAL', image: 'https://lapanganfutsal.id/wp-content/uploads/2023/01/raja-futsal-palembang.jpg' },
+        { name: 'BASKET', image: 'https://atlanta.urbanize.city/sites/default/files/styles/1140w/public/2021-11/Overtime%20Elite%20Atlantic%20Station%20secondary%20gym.jpg?itok=jN0gzDCw' },
+        { name: 'BADMINTON', image: 'https://media.istockphoto.com/id/1040174716/id/foto/garis-di-lapangan-bulu-tangkis-hijau.jpg?s=612x612&w=0&k=20&c=hQV94ocP4qjsRHjBNmnrEG1lfZTzUA6KsmDotvj1U_E=' },
+        { name: 'VOLI', image: 'https://media.istockphoto.com/id/1216739474/photo/volleyball-stadium.jpg?s=612x612&w=0&k=20&c=Orn6IBPDjw998_4L7G87yoD45MacoMknDNjPbJ0ZmVU=' },
     ];
 
     return (

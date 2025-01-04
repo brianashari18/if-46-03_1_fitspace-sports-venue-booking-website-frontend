@@ -443,6 +443,8 @@ const MyVenue = ({onLogout, user}) => {
                     <div className="bg-white w-full max-w-4xl h-[90vh] overflow-y-auto rounded-lg shadow-lg p-6">
                         <UpdateFieldForm
                             field={currentField}
+                            venue={currentVenueId}
+                            token={localStorage.getItem("token")}
                             onSubmit={async (formData) => {
                                 if (!currentVenueId) {
                                     alert("Venue ID is missing. Cannot update field.");

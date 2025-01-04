@@ -10,12 +10,10 @@ const WriteReview = ({ onClose, username, selectedFacility, facilityId, onSubmit
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (rating === 0 || !review.trim()) {
             alert("Please provide both a rating and a review.");
             return;
         }
-
         try {
             setIsLoading(true);
             const reviewData = { rating, comment: review.trim() };
@@ -23,9 +21,8 @@ const WriteReview = ({ onClose, username, selectedFacility, facilityId, onSubmit
 
             console.log("Review submitted successfully:", response);
 
-            // Trigger success callback
             if (onSubmit) {
-                onSubmit(); // Trigger parent success modal handler
+                onSubmit();
             }
         } catch (error) {
             console.error("Error submitting review:", error);

@@ -105,12 +105,6 @@ const Order = ({ onLogout }) => {
               ) : filteredOrders.length > 0 ? (
                   filteredOrders.map((order) => (
                       <div key={order.id} className="flex items-center bg-white rounded-lg shadow-lg p-4">
-                        {/* Order Image */}
-                        <img
-                            src={order.imageUrl || "https://via.placeholder.com/150"}
-                            alt={order.status}
-                            className="w-16 h-16 rounded-lg mr-4 object-cover"
-                        />
 
                         {/* Order Details */}
                         <div className="flex-1">

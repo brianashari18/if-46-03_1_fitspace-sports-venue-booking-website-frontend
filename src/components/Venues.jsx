@@ -15,19 +15,19 @@ export default function SportVenues() {
   const [itemsPerPage] = useState(9);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentVenues = filteredVenues.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredVenues.length / itemsPerPage);
   const navigate = useNavigate();
 
   const handleButtonClick = (location) => {
     setActiveButton(location);
-
-    // Filter venues by city or regency
     const updatedVenues = venues.filter(
         (venue) =>
             venue.city_or_regency.toLowerCase() === location.toLowerCase()
     );
     setFilteredVenues(updatedVenues);
-
-    // Reset to the first page
     setCurrentPage(1);
   };
 
@@ -53,26 +53,21 @@ export default function SportVenues() {
 
   useEffect(() => {
     let updatedVenues = [...venues];
-
-    // Filter by facility
     if (selectedFacility) {
       updatedVenues = updatedVenues.filter((venue) =>
           venue.fields.some((field) => field.type === selectedFacility)
       );
     }
-
-    // Sort by rating
     if (selectedRating) {
       updatedVenues.sort((a, b) => {
         if (selectedRating === "Lowest to Highest") {
-          return a.rating - b.rating; // Ascending order
+          return a.rating - b.rating;
         } else if (selectedRating === "Highest to Lowest") {
-          return b.rating - a.rating; // Descending order
+          return b.rating - a.rating;
         }
         return 0;
       });
     }
-
     setFilteredVenues(updatedVenues);
   }, [selectedFacility, selectedRating, venues]);
 
@@ -84,10 +79,7 @@ export default function SportVenues() {
     setActiveButton(null); // Reset active button
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentVenues = filteredVenues.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredVenues.length / itemsPerPage);
+  console.log(venues)
 
   return (
       <div className="min-h-screen flex flex-col bg-gray-100">

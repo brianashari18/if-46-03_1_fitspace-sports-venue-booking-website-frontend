@@ -5,9 +5,12 @@ import {forgotPassword, validateOtp} from "../services/auth-service.js";
 import {resendCode} from "../services/user-service.js";
 
 const VerificationCode = () => {
+    const [codeInputs, setCodeInputs] = useState(["", "", "", ""]);
+    const [isVerified, setIsVerified] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [resendMessage, setResendMessage] = useState("");
     const location = useLocation();
     const navigate = useNavigate();
-
     const [email] = useState(() => {
         const emailFromState = location.state?.email;
         if (emailFromState) {
@@ -17,10 +20,6 @@ const VerificationCode = () => {
         return localStorage.getItem("email");
     });
 
-    const [codeInputs, setCodeInputs] = useState(["", "", "", ""]);
-    const [isVerified, setIsVerified] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [resendMessage, setResendMessage] = useState("");
 
     useEffect(() => {
         if (!email) {
