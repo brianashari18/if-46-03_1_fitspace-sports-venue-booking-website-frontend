@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import SideBar from "./SideBar.jsx";
-import AddVenueForm from "./AddVenueForm";
-import AddFieldForm from "./AddFieldForm";
+import AddStudioForm from "./AddStudioForm.jsx";
+import AddRoomForm from "./AddRoomForm.jsx";
 import VenueService from "../services/venue-service.js";
 import UpdateFieldForm from "./UpdateFieldForm.jsx";
 import {addField, deleteField, updateField} from "../services/field-service.js";
@@ -23,7 +23,7 @@ const ProgressBar = ({value, color}) => {
 
 const ITEMS_PER_PAGE = 2;
 
-const MyVenue = ({onLogout, user}) => {
+const MyStudio = ({onLogout, user}) => {
     const [venueData, setVenueData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -201,7 +201,7 @@ const MyVenue = ({onLogout, user}) => {
                 {isModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white w-full max-w-4xl h-[90vh] overflow-y-auto rounded-lg shadow-lg p-6">
-                            <AddVenueForm
+                            <AddStudioForm
                                 onSubmit={handleAddVenue}
                                 onCancel={handleCloseModal}
                             />
@@ -417,7 +417,7 @@ const MyVenue = ({onLogout, user}) => {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white w-full max-w-4xl h-[90vh] overflow-y-auto rounded-lg shadow-lg p-6">
-                        <AddVenueForm
+                        <AddStudioForm
                             onSubmit={handleAddVenue}
                             onCancel={handleCloseModal}
                         />
@@ -428,7 +428,7 @@ const MyVenue = ({onLogout, user}) => {
             {isFieldModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white w-full max-w-4xl h-[90vh] overflow-y-auto rounded-lg shadow-lg p-6">
-                        <AddFieldForm
+                        <AddRoomForm
                             onSubmit={handleAddField}
                             onCancel={handleCloseFieldModal}
                             venueId={currentVenueId}
@@ -471,4 +471,4 @@ const MyVenue = ({onLogout, user}) => {
     );
 };
 
-export default MyVenue;
+export default MyStudio;
